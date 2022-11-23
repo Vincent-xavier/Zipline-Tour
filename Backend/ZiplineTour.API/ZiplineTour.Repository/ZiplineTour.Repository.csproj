@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZiplineTour.Common\ZiplineTour.Common.csproj" />
+    <ProjectReference Include="..\ZiplineTour.DBEngine\ZiplineTour.DBEngine.csproj" />
+    <ProjectReference Include="..\ZiplineTour.Models\ZiplineTour.Models.csproj" />
+  </ItemGroup>
+  
+    <!--to access the IwebHostEnvironment in Class library project-->
+  
+   <ItemGroup>
+       <FrameworkReference Include="Microsoft.AspNetCore.App" />
+   </ItemGroup>
+  
+   <ItemGroup>
+     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+   </ItemGroup>
+
+</Project>
