@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import EventBooking from '../Pages/Booking/EventBooking'
 import OrderList from '../Pages/Booking/OrderList'
 import { Dashboard } from '../Pages/Dashboard'
@@ -15,33 +15,25 @@ import PrivateRoutes from './privateRoutes/PrivateRoute'
 
 const URLRoutes = () => {
   return (
-    
-    
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/event" element={<Events />} />
+      <Route path="/event-details/:id" element={<EventDetails />} />
+      <Route path="/payment" element={<Payment />} />
 
-<Routes>
-<Route path="/" element={<Login />} />
-<Route path="/login" element={<Login />} />
-<Route path="/event" element={<Events />} />
-<Route path="/event-details/:id" element={<EventDetails />} />
-<Route path="/payment" element={<Payment />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/order-list" element={<OrderList />} />
+        <Route path="/edit-event-schedule/:id" element={<EditEventSchedule />} />
+        <Route path="/add-event-schedule/" element={<EditEventSchedule />} />
+        <Route path="/event-booking" element={<EventBooking />} />
+        <Route path="/edit-event" element={<EditEvent />} />
+        <Route path="/roster" element={<RosterView />} />
+        <Route path="/profile" element={<Profile />} />
+      </Route>
+    </Routes>
 
-<Route element={<PrivateRoutes />}>
-<Route path="/dashboard" element={<Dashboard />} />
-<Route path="/order-list" element={<OrderList />} />
-<Route path="/edit-event-schedule/:id" element={<EditEventSchedule />} />
-
-<Route path="/add-event-schedule/" element={<EditEventSchedule />} />
-<Route path="/event-booking" element={<EventBooking />} />
-<Route path="/edit-event" element={<EditEvent />} />
-<Route path="/roster" element={<RosterView />} />
-<Route path="/profile" element={<Profile />} />
-</Route>
-
-
-
-
-</Routes>
-    
   )
 }
 

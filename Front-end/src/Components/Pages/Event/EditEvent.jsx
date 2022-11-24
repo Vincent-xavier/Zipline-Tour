@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
-import { events,eventDetails } from "../../../actions/Event";
+import { Link } from "react-router-dom";
+import { eventDetails } from "../../../actions/Event";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as types from "../../../actions/types";
@@ -12,10 +12,10 @@ const EditProduct = () => {
   useEffect(() => {
     dispatch(eventDetails());
   }, []);
-  
-    const handleClick =()=>{
-      window.location.href = "/add-event-schedule";
-    }
+
+  const handleClick = () => {
+    window.location.href = "/add-event-schedule";
+  };
 
   return (
     <>
@@ -29,9 +29,9 @@ const EditProduct = () => {
         <div className="container">
           <div className="row mt-0">
             <div className="col text-end p-3">
-              {/* <Link to={"/add-event-schedule"} > */}
-                <button onClick={()=>handleClick()} className="btn btn-primary" >Add new Event</button>
-              {/* </Link> */}
+              <button onClick={() => handleClick()} className="btn btn-primary">
+                Add new Event
+              </button>
             </div>
           </div>
         </div>
@@ -48,10 +48,9 @@ const EditProduct = () => {
                     >
                       <div className="table-responsive">
                         <table className="table">
-                          <thead></thead>
                           <tbody>
                             {eventData?.resultData ? (
-                              eventData?.resultData.map((value, key) => {
+                              eventData?.resultData.map((value) => {
                                 return (
                                   <>
                                     <tr className="inner-box">
@@ -69,17 +68,22 @@ const EditProduct = () => {
                                       <td>
                                         <div className="event-wrap">
                                           <h3>
-                                            <Link to={"/event-details"}>
+                                            <Link
+                                              to={`/edit-event-schedule/${value.eventId}`}
+                                            >
                                               {value?.eventName}
                                             </Link>
                                           </h3>
                                           <div className="meta">
                                             <div
                                               className="organizers"
-                                              style={{ width: "450px","overflow-wrap": "anywhere" }}
+                                              style={{
+                                                width: "450px",
+                                                "overflow-wrap": "anywhere",
+                                              }}
                                             >
-                                              <blockquote class="blockquote">
-                                                <p class="mb-0">
+                                              <blockquote className="blockquote">
+                                                <p className="mb-0">
                                                   {value.eventDiscription}
                                                 </p>
                                               </blockquote>

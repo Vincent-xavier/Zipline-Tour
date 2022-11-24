@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 import Sidebar from '../Layout/Sidebar'
 
@@ -84,8 +85,8 @@ export const Dashboard = () => {
                         </div>
                     </div>
                 </section>
+           
             </main>
-
 
         </>
     )

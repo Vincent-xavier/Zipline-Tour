@@ -22,7 +22,7 @@ const Sidebar = () => {
               </li>
               <li className="nav-item">
                 <Link to={"/event"} className="nav-link collapsed">
-                  <i className="bi bi-grid" />
+                  <i className="bi bi-calendar2-event" />
                   <span>Events</span>
                 </Link>
               </li>
@@ -57,7 +57,7 @@ const Sidebar = () => {
                   data-bs-toggle="collapse"
                   href="#"
                 >
-                  <i className="bi bi-journal-text" />
+                  <i className="bi bi-journals" />
                   <span>Bookings</span>
                   <i className="bi bi-chevron-down ms-auto" />
                 </a>

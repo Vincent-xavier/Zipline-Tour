@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as constants from '../actions/types'
 
-export const saveEventBooking = (bookingData) => async (dispatch) => {
+export const saveEventBooking = (bookingData,navigate) => async (dispatch) => {
     dispatch({
         type: constants.EVENT_BOOKING_REQUEST
     });
@@ -10,7 +10,7 @@ export const saveEventBooking = (bookingData) => async (dispatch) => {
         "Content-Type": "application/json",
     }
     try {
-        axios.post(`https://localhost:44306/api/Booking/eventbooking`, bookingData, {
+        axios.post(`/api/Booking/eventbooking`, bookingData, {
             headers: headers,
           })
           .then((res) => {
@@ -18,6 +18,8 @@ export const saveEventBooking = (bookingData) => async (dispatch) => {
               type: constants.EVENT_BOOKING_SUCCESS,
               payload: res.data,
             });
+            navigate("/payment");
+            localStorage.setItem("bookingId",res.data.resultData);
           });
     } catch (error) {
         dispatch({
@@ -26,3 +28,27 @@ export const saveEventBooking = (bookingData) => async (dispatch) => {
     }
 }
 
+export const bookingDetails = (bookingId) => async (dispatch) => {
+    dispatch({
+        type: constants.BOOKING_DETAILS_REQUEST
+    });
+    const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    try {
+        axios.get(`/api/Booking/getBookingDetails/${bookingId}`, {}, {
+            headers: headers,
+          })
+          .then((res) => {
+            dispatch({
+              type: constants.BOOKING_DETAILS_SUCCESS,
+              payload: res.data,
+            });
+          });
+    } catch (error) {
+        dispatch({
+            type: constants.BOOKING_DETAILS_ERROR
+        })
+    }
+}

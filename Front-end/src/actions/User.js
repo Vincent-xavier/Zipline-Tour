@@ -10,7 +10,7 @@ export const userLogin = (data) => async (dispatch) => {
     'Content-Type': 'application/json',
   }
   try {
-    await axios.post(`https://localhost:44306/api/Authendication/gettoken`, data, { headers: headers })
+    await axios.post(`/api/Authendication/gettoken`, data, { headers: headers })
       .then((res) => {
         dispatch({
           type: constants.LOGIN_SUCCESS,

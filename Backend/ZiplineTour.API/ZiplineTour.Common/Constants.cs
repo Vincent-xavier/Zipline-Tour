@@ -13,9 +13,10 @@ namespace ZiplineTour.Common
         public const string UserLogin = "usp_User_Login";
         public const string Users = "usp_User_GetUsers";
 
+        public const string TestEvents = "test_MultipleTable";
 
         // Events
-        public const string TestEvents = "testing_returnobj";
+        //public const string TestEvents = "testing_returnobj";
         public const string Events = "usp_Event_GetEvents";
         public const string EventById = "usp_Event_GetEventById";
         public const string EventDetails = "usp_Event_EventDetails";

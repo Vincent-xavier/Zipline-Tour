@@ -4,16 +4,11 @@ const Footer = () => {
   return (
    <>
     {/* ======= Footer ======= */}
-<footer id="footer" className="footer">
+<footer id="footer" className="footer fixed-bottom z-index-1">
   <div className="copyright">
-    © Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    ©2022 Copyright <strong><span>Bosco Soft</span></strong>. All Rights Reserved
   </div>
   <div className="credits">
-    {/* All the links in the footer should remain intact. */}
-    {/* You can delete the links only if you purchased the pro version. */}
-    {/* Licensing information: https://bootstrapmade.com/license/ */}
-    {/* Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ */}
-    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
   </div>
 </footer>{/* End Footer */}
 

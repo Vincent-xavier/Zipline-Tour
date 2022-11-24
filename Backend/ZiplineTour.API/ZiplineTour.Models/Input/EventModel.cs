@@ -77,4 +77,34 @@ namespace ZiplineTour.Models.Input
         public int DateId { get; set; }
 
     }
+    public class timeModel
+    {
+        public string EventName { get; set; }
+        public decimal Price { get; set; }
+        public DateTime Date { get; set; }
+        public string Time { get; set; }
+        public int Min_Booking { get; set; }
+        public int Max_Booking { get; set; }
+        public string EventImage { get; set; }
+        public int SlotId { get; set; }
+        public int EventCapacity { get; set; }
+
+    }
+    public class DateModel
+    {
+        public int DateId { get; set; }
+        public DateTime Date { get; set; }
+    }
+
+    public class testResult
+    {
+        public List<DateModel> listDate { get; set; }
+        public List<timeModel> listtime { get; set; }
+    }
+
+    public class Result
+    {
+        public DateTime Date { get; set; }
+        public List<timeModel> LstModal { get; set; }
+    }
 }

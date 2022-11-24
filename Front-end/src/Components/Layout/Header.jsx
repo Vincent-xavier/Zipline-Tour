@@ -10,10 +10,8 @@ const Header = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
-
   return (
     <>
-      {/* ======= Header ======= */}
       <header
         id="header"
         className="header fixed-top d-flex align-items-center"
@@ -25,14 +23,11 @@ const Header = () => {
           </Link>
           {/* <i className="bi bi-list toggle-sidebar-btn" /> */}
         </div>
-        {/* End Logo */}
 
         {(isLogedIn && isLogedIn.userdata) ||
         (isAuthenticated && isAuthenticated == true) ? null : (
           <>
             <div className="search-bar">
-              {/* <form className="search-form d-flex align-items-center" method="POST" action="#"> */}
-              {/* <input type="text" name="query" placeholder="Search" title="Enter search keyword" /> */}
               <Link to={"/login"}>
                 <button
                   className="btn btn-primary"
@@ -52,7 +47,6 @@ const Header = () => {
                   Events
                 </button>
               </Link>
-              {/* </form> */}
             </div>
           </>
         )}
@@ -70,7 +64,7 @@ const Header = () => {
                   >
                     <span className="d-none d-md-block pe-2">Welcome</span>
                     <span className="d-none d-md-block dropdown-toggle pe-3">
-                      K. Anderson
+                      Admin
                     </span>
                     <img
                       src="/admin/assets/img/profile-img.jpg"
@@ -78,7 +72,6 @@ const Header = () => {
                       className="rounded-circle"
                     />
                   </a>
-                  {/* End Profile Iamge Icon */}
                   <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li className="dropdown-header">
                       <h6>Kevin Anderson</h6>

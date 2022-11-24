@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import Header from "../../Layout/Header";
-import Sidebar from "../../Layout/Sidebar";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { eventById } from "../../../actions/Event";
+import { useFormik } from "formik";
+import moment from "moment";
 import * as types from "../../../actions/types";
 import * as Yup from "yup";
-import { useFormik } from "formik";
+import Header from "../../Layout/Header";
+import Sidebar from "../../Layout/Sidebar";
+import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [counter, setCounter] = useState(0);
   const [totalPrice, settotalPrice] = useState();
   const [eventPrice, seteventPrice] = useState();
@@ -21,6 +23,7 @@ const EventDetails = () => {
   useEffect(() => {
     dispatch(eventById(id));
   }, []);
+
 
   useEffect(() => {
     setCounter(1);
@@ -59,7 +62,7 @@ const EventDetails = () => {
     validationSchema: Yup.object({
       firstName: Yup.string().required("Enter your first name"),
       lastName: Yup.string().required("Enter your last name"),
-      phone: Yup.number().required("Enter your phone")
+      phone: Yup.number().required("Enter your phone"),
     }),
 
     validate: (values) => {
@@ -75,7 +78,6 @@ const EventDetails = () => {
     },
 
     //  Form data get and set Values send to Actions
-
     onSubmit: (values) => {
       const contactData = {
         userData: {
@@ -99,14 +101,14 @@ const EventDetails = () => {
           ? eventEditData?.resultData?.slotId
           : values.slotId,
         eventTime: eventEditData?.resultData
-          ? eventEditData?.resultData?.time
+          ? moment(eventEditData?.resultData?.times).format("hh:mm A")
           : "",
         eventDate: eventEditData?.resultData
           ? eventEditData?.resultData?.date
           : "",
       };
 
-      dispatch(saveEventBooking(contactData));
+      dispatch(saveEventBooking(contactData, navigate));
 
       console.log(contactData);
     },
@@ -146,7 +148,9 @@ const EventDetails = () => {
                         <a>
                           Event time
                           <span>
-                            {eventEditData && eventEditData?.resultData?.time}
+                            {moment(
+                              eventEditData && eventEditData?.resultData?.times
+                            ).format("hh:mm a")}
                           </span>
                         </a>
                       </li>

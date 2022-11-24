@@ -6,6 +6,7 @@ const initialState = {
   success: "",
   eventData: null,
   eventEditData:null,
+  eventDetails : null,
 };
 
 export default function (state = initialState, action) {
@@ -84,21 +85,21 @@ export default function (state = initialState, action) {
           ...state,
           isLoading: true,
           error: "",
-          eventEditData:null,
+          eventDetails:null,
         };
       case constants.EVENT_DETAILS_BY_ID_SUCCESS:
         return {
           ...state,
           isLoading: false,
           success: "success",
-          eventEditData:action.payload,
+          eventDetails:action.payload,
         };
       case constants.EVENT_DETAILS_BY_ID_ERROR:
         return {
           ...state,
           isLoading: false,
           error: "error",
-          eventEditData:null,
+          eventDetails:null,
         };
 
 
@@ -120,6 +121,48 @@ export default function (state = initialState, action) {
         isLoading: false,
         error: "error",
       };
+
+      case constants.SAVE_EVENT_SCHEDULE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+      };
+    case constants.SAVE_EVENT_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "event Scheduled Successfully",
+      };
+    case constants.SAVE_EVENT_SCHEDULE_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+      };
+
+      case constants.EVENT_SCHEDULE_BY_ID_REQUEST:
+        return {
+          ...state,
+          isLoading: true,
+          error: "",
+          eventSchedule:null,
+          
+        };
+      case constants.EVENT_SCHEDULE_BY_ID_SUCCESS:
+        return {
+          ...state,
+          isLoading: false,
+          success: "success",
+          eventSchedule:action.payload,
+        };
+      case constants.EVENT_SCHEDULE_BY_ID_ERROR:
+        return {
+          ...state,
+          isLoading: false,
+          error: "error",
+          eventSchedule:null,
+        };
 
 
       

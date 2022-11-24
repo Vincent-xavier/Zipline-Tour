@@ -11,7 +11,7 @@ export const events = () => async (dispatch) => {
   };
   try {
     await axios
-      .get(`https://localhost:44306/api/Event/events`, {}, { headers: headers })
+      .get(`/api/Event/fetchEvent`, {}, { headers: headers })
       .then((res) => {
         dispatch({
           type: constants.EVENTS_SUCCESS,
@@ -25,9 +25,7 @@ export const events = () => async (dispatch) => {
   }
 };
 
-
-
-export const eventDetailsById = (id) => async (dispatch) => {
+export const eventById = (id) => async (dispatch) => {
   dispatch({
     type: constants.EVENT_BY_ID_REQUEST,
   });
@@ -38,7 +36,7 @@ export const eventDetailsById = (id) => async (dispatch) => {
   try {
     await axios
       .get(
-        `https://localhost:44306/api/Event/eventDetailsById/${id}`,
+        `/api/Event/eventById/${id}`,
         {},
         { headers: headers }
       )
@@ -66,7 +64,7 @@ export const eventDetails = () => async (dispatch) => {
   try {
     await axios
       .get(
-        `https://localhost:44306/api/Event/eventDetails`,
+        `/api/Event/eventDetails`,
         {},
         { headers: headers }
       )
@@ -84,7 +82,7 @@ export const eventDetails = () => async (dispatch) => {
 };
 
 
-export const eventById = (id) => async (dispatch) => {
+export const eventDetailsById = (id) => async (dispatch) => {
   dispatch({
     type: constants.EVENT_DETAILS_BY_ID_REQUEST,
   });
@@ -95,7 +93,7 @@ export const eventById = (id) => async (dispatch) => {
   try {
     await axios
       .get(
-        `https://localhost:44306/api/Event/eventById/${id}`,
+        `/api/Event/eventDetailsById/${id}`,
         {},
         { headers: headers }
       )
@@ -112,8 +110,6 @@ export const eventById = (id) => async (dispatch) => {
   }
 };
 
-// const formData = new FormData();
-// formData.append("imgFile",fileSelected)
 
 export const saveEvent = (eventData) => async (dispatch) => {
   dispatch({
@@ -126,7 +122,7 @@ export const saveEvent = (eventData) => async (dispatch) => {
   };
   try {
     await axios
-      .post(`https://localhost:44306/api/Booking/saveEventBooking`, eventData, {
+      .post(`/api/Event/saveEvent`, eventData, {
         headers: headers,
       })
       .then((res) => {
@@ -138,6 +134,63 @@ export const saveEvent = (eventData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: constants.SAVE_EVENTS_ERROR,
+    });
+  }
+};
+
+
+
+export const saveEventSchedule = (scheduleData) => async (dispatch) => {
+  dispatch({
+    type: constants.SAVE_EVENT_SCHEDULE_REQUEST,
+  });
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios
+      .post(`/api/Event/saveSchedule`, scheduleData, {
+        headers: headers,
+      })
+      .then((res) => {
+        dispatch({
+          type: constants.SAVE_EVENT_SCHEDULE_SUCCESS,
+          payload: res.data,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: constants.SAVE_EVENT_SCHEDULE_ERROR,
+    });
+  }
+};
+
+
+export const eventScheduleById = (id) => async (dispatch) => {
+  dispatch({
+    type: constants.EVENT_SCHEDULE_BY_ID_REQUEST,
+  });
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios
+      .get(
+        `/api/Event/getSchedule/${id}`,
+        {},
+        { headers: headers }
+      )
+      .then((res) => {
+        dispatch({
+          type: constants.EVENT_SCHEDULE_BY_ID_SUCCESS,
+          payload: res.data,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: constants.EVENT_SCHEDULE_BY_ID_ERROR,
     });
   }
 };

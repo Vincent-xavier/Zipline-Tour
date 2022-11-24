@@ -1,71 +1,107 @@
 import "react-datepicker/dist/react-datepicker.css";
-import { Formik, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import moment from "moment/moment";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { eventById, eventDetailsById, saveEvent } from "../../../actions/Event";
-import { useNavigate, useParams } from "react-router-dom";
-import swal from "sweetalert";
-import ReactDatePicker from "react-datepicker";
+import {
+  eventDetailsById,
+  eventScheduleById,
+  saveEvent,
+  saveEventSchedule,
+} from "../../../actions/Event";
 
 const EditEventSchedule = () => {
-  const dispatch = useDispatch();
-  const { id } = useParams();
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
+  const { eventDetails, eventSchedule, success } = useSelector(
+    (state) => state.eventAPI
+  );
+  console.log(eventSchedule);
+  const { id } = useParams();
+  const eventId = id;
+
   const [fileSelected, setFileSelected] = useState();
-  const [timeSloats, setTimeSloats] = useState([]);
-  const [noOfRows, setNoOfRows] = useState(1);
-  const { eventEditData, success } = useSelector((state) => state.eventAPI);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-
-  console.log(timeSloats);
+  const [openAccordin, setOpenAccordin] = useState({
+    collapsed: "",
+    collapse: "",
+  });
 
   useEffect(() => {
-    if (id) {
-      dispatch(eventDetailsById(id));
-    } else if (success == "event Saved Successfully") {
-      swal("Event Saved Successfully");
+    dispatch(eventDetailsById(eventId));
+  }, []);
+
+  useEffect(() => {
+    if (success === "event Scheduled Successfully") {
+      navigate("/event");
+    } else if (success === "event Saved Successfully") {
       navigate("/edit-event");
     }
-  }, [id, success]);
+  }, [success]);
 
-  // console.log(eventEditData);
+  const handleOpenAccordin = (id) => {
+    alert(id)
+  };
+
+  const handleScheduleDetails = () => {
+    dispatch(eventScheduleById(eventId));
+  };
 
   const saveFileSelected = (e) => {
-    // console.log(e.target.files[0]);
     setFileSelected(e.target.files[0]);
   };
 
+  const [inputActivitiesFields, setInputActivitiesFields] = useState([
+    {
+      ActivitiesData: "",
+    },
+  ]);
 
-  //use of hook for couting
+  var times = inputActivitiesFields
+    .map((t) => moment(t.ActivitiesData).format("hh:mm A")).join();
 
-  const handleTimeSloat = () => {
-    var myInput = document.getElementById("timeSloat");
-    if (myInput && myInput.value) {
-      setNoOfRows(noOfRows + 1);
-    }
+  const addInputActivitiesField = () => {
+    setInputActivitiesFields([
+      ...inputActivitiesFields,
+      {
+        ActivitiesData: "",
+      },
+    ]);
   };
 
-  const removeTimeSlot = (e)=>{
-    const rows = [...noOfRows];
-    rows.splice(e,1);
-    setNoOfRows(rows);
-  }
+  const removeInputActivitiesFields = (index) => {
+    const rows = [...inputActivitiesFields];
+    rows.pop();
+    setInputActivitiesFields(rows);
+  };
+
+  const handleActivitiesChange = (index, evnt) => {
+    const { name, value } = evnt.target;
+    const list = [...inputActivitiesFields];
+    list[index][name] = value;
+    setInputActivitiesFields(list);
+  };
 
   // Event Registration Form
   const eventForm = useFormik({
     initialValues: {
-      eventName: eventEditData ? eventEditData?.resultData?.eventName : "",
-      price: eventEditData ? eventEditData?.resultData?.price : "",
-      max_Booking: eventEditData ? eventEditData?.resultData?.max_Booking : "",
-      min_Booking: eventEditData ? eventEditData?.resultData?.min_Booking : "",
-      eventDiscription: eventEditData
-        ? eventEditData?.resultData?.eventDiscription
+      eventName: eventDetails ? eventDetails?.resultData?.eventName : "",
+      price: eventDetails ? eventDetails?.resultData?.price : "",
+      max_Booking: eventDetails ? eventDetails?.resultData?.max_Booking : "",
+      min_Booking: eventDetails ? eventDetails?.resultData?.min_Booking : "",
+      eventCapacity: eventDetails
+        ? eventDetails?.resultData?.eventCapacity
+        : "",
+      eventDiscription: eventDetails
+        ? eventDetails?.resultData?.eventDiscription
         : "",
       imgFile: null,
     },
@@ -75,7 +111,7 @@ const EditEventSchedule = () => {
       min_Booking: Yup.number().required("Enter minimum Booking"),
       max_Booking: Yup.number().required("Enter maximum Booking"),
       eventDiscription: Yup.string().required("Enter event discription"),
-      // imgFile: Yup.string().required("Choose event image"),
+      eventCapacity: Yup.string().required("Enter Capacity"),
     }),
     onSubmit: (values) => {
       const formData = {
@@ -83,13 +119,11 @@ const EditEventSchedule = () => {
         price: values.price,
         max_Booking: values.max_Booking,
         min_Booking: values.min_Booking,
+        eventCapacity: values.eventCapacity,
         eventDiscription: values.eventDiscription,
         imgFile: fileSelected,
       };
-
       dispatch(saveEvent(formData));
-
-      console.log(formData);
     },
   });
 
@@ -111,11 +145,11 @@ const EditEventSchedule = () => {
         name: values.name,
         dateFrom: startDate,
         dateTo: endDate,
-        times: timeSloats,
-        eventId: values.eventId,
+        times: times,
+        eventId: eventId,
       };
 
-      //  dispatch(saveEvent(formData));
+      dispatch(saveEventSchedule(scheduleData));
 
       console.log(scheduleData);
     },
@@ -129,11 +163,9 @@ const EditEventSchedule = () => {
       <main id="main" className="main">
         <section className="section">
           <div className="container">
-            {/* tab order design */}
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Update Events</h5>
-                {/* Bordered Tabs */}
                 <ul
                   className="nav nav-tabs nav-tabs-bordered"
                   id="borderedTab"
@@ -163,6 +195,7 @@ const EditEventSchedule = () => {
                       role="tab"
                       aria-controls="contact"
                       aria-selected="false"
+                      onClick={() => handleScheduleDetails()}
                     >
                       Schedule
                     </button>
@@ -237,6 +270,40 @@ const EditEventSchedule = () => {
                             ) : null}
                           </div>
                         </div>
+
+                        <div className="row mt-3">
+                          <div className="col-md-6">
+                            <div className="form-floating">
+                              <input
+                                type="number"
+                                className={
+                                  eventForm.touched.price &&
+                                  eventForm.errors.price
+                                    ? "form-control is-invalid"
+                                    : "form-control"
+                                }
+                                id="floatingName"
+                                placeholder="eventCapacity"
+                                name="eventCapacity"
+                                onChange={eventForm.handleChange}
+                                value={eventForm.values.eventCapacity}
+                                onBlur={eventForm.handleBlur}
+                              />
+                              <label htmlFor="floatingName">
+                                eventCapacity
+                              </label>
+                            </div>
+                            {eventForm.touched.eventCapacity &&
+                            eventForm.errors.eventCapacity ? (
+                              <small>
+                                <span className={"text-danger "}>
+                                  {eventForm.errors.eventCapacity}
+                                </span>
+                              </small>
+                            ) : null}
+                          </div>
+                        </div>
+
                         <div className="row mt-3">
                           <div className="col-md-6">
                             <div className="form-floating">
@@ -353,7 +420,7 @@ const EditEventSchedule = () => {
                           {eventForm.touched.imgFile &&
                           eventForm.errors.imgFile ? (
                             <small>
-                              <span className={"text-danger "}>
+                              <span className={"text-danger"}>
                                 {eventForm.errors.imgFile}
                               </span>
                             </small>
@@ -376,7 +443,6 @@ const EditEventSchedule = () => {
                     <div className="card">
                       <div className="card-body">
                         <h5 className="card-title">New Schedule</h5>
-                        {/* Pills Tabs */}
                         <ul
                           className="nav nav-pills mb-3"
                           id="pills-tab"
@@ -432,39 +498,36 @@ const EditEventSchedule = () => {
                             role="tabpanel"
                             aria-labelledby="home-tab"
                           >
-                            Sunt est soluta temporibus accusantium neque nam
-                            maiores cumque temporibus. Tempora libero non est
-                            unde veniam est qui dolor. Ut sunt iure rerum quae
-                            quisquam autem eveniet perspiciatis odit. Fuga sequi
-                            sed ea saepe at unde.
+                            <p onClick={() => handleOpenAccordin(eventSchedule?.resultData?.scheduleId)}>
+                              <Link
+                                to={"#flush-collapseOne"}
+                                data-bs-toggle="collapse"
+                              >
+                                { eventSchedule?.resultData?.name + " - " + moment(
+                                  eventSchedule?.resultData?.dateFrom
+                                ).format("DD-MM-YYYY") +
+                                  " untill  " +
+                                  moment(
+                                    eventSchedule?.resultData?.dateTo
+                                  ).format("DD-MM-YYYY") +
+                                  " " +
+                                  eventSchedule?.resultData?.times}
+                              </Link>
+                            </p>
                           </div>
                           <div
                             className="tab-pane fade"
                             id="pills-profile"
                             role="tabpanel"
                             aria-labelledby="profile-tab"
-                          >
-                            Nesciunt totam et. Consequuntur magnam aliquid eos
-                            nulla dolor iure eos quia. Accusantium distinctio
-                            omnis et atque fugiat. Itaque doloremque aliquid
-                            sint quasi quia distinctio similique. Voluptate
-                            nihil recusandae mollitia dolores. Ut laboriosam
-                            voluptatum dicta.
-                          </div>
+                          ></div>
                           <div
                             className="tab-pane fade"
                             id="pills-contact"
                             role="tabpanel"
                             aria-labelledby="contact-tab"
-                          >
-                            Saepe animi et soluta ad odit soluta sunt. Nihil
-                            quos omnis animi debitis cumque. Accusantium
-                            quibusdam perspiciatis qui qui omnis magnam.
-                            Officiis accusamus impedit molestias nostrum veniam.
-                            Qui amet ipsum iure. Dignissimos fuga tempore dolor.
-                          </div>
+                          ></div>
                         </div>
-                        {/* End Pills Tabs */}
                       </div>
                     </div>
                     <div
@@ -474,7 +537,7 @@ const EditEventSchedule = () => {
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="flush-headingOne">
                           <button
-                            className="accordion-button collapsed"
+                            className="accordion-button "
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseOne"
@@ -492,7 +555,6 @@ const EditEventSchedule = () => {
                         >
                           <div className="card">
                             <div className="card-body">
-                              {/* Multi Columns Form */}
                               <form
                                 className="row g-3 mt-2"
                                 onSubmit={eventScheduleForm.handleSubmit}
@@ -551,51 +613,51 @@ const EditEventSchedule = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  {[...Array(noOfRows)].map(
-                                    (elementInArray, index) => {
-                                      return (
+
+                                  {inputActivitiesFields.map((data, index) => {
+                                    const { ActivitiesData } = data;
+                                    return (
+                                      <>
                                         <div className="col-sm-2">
                                           <input
                                             type="time"
                                             id="timeSloat"
                                             className="form-control"
-                                            name="times"                
-                                             onChange={(e) =>
-                                              setTimeSloats((prev) => {
-                                                return {
-                                                  ...prev,
-                                                  [noOfRows]: e.target.value,
-                                                };
-                                              })
+                                            name="ActivitiesData"
+                                            onChange={(evnt) =>
+                                              handleActivitiesChange(
+                                                index,
+                                                evnt
+                                              )
                                             }
+                                            value={ActivitiesData}
                                           />
                                         </div>
-                                      );
-                                    }
-                                  )}
+                                      </>
+                                    );
+                                  })}
                                 </div>
-
                                 <div className="row mt-2">
                                   <div className="offset-md-6  col-6">
-                                    {noOfRows <= 4 ? (
+                                    {inputActivitiesFields.length <= 4 ? (
                                       <>
                                         <button
                                           type="button"
                                           className="btn btn-primary me-3"
-                                          onClick={() => handleTimeSloat()}
+                                          // onClick={() => handleTimeSloat()}
+                                          onClick={addInputActivitiesField}
                                         >
                                           Add
                                         </button>
                                       </>
                                     ) : null}
 
-                                    {noOfRows > 1 ? (
+                                    {inputActivitiesFields.length !== 1 ? (
                                       <button
                                         type="button"
                                         className="btn btn-outline-danger bg-danger text-white"
-                                        onClick={(e) => removeTimeSlot(e)
-                                          // setNoOfRows(noOfRows - 1)
-                                        }
+                                        // onClick={setNoOfRows(noOfRows - 1)}
+                                        onClick={removeInputActivitiesFields}
                                       >
                                         Delete
                                       </button>
