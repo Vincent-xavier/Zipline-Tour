@@ -14,7 +14,7 @@ const Header = () => {
     <>
       <header
         id="header"
-        className="header fixed-top d-flex align-items-center"
+        className="header fixed-top d-flex align-items-center xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back"
       >
         <div className="d-flex align-items-center justify-content-between">
           <Link to={"/dashboard"} className="logo d-flex align-items-center">

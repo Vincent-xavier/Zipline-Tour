@@ -279,7 +279,7 @@ const EventDetails = () => {
                         value={contactForm.values.firstName}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingName">First Name</label>
+                      <label htmlFor="floatingName">First Name <span className="text-danger">*</span></label>
                     </div>
 
                     {contactForm.touched.firstName &&
@@ -307,7 +307,7 @@ const EventDetails = () => {
                         value={contactForm.values.lastName}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingName">Last Name</label>
+                      <label htmlFor="floatingName">Last Name <span className="text-danger">*</span></label>
                     </div>
                     {contactForm.touched.lastName &&
                     contactForm.errors.lastName ? (
@@ -333,7 +333,7 @@ const EventDetails = () => {
                         value={contactForm.values.email}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingEmail">Your Email</label>
+                      <label htmlFor="floatingEmail">Your Email <span className="text-danger">*</span></label>
                       {contactForm.touched.email && contactForm.errors.email ? (
                         <small>
                           <span className={"text-danger "}>
@@ -358,7 +358,7 @@ const EventDetails = () => {
                         value={contactForm.values.phone}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingEmail">Your phone</label>
+                      <label htmlFor="floatingEmail">Your phone <span className="text-danger">*</span></label>
                     </div>
                     {contactForm.touched.phone && contactForm.errors.phone ? (
                       <small>

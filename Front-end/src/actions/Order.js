@@ -19,7 +19,6 @@ export const saveEventBooking = (bookingData,navigate) => async (dispatch) => {
               payload: res.data,
             });
             navigate("/payment");
-            localStorage.setItem("bookingId",res.data.resultData);
           });
     } catch (error) {
         dispatch({

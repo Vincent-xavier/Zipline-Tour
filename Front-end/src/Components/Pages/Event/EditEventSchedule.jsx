@@ -48,7 +48,7 @@ const EditEventSchedule = () => {
   }, [success]);
 
   const handleOpenAccordin = (id) => {
-    alert(id)
+    alert(id);
   };
 
   const handleScheduleDetails = () => {
@@ -66,7 +66,8 @@ const EditEventSchedule = () => {
   ]);
 
   var times = inputActivitiesFields
-    .map((t) => moment(t.ActivitiesData).format("hh:mm A")).join();
+    .map((t) => moment(t.ActivitiesData).format("hh:mm A"))
+    .join();
 
   const addInputActivitiesField = () => {
     setInputActivitiesFields([
@@ -105,6 +106,7 @@ const EditEventSchedule = () => {
         : "",
       imgFile: null,
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       eventName: Yup.string().required("Enter event title"),
       price: Yup.string().required("Enter price amount"),
@@ -498,20 +500,32 @@ const EditEventSchedule = () => {
                             role="tabpanel"
                             aria-labelledby="home-tab"
                           >
-                            <p onClick={() => handleOpenAccordin(eventSchedule?.resultData?.scheduleId)}>
+                            <p
+                              onClick={() =>
+                                handleOpenAccordin(
+                                  eventSchedule?.resultData?.scheduleId
+                                )
+                              }
+                            >
                               <Link
                                 to={"#flush-collapseOne"}
                                 data-bs-toggle="collapse"
                               >
-                                { eventSchedule?.resultData?.name + " - " + moment(
-                                  eventSchedule?.resultData?.dateFrom
-                                ).format("DD-MM-YYYY") +
-                                  " untill  " +
-                                  moment(
-                                    eventSchedule?.resultData?.dateTo
-                                  ).format("DD-MM-YYYY") +
-                                  " " +
-                                  eventSchedule?.resultData?.times}
+                                {eventSchedule && eventSchedule?.resultData ? (
+                                  <>
+                                    {eventSchedule?.resultData?.name +
+                                      " - " +
+                                      moment(
+                                        eventSchedule?.resultData?.dateFrom
+                                      ).format("DD-MM-YYYY") +
+                                      " untill  " +
+                                      moment(
+                                        eventSchedule?.resultData?.dateTo
+                                      ).format("DD-MM-YYYY") +
+                                      " " +
+                                      eventSchedule?.resultData?.times}
+                                  </>
+                                ) : null}
                               </Link>
                             </p>
                           </div>

@@ -6,28 +6,26 @@ import swal from "sweetalert";
 import * as Yup from "yup";
 import { userLogin } from "../../actions/User";
 import Header from "../Layout/Header";
-
+import '@animxyz/core'
 
 const Login = () => {
- const dispatch = useDispatch();
- const navigate = useNavigate();
- const userData = useSelector((state)=>state.userAPI)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.userAPI);
 
- console.log(userData);
-  const isLogedIn=JSON.parse(localStorage.getItem("user"));
+  console.log(userData);
+  const isLogedIn = JSON.parse(localStorage.getItem("user"));
 
- useEffect(() => {
-
-    if ( userData && userData?.userData?.message == "Login Success" || isLogedIn && isLogedIn?.userdata) {
+  useEffect(() => {
+    if (
+      (userData && userData?.userData?.message == "Login Success") ||
+      (isLogedIn && isLogedIn?.userdata)
+    ) {
       navigate("/dashboard");
-    }else if (userData?.error==="login error") {
-      swal("please check username and password")
+    } else if (userData?.error === "login error") {
+      swal("please check username and password");
     }
-
- }, [userData,isLogedIn])
-
-
-
+  }, [userData, isLogedIn]);
 
   const loginForm = useFormik({
     initialValues: {
@@ -35,9 +33,10 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string().required("Please enter your password")
-      // .min(7,"Password length must be greater than 7 characters")
-      .max(255)
+      password: Yup.string()
+        .required("Please enter your password")
+        // .min(7,"Password length must be greater than 7 characters")
+        .max(255),
     }),
 
     validate: (values) => {
@@ -68,16 +67,13 @@ const Login = () => {
       <main>
         <div className="container">
           <section
-
-         
             style={{ marginTop: "-40px" }}
             className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
           >
-             <Header/>
-            <div className="container">
+            <Header />
+            <div className="container xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
               <div className="row justify-content-center">
                 <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                  
                   <div className="card mb-3">
                     <div className="card-body">
                       <div className="p-5 text-center">
@@ -85,8 +81,6 @@ const Login = () => {
                           src="/admin/assets/img/icon-user.png"
                           alt="login"
                         />
-                        {/* <h5 className="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                                <p className="text-center small">Enter your email &amp; password to login</p> */}
                       </div>
                       <form
                         className="row g-3 p-3"
@@ -129,13 +123,13 @@ const Login = () => {
                           />
                         </div>
                         {loginForm.touched.password &&
-                          loginForm.errors.password ? (
-                            <small>
-                              <span className={"text-danger "}>
-                                {loginForm.errors.password}
-                              </span>
-                            </small>
-                          ) : null}
+                        loginForm.errors.password ? (
+                          <small>
+                            <span className={"text-danger "}>
+                              {loginForm.errors.password}
+                            </span>
+                          </small>
+                        ) : null}
                         <div className="col-10 mt-4 col-12 align-center text center">
                           {/* <Link to={"/dashboard"}> */}
                           <button

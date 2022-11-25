@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import EventBooking from '../Pages/Booking/EventBooking'
 import OrderList from '../Pages/Booking/OrderList'
 import { Dashboard } from '../Pages/Dashboard'
+import ErrorPage from '../Pages/ErrorPage'
 import EditEvent from '../Pages/Event/EditEvent'
 import EditEventSchedule from '../Pages/Event/EditEventSchedule'
 import EventDetails from '../Pages/Event/EventDetails'
@@ -21,6 +22,7 @@ const URLRoutes = () => {
       <Route path="/event" element={<Events />} />
       <Route path="/event-details/:id" element={<EventDetails />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="*" element={<ErrorPage />} />
 
       <Route element={<PrivateRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />

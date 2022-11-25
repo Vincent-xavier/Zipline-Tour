@@ -9,7 +9,7 @@ const Sidebar = () => {
   return (
     <>
       {/* ======= Sidebar ======= */}
-      <aside id="sidebar" className="sidebar">
+      <aside id="sidebar" className="sidebar xyz-in" xyz="fade left stagger">
         <ul className="sidebar-nav" id="sidebar-nav">
           {(isLogedIn && isLogedIn.userdata) ||
           (isAuthenticated && isAuthenticated == true) ? (

@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.notfound {
+  background-color: aqua;
+  width: auto;
+  height: 100vh;
+  position: relative;
+}

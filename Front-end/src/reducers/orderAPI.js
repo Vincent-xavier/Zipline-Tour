@@ -5,7 +5,7 @@ const initialState = {
     success: "",
     error: "",
     orderData: "",
-    bookingId:"",
+    bookingdata:"",
 }
 
 
@@ -23,7 +23,7 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoading: false,
                 success: "Event Booked SuccessFully",
-                bookingId: action.payload,
+                bookingdata: action.payload,
             };
         case constants.EVENT_BOOKING_ERROR:
             return {

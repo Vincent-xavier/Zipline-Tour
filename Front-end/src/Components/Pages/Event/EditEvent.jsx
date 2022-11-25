@@ -47,13 +47,13 @@ const EditProduct = () => {
                       role="tabpanel"
                     >
                       <div className="table-responsive">
-                        <table className="table">
-                          <tbody>
-                            {eventData?.resultData ? (
-                              eventData?.resultData.map((value) => {
-                                return (
-                                  <>
-                                    <tr className="inner-box">
+                        {eventData?.resultData ? (
+                          eventData?.resultData.map((value) => {
+                            return (
+                              <div class="xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
+                                <table className="table">
+                                  <tbody>
+                                    <tr className="inner-box xyz-in" xyz="fade left stagger">
                                       <td>
                                         <div className="event-img">
                                           <img
@@ -114,16 +114,16 @@ const EditProduct = () => {
                                         </div>
                                       </td>
                                     </tr>
-                                  </>
-                                );
-                              })
-                            ) : (
-                              <>
-                                <h3>No Data Found</h3>
-                              </>
-                            )}
-                          </tbody>
-                        </table>
+                                  </tbody>
+                                </table>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <>
+                            <h4>No Events Found !</h4>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
