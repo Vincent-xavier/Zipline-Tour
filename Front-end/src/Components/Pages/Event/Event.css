@@ -2,6 +2,11 @@ body {
     margin-top: 20px;
 }
 
+login-page {
+    background-image: url('http://placekitten.com/1200/800');
+    opacity: 0.75;
+}
+
 .event-schedule-area .section-title .title-text {
     margin-bottom: 50px;
 }
@@ -267,6 +272,13 @@ body {
     border-radius: 8px;
 }
 
+.event-img img::before{
+    opacity: 0.8;
+}
+
+.event-img:hover{
+    opacity: 1;
+}
 
 
 .product-content {

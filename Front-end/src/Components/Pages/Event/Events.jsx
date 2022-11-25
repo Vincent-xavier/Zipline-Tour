@@ -18,11 +18,7 @@ const Events = () => {
   const [startDate, setStartDate] = useState(new Date());
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <>
-  
   <input type="text" className="form-control" onClick={onClick} ref={ref} value={format(startDate, "dd-MM-yyyy")} />
-
-
-    {/* <button className="btn btn-primary ps-5 pe-5" onClick={onClick} ref={ref}>{value}</button> */}
   </>
   ));
 

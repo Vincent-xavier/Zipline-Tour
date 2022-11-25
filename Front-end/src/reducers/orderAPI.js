@@ -5,7 +5,7 @@ const initialState = {
     success: "",
     error: "",
     orderData: "",
-    bookingdata:"",
+    bookingdata: "",
 }
 
 
@@ -35,7 +35,7 @@ export default function (state = initialState, action) {
             };
 
 
-            case constants.BOOKING_DETAILS_REQUEST:
+        case constants.BOOKING_DETAILS_REQUEST:
             return {
                 ...state,
                 isLoading: true,
@@ -57,6 +57,30 @@ export default function (state = initialState, action) {
                 orderData: null,
                 error: "error",
             };
+
+            case constants.FETCH_BOOKING_REQUEST:
+                return {
+                    ...state,
+                    isLoading: true,
+                    success: null,
+                    error: null,
+                    bookingdata: null,
+                };
+            case constants.FETCH_BOOKING_SUCCESS:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: "success",
+                    bookingdata: action.payload,
+                };
+            case constants.FETCH_BOOKING_ERROR:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: null,
+                    bookingdata: null,
+                    error: "error",
+                };
 
         default:
             return state;

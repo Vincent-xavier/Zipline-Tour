@@ -51,3 +51,29 @@ export const bookingDetails = (bookingId) => async (dispatch) => {
         })
     }
 }
+
+
+export const fetchbooking = () => async (dispatch) => {
+    dispatch({
+        type: constants.FETCH_BOOKING_REQUEST
+    });
+    const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    try {
+        axios.get(`/api/Booking/fetchAllBookings`, {}, {
+            headers: headers,
+          })
+          .then((res) => {
+            dispatch({
+              type: constants.FETCH_BOOKING_SUCCESS,
+              payload: res.data,
+            });
+          });
+    } catch (error) {
+        dispatch({
+            type: constants.FETCH_BOOKING_ERROR
+        })
+    }
+}

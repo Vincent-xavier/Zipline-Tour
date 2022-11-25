@@ -7,6 +7,7 @@ import swal from "sweetalert";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as Yup from "yup";
+import '@animxyz/core'
 
 const Payment = () => {
   const { bookingdata } = useSelector((state) => state.orderAPI);
@@ -57,11 +58,11 @@ const Payment = () => {
         <section className="section">
           <div className="container">
             <div className="row">
-              <div className="card col-md-5 ">
-                <div className="card-body">
+              <div className="card col-md-5 xyz-in" xyz="fade  flip-left perspective-1">
+                <div className="card-body xyz-none xyz-in">
                   <h3 className="card-title">Shopping Cart</h3>
-                  <div className="card shadow-sm">
-                    <div className="card-body">
+                  <div className="card shadow-sm ">
+                    <div className="card-body xyz-nested">
                       <h5 className="card-title">
                         {customer?.listBooking[0].eventName}
                       </h5>
@@ -110,7 +111,7 @@ const Payment = () => {
                   </div>
                 </div>
               </div>
-              <div className="card col-md-5 ms-5">
+              <div className="card col-md-5 ms-5 xyz-in" xyz="fade flip-left perspective-1">
                 <div className="card-body">
                   <h3 className="card-title">Payment Method</h3>
                   <div className="row">
@@ -230,8 +231,8 @@ const Payment = () => {
                 </div>
               </div>
 
-              <div className="card col-md-5 ">
-                <div className="card-body">
+              <div className="card col-md-5 xyz-in" xyz="small-100% origin-top-right">
+                <div className="card-body ">
                   <h5 className="card-title">Contact Information</h5>
                   <div className="ms-4 mt-0">
                     <h6>{fullName}</h6>

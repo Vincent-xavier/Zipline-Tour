@@ -11,6 +11,9 @@ import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 
+import DataTable from 'react-data-table-component';
+import '@animxyz/core'
+
 const EventDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +45,8 @@ const EventDetails = () => {
     setCounter(counter - 1);
     settotalPrice((counter - 1) * eventPrice);
   };
+
+
 
   // Event Registration Form
   const contactForm = useFormik({
@@ -121,29 +126,29 @@ const EventDetails = () => {
 
       <main id="main" className="main">
         <section className="section">
-          <div className="container">
-            <div className="product-content product-wrap clearfix product-deatil">
+          <div className="container"  xyz="fade small-100%">
+            <div className="product-content product-wrap clearfix product-deatil xyz-none xyz-in" >
               <div className="row">
-                <div className="col-md-5 col-sm-12 col-xs-12">
+                <div className="col-md-5 col-sm-12 col-xs-12 ">
                   <div className="product-image">
                     <img
                       style={{ width: "400px", hight: "400px" }}
                       src={
                         types.IMAGE_PATH + eventEditData?.resultData?.eventImage
                       }
-                      className="img-responsive"
+                      className="img-responsive xyz-nested"
                       alt="event image"
                     />
                   </div>
                 </div>
                 <div className="col-md-offset-1 col-md-6 ms-4 col-sm-12 col-xs-12 ">
-                  <h2 className="name">
+                  <h2 className="name xyz-nested">
                     {eventEditData && eventEditData?.resultData?.eventName}
                   </h2>
                   <hr />
-                  <h3 className="price-container ms-1">$ {eventPrice}.00</h3>
-                  <div class="certified">
-                    <ul>
+                  <h3 className="price-container ms-1 xyz-nested">$ {eventPrice}.00</h3>
+                  <div class="certified xyz-nested">
+                    <ul className="xyz-nested">
                       <li>
                         <a>
                           Event time
@@ -174,7 +179,7 @@ const EventDetails = () => {
                       </li>
                     </ul>
                   </div>
-                  <div className="mb-8 justify-content-center ">
+                  <div className="mb-8 justify-content-center xyz-nested">
                     <div className="col-md-6 col-12">
                       <div className="mb-4 border-bottom pb-2"></div>
                       <div className="row">
@@ -210,7 +215,7 @@ const EventDetails = () => {
                           </div>
                         </div>
 
-                        <div className="col-12 mt-3 mb-0">
+                        <div className="col-12 mt-3 mb-0 xyz-nested">
                           <h4>Total $ {totalPrice}.00</h4>
                         </div>
                       </div>
@@ -218,7 +223,7 @@ const EventDetails = () => {
                   </div>
                   <hr />
                   <div
-                    className="description description-tabs"
+                    className="description description-tabs xyz-nested"
                     style={{ clear: "both" }}
                   >
                     <p style={{ wordWrap: "break-word" }}>
@@ -232,7 +237,7 @@ const EventDetails = () => {
             </div>
           </div>
           <div className="container">
-            <div className="card offset-md-2 col-md-8 ">
+            <div className="card offset-md-2 col-md-8 xyz-in" xyz="small-100% origin-top-right">
               <div className="card-body">
                 <h5 className="card-title">Contact</h5>
                 <form className="row g-3" onSubmit={contactForm.handleSubmit}>
@@ -267,6 +272,7 @@ const EventDetails = () => {
                       <input
                         type="text"
                         id="floatingName"
+                        max={70}
                         placeholder="First Name"
                         className={
                           contactForm.touched.firstName &&
@@ -346,17 +352,18 @@ const EventDetails = () => {
                   <div className="col-md-6">
                     <div className="form-floating">
                       <input
-                        type="text"
+                        type="number"
+                        placeholder="Phone"
+                        name="phone"
+                        maxLength={10}
+                        onChange={contactForm.handleChange}
+                        value={contactForm.values.phone}
+                        onBlur={contactForm.handleBlur}
                         className={
                           contactForm.touched.phone && contactForm.errors.phone
                             ? "form-control is-invalid"
                             : "form-control input-lg mt-1"
                         }
-                        placeholder="Phone"
-                        name="phone"
-                        onChange={contactForm.handleChange}
-                        value={contactForm.values.phone}
-                        onBlur={contactForm.handleBlur}
                       />
                       <label htmlFor="floatingEmail">Your phone <span className="text-danger">*</span></label>
                     </div>

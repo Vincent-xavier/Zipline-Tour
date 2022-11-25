@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import EventBooking from '../Pages/Booking/EventBooking'
+import BookingList from '../Pages/Booking/BookingList'
 import OrderList from '../Pages/Booking/OrderList'
 import { Dashboard } from '../Pages/Dashboard'
 import ErrorPage from '../Pages/ErrorPage'
@@ -29,7 +29,7 @@ const URLRoutes = () => {
         <Route path="/order-list" element={<OrderList />} />
         <Route path="/edit-event-schedule/:id" element={<EditEventSchedule />} />
         <Route path="/add-event-schedule/" element={<EditEventSchedule />} />
-        <Route path="/event-booking" element={<EventBooking />} />
+        <Route path="/booking-list" element={<BookingList />} />
         <Route path="/edit-event" element={<EditEvent />} />
         <Route path="/roster" element={<RosterView />} />
         <Route path="/profile" element={<Profile />} />

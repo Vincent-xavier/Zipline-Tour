@@ -23,7 +23,13 @@ const Login = () => {
     ) {
       navigate("/dashboard");
     } else if (userData?.error === "login error") {
-      swal("please check username and password");
+      swal("please check your username and password");
+      swal({
+        title: "Sign-in Failed",
+        text: "please check your username and password!",
+        icon: "error",
+        button: "try again!",
+      });
     }
   }, [userData, isLogedIn]);
 
@@ -65,7 +71,7 @@ const Login = () => {
   return (
     <>
       <main>
-        <div className="container">
+        <div className="container login-page">
           <section
             style={{ marginTop: "-40px" }}
             className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
@@ -94,7 +100,7 @@ const Login = () => {
                             <input
                               type="text"
                               name="email"
-                              className="form-control"
+                              className={loginForm.touched.email && loginForm.errors.email ? "form-control is-invalid" : "form-control"}
                               onChange={loginForm.handleChange}
                               value={loginForm.values.email}
                               onBlur={loginForm.handleBlur}
