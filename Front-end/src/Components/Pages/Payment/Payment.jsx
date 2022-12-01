@@ -7,7 +7,7 @@ import swal from "sweetalert";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as Yup from "yup";
-import '@animxyz/core'
+import "@animxyz/core";
 const Payment = () => {
   const { bookingdata } = useSelector((state) => state.orderAPI);
   const [customer, setCustomer] = useState();
@@ -16,7 +16,7 @@ const Payment = () => {
 
   useEffect(() => {
     setCustomer(bookingdata?.resultData);
-  }, []);
+  }, [bookingdata?.resultData, customer]);
 
   console.log(bookingdata);
 
@@ -36,7 +36,8 @@ const Payment = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Enter Card Holder Name").max(50),
-      cardNumber: Yup.number().required("Enter Card Number").max(16),
+      cardNumber: Yup.number().required("Enter Card Number"),
+      cvv: Yup.number().required("Enter cvv Number"),
     }),
     onSubmit: (values) => {
       const paymentData = {
@@ -45,6 +46,8 @@ const Payment = () => {
         expiryDate: values.expiryDate,
         cvv: values.cvv,
       };
+
+      console.log(paymentData);
     },
   });
 
@@ -57,7 +60,10 @@ const Payment = () => {
         <section className="section">
           <div className="container">
             <div className="row">
-              <div className="card col-md-5 xyz-in" xyz="fade  flip-left perspective-1" >
+              <div
+                className="card col-md-5 xyz-in"
+                xyz="fade  flip-left perspective-1"
+              >
                 <div className="card-body xyz-none xyz-in">
                   <h3 className="card-title">Shopping Cart</h3>
                   <div className="card shadow-sm ">
@@ -110,7 +116,10 @@ const Payment = () => {
                   </div>
                 </div>
               </div>
-              <div className="card col-md-5 ms-5 xyz-in" xyz="fade flip-left perspective-1">
+              <div
+                className="card col-md-5 ms-5 xyz-in"
+                xyz="fade flip-left perspective-1"
+              >
                 <div className="card-body">
                   <h3 className="card-title">Payment Method</h3>
                   <div className="row">
@@ -139,7 +148,8 @@ const Payment = () => {
                           <input
                             type="text"
                             className={
-                              paymentForm.touched.name && paymentForm.errors.name
+                              paymentForm.touched.name &&
+                              paymentForm.errors.name
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
@@ -149,7 +159,8 @@ const Payment = () => {
                             value={paymentForm.values.name}
                             onBlur={paymentForm.handleBlur}
                           />
-                          {paymentForm.touched.name && paymentForm.errors.name ? (
+                          {paymentForm.touched.name &&
+                          paymentForm.errors.name ? (
                             <small className="text-danger ">
                               {paymentForm.errors.name}
                             </small>
@@ -161,14 +172,20 @@ const Payment = () => {
                           </label>
                           <input
                             type="text"
-                            className={paymentForm.touched.cardNumber && paymentForm.errors.cardNumber ? "form-control is-invalid":"form-control"}
+                            className={
+                              paymentForm.touched.cardNumber &&
+                              paymentForm.errors.cardNumber
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
                             maxLength={16}
                             name="cardNumber"
                             onChange={paymentForm.handleChange}
                             value={paymentForm.values.cardNumber}
                             onBlur={paymentForm.handleBlur}
                           />
-                          {paymentForm.touched.cardNumber && paymentForm.errors.cardNumber ? (
+                          {paymentForm.touched.cardNumber &&
+                          paymentForm.errors.cardNumber ? (
                             <small className="text-danger ">
                               {paymentForm.errors.cardNumber}
                             </small>
@@ -180,13 +197,19 @@ const Payment = () => {
                           </label>
                           <input
                             type="date"
-                            className={paymentForm.touched.expiryDate && paymentForm.errors.expiryDate ? "form-control is-invalid":"form-control"}
+                            className={
+                              paymentForm.touched.expiryDate &&
+                              paymentForm.errors.expiryDate
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
                             name="expiryDate"
                             onChange={paymentForm.handleChange}
                             value={paymentForm.values.expiryDate}
                             onBlur={paymentForm.handleBlur}
                           />
-                          {paymentForm.touched.expiryDate && paymentForm.errors.expiryDate ? (
+                          {paymentForm.touched.expiryDate &&
+                          paymentForm.errors.expiryDate ? (
                             <small className="text-danger ">
                               {paymentForm.errors.expiryDate}
                             </small>
@@ -201,8 +224,12 @@ const Payment = () => {
                             type="number"
                             id="CVV"
                             maxLength={3}
-                            className={paymentForm.touched.cvv && paymentForm.errors.cvv ? "form-control is-invalid":"form-control"}
-                            name="expiryDate"
+                            className={
+                              paymentForm.touched.cvv && paymentForm.errors.cvv
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                            name="cvv"
                             onChange={paymentForm.handleChange}
                             value={paymentForm.values.cvv}
                             onBlur={paymentForm.handleBlur}
@@ -230,7 +257,10 @@ const Payment = () => {
                 </div>
               </div>
 
-              <div className="card col-md-5 xyz-in" xyz="small-100% origin-top-right">
+              <div
+                className="card col-md-5 xyz-in"
+                xyz="small-100% origin-top-right"
+              >
                 <div className="card-body ">
                   <h5 className="card-title">Contact Information</h5>
                   <div className="ms-4 mt-0">

@@ -10,7 +10,7 @@ import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
-import '@animxyz/core'
+import "@animxyz/core";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
@@ -141,7 +141,9 @@ const EventDetails = () => {
                     {eventEditData && eventEditData?.resultData?.eventName}
                   </h2>
                   <hr />
-                  <h3 className="price-container ms-1 xyz-nested">$ {eventPrice}.00</h3>
+                  <h3 className="price-container ms-1 xyz-nested">
+                    $ {eventPrice}.00
+                  </h3>
                   <div class="certified xyz-nested">
                     <ul className="xyz-nested">
                       <li>
@@ -241,7 +243,10 @@ const EventDetails = () => {
             </div>
           </div>
           <div className="container">
-            <div className="card offset-md-2 col-md-8 xyz-in" xyz="small-100% origin-top-right">
+            <div
+              className="card offset-md-2 col-md-8 xyz-in"
+              xyz="small-100% origin-top-right"
+            >
               <div className="card-body">
                 <h5 className="card-title">Contact</h5>
                 <form className="row g-3" onSubmit={contactForm.handleSubmit}>

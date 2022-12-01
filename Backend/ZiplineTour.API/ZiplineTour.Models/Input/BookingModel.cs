@@ -14,9 +14,11 @@ namespace ZiplineTour.Models.Input
         public int DateId { get; set; }
         public int SlotId { get; set; }
         public int Guests { get; set; }
+        public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
-        public DateTime EventTime { get; set; }
+        public string EventTime { get; set; }
         public DateTime EventDate { get; set; }
+        public string EventName { get; set; }
     }
 
 

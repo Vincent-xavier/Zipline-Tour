@@ -1,10 +1,9 @@
 import "../Event/Event.css";
 import "react-datepicker/dist/react-datepicker.css";
-import '@animxyz/core'
-import React, {  forwardRef, useEffect, useState } from "react";
+import "@animxyz/core";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactDatePicker from "react-datepicker";
-import { format } from 'date-fns'
 import swal from "sweetalert";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
@@ -12,29 +11,32 @@ import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { events } from "../../../actions/Event";
 import * as types from "../../../actions/types";
-
-
+import { format } from "date-fns";
 
 const Events = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [startDate, setStartDate] = useState(new Date());
 
-  
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <>
-  <input type="text" className="form-control" onClick={onClick} ref={ref} value={format(startDate, "dd-MM-yyyy")} />
-  </>
+      <input
+        type="text"
+        className="form-control"
+        onClick={onClick}
+        ref={ref}
+        value={format(startDate, "dd-MM-yyyy")}
+      />
+    </>
   ));
-  const { eventData,success } = useSelector((state) => state.eventAPI);
-  console.log(success);
+  const { eventData, success } = useSelector((state) => state.eventAPI);
 
   useEffect(() => {
     dispatch(events());
     if (success === "event Saved Successfully") {
-      swal("Event Scheduled Successfully")
-    }else if (success === "event Scheduled Successfully") {
-      swal("Event Scheduled Successfully")
+      swal("Event Scheduled Successfully");
+    } else if (success === "event Scheduled Successfully") {
+      swal("Event Scheduled Successfully");
     }
   }, [success]);
 
@@ -61,7 +63,7 @@ const Events = () => {
                         <div className="card-body opacity-0.5 mb-0">
                           <div className="row">
                             <div className="col-md-8">
-                            <div className="row mt-3">
+                              <div className="row mt-3">
                                 <label
                                   htmlFor="inputText"
                                   className="col-sm-3 col-form-label mt-1"
@@ -69,12 +71,11 @@ const Events = () => {
                                   Select Date from
                                 </label>
                                 <div className="col-sm-5 mt-1">
-                                <ReactDatePicker
+                                  <ReactDatePicker
                                     selected={startDate}
                                     dateFormat="yyyy/MM/dd"
                                     onChange={(date) => setStartDate(date)}
                                     minDate={new Date()}
-                                    
                                     closeOnScroll={true}
                                     customInput={<ExampleCustomInput />}
                                     showDisabledMonthNavigation
@@ -111,11 +112,15 @@ const Events = () => {
                       {eventData && eventData.length ? (
                         eventData?.map((value) => {
                           return (
-                            <div className="display-events xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
+                            <div
+                              className="display-events xyz-in"
+                              xyz="fade flip-down stagger duration-10 delay-2 ease-out-back"
+                            >
                               <table className="table mt-3">
                                 <tbody>
                                   <tr
-                                    className="border p-0 xyz-in" xyz="fade left stagger"
+                                    className="border p-0 xyz-in"
+                                    xyz="fade left stagger"
                                     key={value.eventId}
                                   >
                                     <th className="text-center h4" scope="col">
@@ -136,17 +141,26 @@ const Events = () => {
                                     .map((event) => {
                                       return (
                                         <>
-                                          <tr className="inner-box xyz-in" xyz="fade left stagger">
+                                          <tr
+                                            className="inner-box xyz-in"
+                                            xyz="fade left stagger"
+                                          >
                                             <th scope="row">
                                               <div className="event-date">
                                                 <span>
-                                                  { event?.available && event?.available > 0 ?  event?.available :event?.eventCapacity }
+                                                  {event?.available &&
+                                                  event?.available > 0
+                                                    ? event?.available
+                                                    : event?.eventCapacity}
                                                 </span>
                                                 <p>Available</p>
                                               </div>
                                             </th>
                                             <td>
-                                              <div className="event-img" xyz="rotate-right">
+                                              <div
+                                                className="event-img"
+                                                xyz="rotate-right"
+                                              >
                                                 <img
                                                   // src="/admin/assets/img/event-img.jpg"
                                                   src={

@@ -1,18 +1,18 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import BookingList from '../Pages/Booking/BookingList'
-import OrderList from '../Pages/Booking/OrderList'
-import { Dashboard } from '../Pages/Dashboard'
-import ErrorPage from '../Pages/ErrorPage'
-import EditEvent from '../Pages/Event/EditEvent'
-import EditEventSchedule from '../Pages/Event/EditEventSchedule'
-import EventDetails from '../Pages/Event/EventDetails'
-import Events from '../Pages/Event/Events'
-import Login from '../Pages/Login'
-import Payment from '../Pages/Payment/Payment'
-import Profile from '../Pages/Profile'
-import RosterView from '../Pages/Roster'
-import PrivateRoutes from './privateRoutes/PrivateRoute'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import BookingList from "../Pages/Booking/BookingList";
+import OrderList from "../Pages/Booking/OrderList";
+import { Dashboard } from "../Pages/Dashboard";
+import ErrorPage from "../Pages/ErrorPage";
+import EditEvent from "../Pages/Event/EditEvent";
+import EditEventSchedule from "../Pages/Event/EditEventSchedule";
+import EventDetails from "../Pages/Event/EventDetails";
+import Events from "../Pages/Event/Events";
+import Login from "../Pages/Login";
+import Payment from "../Pages/Payment/Payment";
+import Profile from "../Pages/Profile";
+import RosterView from "../Pages/Roster";
+import PrivateRoutes from "./privateRoutes/PrivateRoute";
 
 const URLRoutes = () => {
   return (
@@ -27,7 +27,10 @@ const URLRoutes = () => {
       <Route element={<PrivateRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/order-list" element={<OrderList />} />
-        <Route path="/edit-event-schedule/:id" element={<EditEventSchedule />} />
+        <Route
+          path="/edit-event-schedule/:id"
+          element={<EditEventSchedule />}
+        />
         <Route path="/add-event-schedule/" element={<EditEventSchedule />} />
         <Route path="/booking-list" element={<BookingList />} />
         <Route path="/edit-event" element={<EditEvent />} />
@@ -35,8 +38,7 @@ const URLRoutes = () => {
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
+  );
+};
 
-  )
-}
-
-export default URLRoutes
+export default URLRoutes;

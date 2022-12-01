@@ -25,7 +25,7 @@ const BookingList = () => {
     return () => clearTimeout(timeout);
   }, [bookingdata?.resultData]);
 
-
+  console.log(bData);
   const columns = [
     {
       name: "Booking code",
@@ -38,7 +38,7 @@ const BookingList = () => {
     },
     {
       name: "Event Time",
-      selector: (row) => row?.eventTime,
+      selector: (row) => moment(row?.eventTime).format("hh:mm A"),
     },
     {
       name: "Event Day",

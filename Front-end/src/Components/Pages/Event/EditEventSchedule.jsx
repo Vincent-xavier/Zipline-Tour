@@ -16,11 +16,12 @@ import {
   ScheduleById,
 } from "../../../actions/Event";
 import * as types from "../../../actions/types";
+import { format } from "date-fns";
 
 const EditEventSchedule = () => {
   const dispatch = useDispatch();
 
-  const { eventDetails, eventSchedule, scheduleDetails, success } = useSelector(
+  const { eventDetails, eventSchedule, scheduleDetails } = useSelector(
     (state) => state.eventAPI
   );
 
@@ -36,8 +37,8 @@ const EditEventSchedule = () => {
     },
   ]);
   var times = inputActivitiesFields
-  .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
-  .join();
+    .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
+    .join();
 
   useEffect(() => {
     if (eventId) {
@@ -73,7 +74,7 @@ const EditEventSchedule = () => {
   const handleNewSchedule = () => {
     dispatch({ type: types.CLEAR_SCHEDULE });
   };
-  
+
   const handleOpenAccordin = (id) => {
     dispatch(ScheduleById(id));
   };
@@ -90,7 +91,6 @@ const EditEventSchedule = () => {
     setFileSelected(e.target.files[0]);
   };
 
-
   const addInputActivitiesField = () => {
     setInputActivitiesFields([
       ...inputActivitiesFields,
@@ -99,14 +99,14 @@ const EditEventSchedule = () => {
       },
     ]);
   };
-  
+
   const handleActivitiesChange = (index, evnt) => {
     const { name, value } = evnt.target;
     const list = [...inputActivitiesFields];
     list[index][name] = value;
     setInputActivitiesFields(list);
   };
-  
+
   const removeInputActivitiesFields = (index) => {
     const rows = [...inputActivitiesFields];
     rows.pop();
@@ -153,7 +153,6 @@ const EditEventSchedule = () => {
       dispatch(saveEvent(formData));
     },
   });
-
 
   //Event Schedule Form
   const eventScheduleForm = useFormik({
@@ -715,7 +714,7 @@ const EditEventSchedule = () => {
                                   </label>
                                   <ReactDatePicker
                                     selected={startDate}
-                                    dateFormat="yyyy/MM/dd"
+                                    dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setStartDate(date)}
                                     minDate={new Date()}
                                     showDisabledMonthNavigation
@@ -731,7 +730,7 @@ const EditEventSchedule = () => {
                                   </label>
                                   <ReactDatePicker
                                     selected={endDate}
-                                    dateFormat="yyyy/MM/dd"
+                                    dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setEndDate(date)}
                                     minDate={new Date()}
                                     showDisabledMonthNavigation

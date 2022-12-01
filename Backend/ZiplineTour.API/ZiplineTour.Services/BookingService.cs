@@ -33,6 +33,7 @@ namespace ZiplineTour.Services
             {
                 args.StatusCode = 200;
                 args.StatusMessage = "Saved Successfully";
+                args.ResultData = result;
             }
             else
             {
