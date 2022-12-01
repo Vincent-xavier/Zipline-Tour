@@ -11,6 +11,8 @@ namespace ZiplineTour.Services
     public interface IBookingService
     {
         Task<ResultArgs> SaveEventBooking(BookingModel bookingModel);
+        Task<ResultArgs> BookingDetails(int id);
+        Task<ResultArgs> FetchBooking();
 
     }
     public class BookingService : IBookingService
@@ -27,10 +29,52 @@ namespace ZiplineTour.Services
 
             var result = await _bookingRepository.SaveEventBooking(bookingModel);
 
-            if (result > 0)
+            if (result != null)
             {
                 args.StatusCode = 200;
                 args.StatusMessage = "Saved Successfully";
+            }
+            else
+            {
+                args.StatusCode = 500;
+                args.StatusMessage = "failed";
+            }
+
+            return args;
+        }
+
+        public async Task<ResultArgs> BookingDetails(int id)
+        {
+            var args = new ResultArgs();
+
+            var result = await _bookingRepository.BookingDetails(id);
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "Success";
+                args.ResultData = result;
+            }
+            else
+            {
+                args.StatusCode = 500;
+                args.StatusMessage = "failed";
+            }
+
+            return args;
+        }
+
+        public async Task<ResultArgs> FetchBooking()
+        {
+            var args = new ResultArgs();
+
+            var result = await _bookingRepository.FetchBooking();
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "Success";
+                args.ResultData = result;
             }
             else
             {

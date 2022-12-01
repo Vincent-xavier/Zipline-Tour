@@ -1,14 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGOUT } from "../../actions/types";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.userAPI);
   const isLogedIn = JSON.parse(localStorage.getItem("user"));
 
   const handleSignOut = () => {
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    dispatch({ type: LOGOUT });
+    navigate("/login");
+    // window.location.href = "/login";
   };
   return (
     <>
@@ -95,7 +100,7 @@ const Header = () => {
                     <li>
                       <p className="dropdown-item d-flex align-items-center">
                         <i className="bi bi-box-arrow-right" />
-                        <span onClick={() => handleSignOut()}>Sign Out</span>
+                        <span style={{cursor:"pointer"}} onClick={() => handleSignOut()}>Sign Out</span>
                       </p>
                     </li>
                   </ul>
@@ -118,7 +123,6 @@ const Header = () => {
                       className="rounded-circle"
                     />
                   </h5>
-                  {/* End Profile Iamge Icon */}
                 </li>
               </>
             )}

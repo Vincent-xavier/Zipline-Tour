@@ -1,18 +1,19 @@
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useState } from "react";
-import ReactDatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import moment from "moment/moment";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
+import moment from "moment/moment";
+import ReactDatePicker from "react-datepicker";
+import * as Yup from "yup";
 import {
   eventDetailsById,
-  eventScheduleById,
+  listSchedule,
   saveEvent,
   saveEventSchedule,
+  ScheduleById,
 } from "../../../actions/Event";
 
 const EditEventSchedule = () => {
@@ -20,23 +21,64 @@ const EditEventSchedule = () => {
 
   const dispatch = useDispatch();
 
-  const { eventDetails, eventSchedule, success } = useSelector(
+  const { eventDetails, eventSchedule, scheduleDetails, success } = useSelector(
     (state) => state.eventAPI
   );
-  console.log(eventSchedule);
+
   const { id } = useParams();
   const eventId = id;
-
   const [fileSelected, setFileSelected] = useState();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [openAccordin, setOpenAccordin] = useState({
-    collapsed: "",
-    collapse: "",
+  const [scheduleData , setScheduleData] = useState();
+
+  console.log(startDate);
+  console.log(scheduleData);
+  // Event Registration Form
+  const eventForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      eventId: eventDetails ? eventDetails?.resultData?.eventId : 0,
+      eventName: eventDetails ? eventDetails?.resultData?.eventName : "",
+      price: eventDetails ? eventDetails?.resultData?.price : "",
+      max_Booking: eventDetails ? eventDetails?.resultData?.max_Booking : "",
+      min_Booking: eventDetails ? eventDetails?.resultData?.min_Booking : "",
+      eventCapacity: eventDetails
+        ? eventDetails?.resultData?.eventCapacity
+        : "",
+      eventDiscription: eventDetails
+        ? eventDetails?.resultData?.eventDiscription
+        : "",
+      imgFile: "",
+    },
+    validationSchema: Yup.object({
+      eventName: Yup.string().required("Enter event title"),
+      price: Yup.string().required("Enter price amount"),
+      min_Booking: Yup.number().required("Enter minimum Booking"),
+      max_Booking: Yup.number().required("Enter maximum Booking"),
+      eventDiscription: Yup.string().required("Enter event discription"),
+      eventCapacity: Yup.string().required("Enter Capacity"),
+    }),
+    onSubmit: (values) => {
+      const formData = {
+        eventId: values.eventId,
+        eventName: values.eventName,
+        price: values.price,
+        max_Booking: values.max_Booking,
+        min_Booking: values.min_Booking,
+        eventCapacity: values.eventCapacity,
+        eventDiscription: values.eventDiscription,
+        imgFile: fileSelected,
+        eventImage: eventDetails?.resultData?.eventImage,
+      };
+      dispatch(saveEvent(formData));
+    },
   });
 
   useEffect(() => {
-    dispatch(eventDetailsById(eventId));
+    if (eventId) {
+      dispatch(eventDetailsById(eventId));
+    }
   }, []);
 
   useEffect(() => {
@@ -45,14 +87,25 @@ const EditEventSchedule = () => {
     } else if (success === "event Saved Successfully") {
       navigate("/edit-event");
     }
+
+    
   }, [success]);
 
+
+  useEffect(()=>{
+    setScheduleData(scheduleDetails?.resultData);
+    // setStartDate(scheduleDetails?.resultData?.dateFrom);
+    // setEndDate(scheduleDetails?.resultData?.dateTo);
+  },[scheduleDetails?.resultData])
+
   const handleOpenAccordin = (id) => {
-    alert(id);
+    dispatch(ScheduleById(id));
   };
 
   const handleScheduleDetails = () => {
-    dispatch(eventScheduleById(eventId));
+    if (eventId) {
+      dispatch(listSchedule(eventId));
+    }
   };
 
   const saveFileSelected = (e) => {
@@ -66,7 +119,7 @@ const EditEventSchedule = () => {
   ]);
 
   var times = inputActivitiesFields
-    .map((t) => moment(t.ActivitiesData).format("hh:mm A"))
+    .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
     .join();
 
   const addInputActivitiesField = () => {
@@ -91,52 +144,16 @@ const EditEventSchedule = () => {
     setInputActivitiesFields(list);
   };
 
-  // Event Registration Form
-  const eventForm = useFormik({
-    initialValues: {
-      eventName: eventDetails ? eventDetails?.resultData?.eventName : "",
-      price: eventDetails ? eventDetails?.resultData?.price : "",
-      max_Booking: eventDetails ? eventDetails?.resultData?.max_Booking : "",
-      min_Booking: eventDetails ? eventDetails?.resultData?.min_Booking : "",
-      eventCapacity: eventDetails
-        ? eventDetails?.resultData?.eventCapacity
-        : "",
-      eventDiscription: eventDetails
-        ? eventDetails?.resultData?.eventDiscription
-        : "",
-      imgFile: null,
-    },
-    enableReinitialize: true,
-    validationSchema: Yup.object({
-      eventName: Yup.string().required("Enter event title"),
-      price: Yup.string().required("Enter price amount"),
-      min_Booking: Yup.number().required("Enter minimum Booking"),
-      max_Booking: Yup.number().required("Enter maximum Booking"),
-      eventDiscription: Yup.string().required("Enter event discription"),
-      eventCapacity: Yup.string().required("Enter Capacity"),
-    }),
-    onSubmit: (values) => {
-      const formData = {
-        eventName: values.eventName,
-        price: values.price,
-        max_Booking: values.max_Booking,
-        min_Booking: values.min_Booking,
-        eventCapacity: values.eventCapacity,
-        eventDiscription: values.eventDiscription,
-        imgFile: fileSelected,
-      };
-      dispatch(saveEvent(formData));
-    },
-  });
-
   //Event Schedule Form
   const eventScheduleForm = useFormik({
+    enableReinitialize:true,
+
     initialValues: {
-      name: "",
+      name:scheduleData ? scheduleData?.name : "",
       dateFrom: "",
       dateTo: "",
       times: "",
-      eventId: "",
+      eventId:scheduleData ? scheduleData?.eventId : "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Enter schedule name"),
@@ -213,6 +230,7 @@ const EditEventSchedule = () => {
                     <div className="card-body">
                       <h5 className="card-title">Discription</h5>
                       <form onSubmit={eventForm.handleSubmit}>
+                        <input type="hidden" name="eventId" />
                         <div className="row mt-3">
                           <div className="col-md-6">
                             <div className="form-floating">
@@ -413,8 +431,6 @@ const EditEventSchedule = () => {
                                 }
                                 accept="image/*"
                                 name="imgFile"
-                                value={eventForm.values.imgFile}
-                                onBlur={eventForm.handleBlur}
                                 onChange={(e) => saveFileSelected(e)}
                               />
                             </div>
@@ -500,9 +516,35 @@ const EditEventSchedule = () => {
                             role="tabpanel"
                             aria-labelledby="home-tab"
                           >
-                            <p
-                              onClick={() =>
-                                handleOpenAccordin(
+                            {eventSchedule &&
+                              eventSchedule.resultData.map((schedule) => {
+                                return (
+                                  <p
+                                    onClick={() =>
+                                      handleOpenAccordin(schedule.scheduleId)
+                                    }
+                                  >
+                                    <Link
+                                      to={"#flush-collapseOne"}
+                                      data-bs-toggle="collapse"
+                                    >
+                                      {schedule?.name +
+                                        " - " +
+                                        moment(schedule?.dateFrom).format(
+                                          "DD-MM-YYYY"
+                                        ) +
+                                        " untill  " +
+                                        moment(schedule?.dateTo).format(
+                                          "DD-MM-YYYY"
+                                        ) +
+                                        " " +
+                                        schedule?.times}
+                                    </Link>
+                                  </p>
+                                );
+                              })}
+
+                            {/* <p onClick={() => handleOpenAccordin(
                                   eventSchedule?.resultData?.scheduleId
                                 )
                               }
@@ -527,7 +569,7 @@ const EditEventSchedule = () => {
                                   </>
                                 ) : null}
                               </Link>
-                            </p>
+                            </p> */}
                           </div>
                           <div
                             className="tab-pane fade"

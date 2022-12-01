@@ -8,7 +8,6 @@ import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as Yup from "yup";
 import '@animxyz/core'
-
 const Payment = () => {
   const { bookingdata } = useSelector((state) => state.orderAPI);
   const [customer, setCustomer] = useState();
@@ -58,7 +57,7 @@ const Payment = () => {
         <section className="section">
           <div className="container">
             <div className="row">
-              <div className="card col-md-5 xyz-in" xyz="fade  flip-left perspective-1">
+              <div className="card col-md-5 xyz-in" xyz="fade  flip-left perspective-1" >
                 <div className="card-body xyz-none xyz-in">
                   <h3 className="card-title">Shopping Cart</h3>
                   <div className="card shadow-sm ">

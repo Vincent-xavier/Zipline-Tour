@@ -1,0 +1,87 @@
+﻿using System;
+using Dapper;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using ZiplineTour.Common;
+using ZiplineTour.DBEngine;
+using ZiplineTour.Models;
+using ZiplineTour.Models.Input;
+using ZiplineTour.Models.Output;
+using System.Collections.Generic;
+
+namespace ZiplineTour.Repository
+{
+    public interface IBookingRepository
+    {
+        Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
+        Task<BookingResult> BookingDetails(int id);
+        Task<List<BookingModel>> FetchBooking();
+    }
+    public class BookingRepository : IBookingRepository
+    {
+        private readonly IServerHandler _serverHandler;
+
+        public BookingRepository(IServerHandler serverHandler)
+        {
+            _serverHandler = serverHandler;
+        }
+
+
+        public async Task<BookingResult> SaveEventBooking(BookingModel bookingModel)
+        {
+            DynamicParameters param = new DynamicParameters();
+            BookingResult result = new BookingResult();
+            int BookingId;
+            try
+            {
+                param.Add("@firstname", bookingModel.UserData.FirstName, DbType.String, ParameterDirection.Input);
+                param.Add("@lastname", bookingModel.UserData.LastName, DbType.String, ParameterDirection.Input);
+                param.Add("@email", bookingModel.UserData.Email, DbType.String, ParameterDirection.Input);
+                param.Add("@phone", bookingModel.UserData.Phone, DbType.String, ParameterDirection.Input);
+                param.Add("@eventid", bookingModel.EventId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@scheduleid", bookingModel.ScheduleId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@dateid", bookingModel.DateId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@slotid", bookingModel.SlotId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@guest", bookingModel.Guests, DbType.Int32, ParameterDirection.Input);
+                param.Add("@totalprice", bookingModel.TotalPrice, DbType.Decimal, ParameterDirection.Input);
+                param.Add("@eventtime", bookingModel.EventTime, DbType.String, ParameterDirection.Input);
+                param.Add("@eventdate", bookingModel.EventDate, DbType.Date, ParameterDirection.Input);
+                param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.EventBooking, CommandType.StoredProcedure, param);
+                BookingId = param.Get<int>("@returnVal");
+                result = await BookingDetails(BookingId);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+
+            }
+            return result;
+        }
+
+        public async Task<List<BookingModel>> FetchBooking()
+        {
+            return (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.FetchAll, CommandType.StoredProcedure, null)).ToList();
+        }
+
+        public async Task<BookingResult> BookingDetails(int id)
+        {
+            var booking = new BookingResult();
+            var param = new DynamicParameters();
+
+            param.Add("@id", id, DbType.Int32, ParameterDirection.Input);
+            var mutiple = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.BookingDetails, CommandType.StoredProcedure, param);
+
+            if (mutiple != null)
+            {
+                booking.listBooking = (await mutiple.ReadAsync<BookingModel>()).ToList();
+                booking.listUser = (await mutiple.ReadAsync<UserModel>()).ToList();
+            }
+
+            return booking;
+        }
+
+    }
+}

@@ -1,17 +1,16 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, {  forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment/moment";
-import "../Event/Event.css";
 import { Link } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { events } from "../../../actions/Event";
 import * as types from "../../../actions/types";
+import "../Event/Event.css";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns'
 import '@animxyz/core'
-
 const Events = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
@@ -21,14 +20,11 @@ const Events = () => {
   <input type="text" className="form-control" onClick={onClick} ref={ref} value={format(startDate, "dd-MM-yyyy")} />
   </>
   ));
-
-
   const { eventData } = useSelector((state) => state.eventAPI);
-  console.log(eventData);
 
   useEffect(() => {
     dispatch(events());
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -38,7 +34,7 @@ const Events = () => {
         <div className="pagetitle">
           <h1 style={{ fontSize: "28px" }}>Events</h1>
         </div>
-        <section className="section xyz-in" >
+        <section className="section xyz-in">
           <div className="event-schedule-area-two bg-color pad100">
             <div className="container">
               <div className="row">
@@ -49,11 +45,11 @@ const Events = () => {
                       id="home"
                       role="tabpanel"
                     >
-                      <div className="card" >
-                        <div className="card-body opacity-0.5 mb-0" >
+                      <div className="card">
+                        <div className="card-body opacity-0.5 mb-0">
                           <div className="row xyz-in" xyz="fade left stagger">
                             <div className="col-md-8">
-                              <div className="row mt-3">
+                            <div className="row mt-3">
                                 <label
                                   htmlFor="inputText"
                                   className="col-sm-3 col-form-label mt-1"
@@ -128,17 +124,17 @@ const Events = () => {
                                     .map((event) => {
                                       return (
                                         <>
-                                          <tr className="inner-box xyz-in" xyz="fade left stagger" >
+                                          <tr className="inner-box xyz-in" xyz="fade left stagger">
                                             <th scope="row">
                                               <div className="event-date">
                                                 <span>
-                                                  {event?.eventCapacity}
+                                                  { event?.available && event?.available > 0 ?  event?.available :event?.eventCapacity }
                                                 </span>
                                                 <p>Available</p>
                                               </div>
                                             </th>
                                             <td>
-                                              <div className="event-img" xyz="rotate-right" >
+                                              <div className="event-img" xyz="rotate-right">
                                                 <img
                                                   // src="/admin/assets/img/event-img.jpg"
                                                   src={

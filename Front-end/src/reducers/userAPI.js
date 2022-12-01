@@ -32,6 +32,10 @@ export default function (state = initialState, action) {
         error: "login error",
         isAuthenticated: false
       };
+      case constants.LOGOUT:
+        return {
+          initialState
+        };
     default:
       return state;
   }

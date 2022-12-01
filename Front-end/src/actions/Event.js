@@ -167,7 +167,35 @@ export const saveEventSchedule = (scheduleData) => async (dispatch) => {
 };
 
 
-export const eventScheduleById = (id) => async (dispatch) => {
+export const listSchedule = (eventId) => async (dispatch) => {
+  dispatch({
+    type: constants.LIST_SCHEDULE_REQUEST,
+  });
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios
+      .get(
+        `/api/Event/getSchedules/${eventId}`,
+        {},
+        { headers: headers }
+      )
+      .then((res) => {
+        dispatch({
+          type: constants.LIST_SCHEDULE_SUCCESS,
+          payload: res.data,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: constants.LIST_SCHEDULE_ERROR,
+    });
+  }
+};
+
+export const ScheduleById = (ScheduleId) => async (dispatch) => {
   dispatch({
     type: constants.EVENT_SCHEDULE_BY_ID_REQUEST,
   });
@@ -178,7 +206,7 @@ export const eventScheduleById = (id) => async (dispatch) => {
   try {
     await axios
       .get(
-        `/api/Event/getSchedule/${id}`,
+        `/api/Event/getScheduleById/${ScheduleId}`,
         {},
         { headers: headers }
       )

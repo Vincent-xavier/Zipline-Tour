@@ -7,6 +7,8 @@ const initialState = {
   eventData: null,
   eventEditData:null,
   eventDetails : null,
+  eventSchedule:null,
+  scheduleDetails : null,
 };
 
 export default function (state = initialState, action) {
@@ -146,7 +148,7 @@ export default function (state = initialState, action) {
           ...state,
           isLoading: true,
           error: "",
-          eventSchedule:null,
+          scheduleDetails:null,
           
         };
       case constants.EVENT_SCHEDULE_BY_ID_SUCCESS:
@@ -154,16 +156,38 @@ export default function (state = initialState, action) {
           ...state,
           isLoading: false,
           success: "success",
-          eventSchedule:action.payload,
+          scheduleDetails:action.payload,
         };
       case constants.EVENT_SCHEDULE_BY_ID_ERROR:
         return {
           ...state,
           isLoading: false,
           error: "error",
-          eventSchedule:null,
+          scheduleDetails:null,
         };
 
+        
+        case constants.LIST_SCHEDULE_REQUEST:
+        return {
+          ...state,
+          isLoading: true,
+          error: "",
+          eventSchedule:null,          
+        };
+      case constants.LIST_SCHEDULE_SUCCESS:
+        return {
+          ...state,
+          isLoading: false,
+          success: "success",
+          eventSchedule:action.payload,
+        };
+      case constants.LIST_SCHEDULE_ERROR:
+        return {
+          ...state,
+          isLoading: false,
+          error: "error",
+          eventSchedule:null,
+        };
 
       
     default:

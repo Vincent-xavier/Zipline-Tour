@@ -12,8 +12,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.userAPI);
-
-  console.log(userData);
   const isLogedIn = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -41,7 +39,6 @@ const Login = () => {
     validationSchema: Yup.object({
       password: Yup.string()
         .required("Please enter your password")
-        // .min(7,"Password length must be greater than 7 characters")
         .max(255),
     }),
 
@@ -57,7 +54,6 @@ const Login = () => {
       return errors;
     },
 
-    //  Form data get and set Values send to Actions
     onSubmit: (values) => {
       const formData = {
         email: values.email,

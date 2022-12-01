@@ -88,6 +88,8 @@ namespace ZiplineTour.Models.Input
         public string EventImage { get; set; }
         public int SlotId { get; set; }
         public int EventCapacity { get; set; }
+        public int Bookings { get; set; }
+        public int Available { get; set; }
 
     }
     public class DateModel

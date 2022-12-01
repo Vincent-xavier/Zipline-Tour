@@ -20,15 +20,20 @@ namespace ZiplineTour.Repository
     public interface IEventRepository
     {
         Task<List<DisplayEvent>> Events();
+
         Task<DisplayEvent> EventById(int eventId);
+
         Task<List<EventModel>> EventDetails();
+
         Task<EventModel> EventDetailsById(int eventId);
+
         Task<int> SaveEvent(EventModel eventModel);
-        Task<string> UploadEventImage(IFormFile ImageFile);
+
         Task<int> SaveEventSchedule(EventSchedule schedule);
-        List<string> SplitTimes(string times);
-        Array GetDates(DateTime start, DateTime end);
-        Task<List<int>> SaveScheduleDate(DateTime DateFrom, DateTime DateTo, int EventId, int scheduleId);
+
+        Task<List<EventSchedule>> GetEventSchedule(int EventId);
+
+        Task<EventSchedule> ScheduleById(int ScheduleId);
     }
     public class EventRepository : ControllerBase, IEventRepository
     {
@@ -130,13 +135,20 @@ namespace ZiplineTour.Repository
             string EventImage = string.Empty;
             try
             {
-                // upload Image and get Image Name
-                EventImage = await UploadEventImage(eventModel.ImgFile);
-
-                param.Add("@eventId", eventModel.EventId, DbType.Int32, ParameterDirection.Input);
+                if (eventModel.ImgFile != null)
+                {
+                     // upload Image and get Image Name
+                    EventImage = await UploadEventImage(eventModel.ImgFile);
+                }
+                else
+                {
+                    EventImage = eventModel.EventImage;
+                }
+                param.Add("@eId", eventModel.EventId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@eName", eventModel.EventName, DbType.String, ParameterDirection.Input);
                 param.Add("@eDiscri", eventModel.EventDiscription, DbType.String, ParameterDirection.Input);
-                param.Add("@price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
+                param.Add("@e_price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
+                param.Add("@eCapacity", eventModel.EventCapacity, DbType.Int32, ParameterDirection.Input);
                 param.Add("@maxBook", eventModel.Max_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);
@@ -311,5 +323,23 @@ namespace ZiplineTour.Repository
         #endregion
 
         #endregion
+
+        public async Task<List<EventSchedule>> GetEventSchedule(int EventId)
+        {
+            var schedule = new EventSchedule();
+            var param = new DynamicParameters();
+            param.Add("@id", EventId, DbType.Int32, ParameterDirection.Input);
+            return (await _serverHandler.QueryAsync<EventSchedule>(_serverHandler.Connection, StoredProc.EventSchedule, CommandType.StoredProcedure, param)).ToList();
+
+        }
+
+        public async Task<EventSchedule> ScheduleById(int ScheduleId)
+        {
+            var schedule = new EventSchedule();
+            var param = new DynamicParameters();
+            param.Add("@id", ScheduleId, DbType.Int32, ParameterDirection.Input);
+            return await _serverHandler.QueryFirstOrDefaultAsync<EventSchedule>(_serverHandler.Connection, StoredProc.ScheduleById, CommandType.StoredProcedure, param);
+
+        }
     }
 }

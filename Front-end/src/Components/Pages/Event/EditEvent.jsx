@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { eventDetails } from "../../../actions/Event";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
@@ -8,13 +8,17 @@ import * as types from "../../../actions/types";
 
 const EditProduct = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { eventData } = useSelector((state) => state.eventAPI);
+
   useEffect(() => {
     dispatch(eventDetails());
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/add-event-schedule";
+    // window.location.href = "/add-event-schedule";
+    dispatch({ type: types.EVENT_DETAILS_BY_ID_REQUEST });
+    navigate("/add-event-schedule");
   };
 
   return (
@@ -50,10 +54,10 @@ const EditProduct = () => {
                         {eventData?.resultData ? (
                           eventData?.resultData.map((value) => {
                             return (
-                              <div class="xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
+                              <div>
                                 <table className="table">
                                   <tbody>
-                                    <tr className="inner-box xyz-in" xyz="fade left stagger">
+                                    <tr className="inner-box">
                                       <td>
                                         <div className="event-img">
                                           <img

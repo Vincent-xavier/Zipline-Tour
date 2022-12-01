@@ -10,8 +10,6 @@ import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
-
-import DataTable from 'react-data-table-component';
 import '@animxyz/core'
 
 const EventDetails = () => {
@@ -26,7 +24,6 @@ const EventDetails = () => {
   useEffect(() => {
     dispatch(eventById(id));
   }, []);
-
 
   useEffect(() => {
     setCounter(1);
@@ -45,8 +42,6 @@ const EventDetails = () => {
     setCounter(counter - 1);
     settotalPrice((counter - 1) * eventPrice);
   };
-
-
 
   // Event Registration Form
   const contactForm = useFormik({
@@ -126,8 +121,8 @@ const EventDetails = () => {
 
       <main id="main" className="main">
         <section className="section">
-          <div className="container"  xyz="fade small-100%">
-            <div className="product-content product-wrap clearfix product-deatil xyz-none xyz-in" >
+          <div className="container" xyz="fade small-100%">
+            <div className="product-content product-wrap clearfix product-deatil xyz-none xyz-in">
               <div className="row">
                 <div className="col-md-5 col-sm-12 col-xs-12 ">
                   <div className="product-image">
@@ -170,10 +165,19 @@ const EventDetails = () => {
                       </li>
                       <li>
                         <a>
-                          Available
+                          Capacity
                           <span>
                             {eventEditData &&
                               eventEditData?.resultData?.eventCapacity}{" "}
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a>
+                          Available
+                          <span>
+                            {eventEditData &&
+                              eventEditData?.resultData?.available}{" "}
                           </span>
                         </a>
                       </li>
@@ -285,7 +289,9 @@ const EventDetails = () => {
                         value={contactForm.values.firstName}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingName">First Name <span className="text-danger">*</span></label>
+                      <label htmlFor="floatingName">
+                        First Name <span className="text-danger">*</span>
+                      </label>
                     </div>
 
                     {contactForm.touched.firstName &&
@@ -313,7 +319,9 @@ const EventDetails = () => {
                         value={contactForm.values.lastName}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingName">Last Name <span className="text-danger">*</span></label>
+                      <label htmlFor="floatingName">
+                        Last Name <span className="text-danger">*</span>
+                      </label>
                     </div>
                     {contactForm.touched.lastName &&
                     contactForm.errors.lastName ? (
@@ -339,7 +347,9 @@ const EventDetails = () => {
                         value={contactForm.values.email}
                         onBlur={contactForm.handleBlur}
                       />
-                      <label htmlFor="floatingEmail">Your Email <span className="text-danger">*</span></label>
+                      <label htmlFor="floatingEmail">
+                        Your Email <span className="text-danger">*</span>
+                      </label>
                       {contactForm.touched.email && contactForm.errors.email ? (
                         <small>
                           <span className={"text-danger "}>
@@ -355,7 +365,9 @@ const EventDetails = () => {
                         type="number"
                         placeholder="Phone"
                         name="phone"
-                        maxLength={10}
+                        minlength="4"
+                        maxlength="8"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         onChange={contactForm.handleChange}
                         value={contactForm.values.phone}
                         onBlur={contactForm.handleBlur}
@@ -365,7 +377,9 @@ const EventDetails = () => {
                             : "form-control input-lg mt-1"
                         }
                       />
-                      <label htmlFor="floatingEmail">Your phone <span className="text-danger">*</span></label>
+                      <label htmlFor="floatingEmail">
+                        Your phone <span className="text-danger">*</span>
+                      </label>
                     </div>
                     {contactForm.touched.phone && contactForm.errors.phone ? (
                       <small>

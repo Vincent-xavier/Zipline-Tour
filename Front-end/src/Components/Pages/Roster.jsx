@@ -36,9 +36,7 @@ const RosterView = () => {
                                         </div>
                                     </div>
                                 </Tab>
-                                
                             </TabList>
-
                             <TabPanel>
                             </TabPanel>
                             <TabPanel>

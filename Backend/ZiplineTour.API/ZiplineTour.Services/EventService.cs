@@ -16,9 +16,10 @@ namespace ZiplineTour.Services
         Task<ResultArgs> EventById(int eventId);
         Task<ResultArgs> EventDetails();
         Task<ResultArgs> EventDetailsById(int eventId);
-
         Task<ResultArgs> SaveEvent(EventModel eventModel);
         Task<ResultArgs> SaveEventSchedule(EventSchedule schedule);
+        Task<ResultArgs> GetEventSchedule(int EventId);
+        Task<ResultArgs> ScheduleById(int ScheduleId);
     }
     public class EventService : IEventService
     {
@@ -146,6 +147,44 @@ namespace ZiplineTour.Services
 
             return args;
         }
+        public async Task<ResultArgs> GetEventSchedule(int EventId)
+        {
+            var args = new ResultArgs();
+            var result = await _eventRepository.GetEventSchedule(EventId);
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "success";
+                args.ResultData = result;
+            }
+            else
+            {
+                return null;
+            }
+
+            return args;
+        }
+
+        public async Task<ResultArgs> ScheduleById(int ScheduleId)
+        {
+            var args = new ResultArgs();
+            var result = await _eventRepository.ScheduleById(ScheduleId);
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "success";
+                args.ResultData = result;
+            }
+            else
+            {
+                return null;
+            }
+
+            return args;
+        }
+
 
     }
 }

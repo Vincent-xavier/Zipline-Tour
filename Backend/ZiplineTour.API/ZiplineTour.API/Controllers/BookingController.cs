@@ -34,5 +34,36 @@ namespace ZiplineTour.API.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpGet]
+        [Route("fetchAllBookings")]
+        public async Task<IActionResult> FetchBooking()
+        {
+            var result = await _bookingService.FetchBooking();
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpGet("getBookingDetails/{bookingId}")]
+        public async Task<IActionResult> BookingDetails(int bookingId)
+        {
+            var result = await _bookingService.BookingDetails(bookingId);
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }

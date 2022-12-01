@@ -75,6 +75,43 @@ namespace ZiplineTour.API.Controllers
         {
             return Ok(await _eventService.SaveEventSchedule(schedule));
         }
+
+        [HttpGet("getSchedules/{EventId}")]
+        public async Task<IActionResult> GetScheduleDetails(int EventId)
+        {
+            var Schedule = await _eventService.GetEventSchedule(EventId);
+
+            if (Schedule == null)
+            {
+                return BadRequest();
+            }
+            else if (Schedule != null && Schedule.StatusCode == 200)
+            {
+                return Ok(Schedule);
+            }
+            return BadRequest();
+
+        }
+
+        [HttpGet("getScheduleById/{ScheduleId}")]
+        public async Task<IActionResult> ScheduleById(int ScheduleId)
+        {
+            var Schedule = await _eventService.ScheduleById(ScheduleId);
+
+            if (Schedule == null)
+            {
+                return BadRequest();
+            }
+            else if (Schedule != null && Schedule.StatusCode == 200)
+            {
+                return Ok(Schedule);
+            }
+            return BadRequest();
+
+        }
+
+
+
         [HttpGet]
         [Route("fetchEvent")]
         public async Task<IActionResult> FetchEvent()
@@ -106,6 +143,8 @@ namespace ZiplineTour.API.Controllers
                                                  Min_Booking = lt.Min_Booking,
                                                  Max_Booking = lt.Max_Booking,
                                                  EventImage = lt.EventImage,
+                                                 Bookings = lt.Bookings,
+                                                 Available = lt.Available
                                              }).ToList()
 
                              }).ToList();
