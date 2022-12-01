@@ -1,12 +1,12 @@
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { eventDetails } from "../../../actions/Event";
+import { ToastContainer, toast  } from 'react-toastify';
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as types from "../../../actions/types";
-import { ToastContainer, toast  } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const EditProduct = () => {
   const dispatch = useDispatch();

@@ -2,11 +2,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import ReactDatePicker from "react-datepicker";
 import { useFormik } from "formik";
+import moment from "moment/moment";
+import * as Yup from "yup";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
-import moment from "moment/moment";
-import ReactDatePicker from "react-datepicker";
 import {
   eventDetailsById,
   listSchedule,
@@ -14,7 +15,6 @@ import {
   saveEventSchedule,
   ScheduleById,
 } from "../../../actions/Event";
-import * as Yup from "yup";
 import * as types from "../../../actions/types";
 
 const EditEventSchedule = () => {
@@ -35,6 +35,83 @@ const EditEventSchedule = () => {
       ActivitiesData: "",
     },
   ]);
+  var times = inputActivitiesFields
+  .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
+  .join();
+
+  useEffect(() => {
+    if (eventId) {
+      dispatch(eventDetailsById(eventId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scheduleDetails?.resultData) {
+      setScheduleData(scheduleDetails?.resultData);
+      const dateFrom = scheduleDetails?.resultData?.dateFrom.split("T")?.[0];
+      setStartDate(new Date(dateFrom));
+      const dateTo = scheduleDetails?.resultData?.dateTo.split("T")?.[0];
+      setEndDate(new Date(dateTo));
+      const times = scheduleDetails?.resultData?.times.split(",");
+      var newTimes = handleTimesToArray(times);
+      setInputActivitiesFields(newTimes);
+    }
+  }, [scheduleDetails?.resultData]);
+
+  const handleTimesToArray = (times) => {
+    var nietos = [];
+    var obj = {};
+    var i;
+    for (i = 0; i < times.length; i++) {
+      var obj = {};
+      obj["ActivitiesData"] = moment(times[i], ["hh:mm A"]).format("HH:mm");
+      nietos.push(obj);
+    }
+    return nietos;
+  };
+
+  const handleNewSchedule = () => {
+    dispatch({ type: types.CLEAR_SCHEDULE });
+  };
+  
+  const handleOpenAccordin = (id) => {
+    dispatch(ScheduleById(id));
+  };
+
+  const handleScheduleDetails = () => {
+    if (eventId > 0) {
+      dispatch(listSchedule(eventId));
+    } else {
+      dispatch({ type: types.LIST_SCHEDULE_REQUEST });
+    }
+  };
+
+  const saveFileSelected = (e) => {
+    setFileSelected(e.target.files[0]);
+  };
+
+
+  const addInputActivitiesField = () => {
+    setInputActivitiesFields([
+      ...inputActivitiesFields,
+      {
+        ActivitiesData: "",
+      },
+    ]);
+  };
+  
+  const handleActivitiesChange = (index, evnt) => {
+    const { name, value } = evnt.target;
+    const list = [...inputActivitiesFields];
+    list[index][name] = value;
+    setInputActivitiesFields(list);
+  };
+  
+  const removeInputActivitiesFields = (index) => {
+    const rows = [...inputActivitiesFields];
+    rows.pop();
+    setInputActivitiesFields(rows);
+  };
 
   // Event Registration Form
   const eventForm = useFormik({
@@ -77,84 +154,6 @@ const EditEventSchedule = () => {
     },
   });
 
-  useEffect(() => {
-    if (eventId) {
-      dispatch(eventDetailsById(eventId));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (scheduleDetails?.resultData) {
-      setScheduleData(scheduleDetails?.resultData);
-      const dateFrom = scheduleDetails?.resultData?.dateFrom.split("T")?.[0];
-      setStartDate(new Date(dateFrom));
-      const dateTo = scheduleDetails?.resultData?.dateTo.split("T")?.[0];
-      setEndDate(new Date(dateTo));
-      const times = scheduleDetails?.resultData?.times.split(",");
-      var newTimes = handleTimesToArray(times);
-      setInputActivitiesFields(newTimes);
-    }
-  }, [scheduleDetails?.resultData]);
-
-  const handleTimesToArray = (times) => {
-    var nietos = [];
-    var obj = {};
-    var i;
-    for (i = 0; i < times.length; i++) {
-      var obj = {};
-      obj["ActivitiesData"] = moment(times[i], ["hh:mm A"]).format("HH:mm");
-
-      nietos.push(obj);
-    }
-
-    return nietos;
-  };
-
-  const handleOpenAccordin = (id) => {
-    dispatch(ScheduleById(id));
-  };
-
-  const handleScheduleDetails = () => {
-    if (eventId > 0) {
-      dispatch(listSchedule(eventId));
-    } else {
-      dispatch({ type: types.LIST_SCHEDULE_REQUEST });
-    }
-  };
-
-  const saveFileSelected = (e) => {
-    setFileSelected(e.target.files[0]);
-  };
-
-  var times = inputActivitiesFields
-    .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
-    .join();
-
-  const addInputActivitiesField = () => {
-    setInputActivitiesFields([
-      ...inputActivitiesFields,
-      {
-        ActivitiesData: "",
-      },
-    ]);
-  };
-
-  const removeInputActivitiesFields = (index) => {
-    const rows = [...inputActivitiesFields];
-    rows.pop();
-    setInputActivitiesFields(rows);
-  };
-
-  const handleActivitiesChange = (index, evnt) => {
-    const { name, value } = evnt.target;
-    const list = [...inputActivitiesFields];
-    list[index][name] = value;
-    setInputActivitiesFields(list);
-  };
-
-  const handleNewSchedule = () => {
-    dispatch({ type: types.CLEAR_SCHEDULE });
-  };
 
   //Event Schedule Form
   const eventScheduleForm = useFormik({

@@ -189,6 +189,12 @@ export default function (state = initialState, action) {
         eventSchedule: null,
       };
 
+      case constants.CLEAR_SCHEDULE :
+        return{
+          ...state,
+          scheduleDetails : null,
+        }
+
 
     default:
       return state;

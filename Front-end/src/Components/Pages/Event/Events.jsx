@@ -1,17 +1,20 @@
+import "../Event/Event.css";
+import "react-datepicker/dist/react-datepicker.css";
+import '@animxyz/core'
 import React, {  forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ReactDatePicker from "react-datepicker";
+import { format } from 'date-fns'
+import swal from "sweetalert";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { events } from "../../../actions/Event";
 import * as types from "../../../actions/types";
-import "../Event/Event.css";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { format } from 'date-fns'
-import '@animxyz/core'
-import swal from "sweetalert";
+
+
+
 const Events = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
