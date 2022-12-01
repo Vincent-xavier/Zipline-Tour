@@ -12,7 +12,6 @@ namespace ZiplineTour.Services
 {
     public interface IEventService
     {
-        Task<ResultArgs> Events();
         Task<ResultArgs> EventById(int eventId);
         Task<ResultArgs> EventDetails();
         Task<ResultArgs> EventDetailsById(int eventId);
@@ -29,27 +28,6 @@ namespace ZiplineTour.Services
             _eventRepository = eventRepository;
         }
 
-        public async Task<ResultArgs> Events()
-        {
-            ResultArgs args = new ResultArgs();
-
-            var events = await _eventRepository.Events();
-
-            if (events != null)
-            {
-                args.StatusCode = 200;
-                args.StatusMessage = "success";
-                args.ResultData = events;
-            }
-            else
-            {
-                args.StatusCode = 201;
-                args.StatusMessage = "error";
-                args.ResultData = null;
-            }
-
-            return args;
-        }
         public async Task<ResultArgs> EventById(int eventId)
         {
             ResultArgs args = new ResultArgs();

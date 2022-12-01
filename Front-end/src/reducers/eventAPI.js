@@ -5,10 +5,10 @@ const initialState = {
   error: "",
   success: "",
   eventData: null,
-  eventEditData:null,
-  eventDetails : null,
-  eventSchedule:null,
-  scheduleDetails : null,
+  eventEditData: null,
+  eventDetails: null,
+  eventSchedule: null,
+  scheduleDetails: null,
 };
 
 export default function (state = initialState, action) {
@@ -35,77 +35,77 @@ export default function (state = initialState, action) {
         eventData: null,
       };
 
-      //event by id
-      case constants.EVENT_BY_ID_REQUEST:
+    //event by id
+    case constants.EVENT_BY_ID_REQUEST:
       return {
         ...state,
         isLoading: true,
         error: "",
-        eventEditData:null,
+        eventEditData: null,
       };
     case constants.EVENT_BY_ID_SUCCESS:
       return {
         ...state,
         isLoading: false,
         success: "success",
-        eventEditData:action.payload,
+        eventEditData: action.payload,
       };
     case constants.EVENT_BY_ID_ERROR:
       return {
         ...state,
         isLoading: false,
         error: "error",
-        eventEditData:null,
+        eventEditData: null,
       };
 
-      // Event Details
-      case constants.EVENT_DETAILS_REQUEST:
-        return {
-          ...state,
-          isLoading: true,
-          error: "",
-          eventData: null,
-        };
-      case constants.EVENT_DETAILS_SUCCESS:
-        return {
-          ...state,
-          isLoading: false,
-          success: "success",
-          eventData: action.payload,
-        };
-      case constants.EVENT_DETAILS_ERROR:
-        return {
-          ...state,
-          isLoading: false,
-          error: "error",
-          eventData: null,
-        };
+    // Event Details
+    case constants.EVENT_DETAILS_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+        eventData: null,
+      };
+    case constants.EVENT_DETAILS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "success",
+        eventData: action.payload,
+      };
+    case constants.EVENT_DETAILS_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+        eventData: null,
+      };
 
-        //event by id
-      case constants.EVENT_DETAILS_BY_ID_REQUEST:
-        return {
-          ...state,
-          isLoading: true,
-          error: "",
-          eventDetails:null,
-        };
-      case constants.EVENT_DETAILS_BY_ID_SUCCESS:
-        return {
-          ...state,
-          isLoading: false,
-          success: "success",
-          eventDetails:action.payload,
-        };
-      case constants.EVENT_DETAILS_BY_ID_ERROR:
-        return {
-          ...state,
-          isLoading: false,
-          error: "error",
-          eventDetails:null,
-        };
+    //event by id
+    case constants.EVENT_DETAILS_BY_ID_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+        eventDetails: null,
+      };
+    case constants.EVENT_DETAILS_BY_ID_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "success",
+        eventDetails: action.payload,
+      };
+    case constants.EVENT_DETAILS_BY_ID_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+        eventDetails: null,
+      };
 
 
-      case constants.SAVE_EVENTS_REQUEST:
+    case constants.SAVE_EVENTS_REQUEST:
       return {
         ...state,
         isLoading: true,
@@ -124,7 +124,7 @@ export default function (state = initialState, action) {
         error: "error",
       };
 
-      case constants.SAVE_EVENT_SCHEDULE_REQUEST:
+    case constants.SAVE_EVENT_SCHEDULE_REQUEST:
       return {
         ...state,
         isLoading: true,
@@ -143,53 +143,53 @@ export default function (state = initialState, action) {
         error: "error",
       };
 
-      case constants.EVENT_SCHEDULE_BY_ID_REQUEST:
-        return {
-          ...state,
-          isLoading: true,
-          error: "",
-          scheduleDetails:null,
-          
-        };
-      case constants.EVENT_SCHEDULE_BY_ID_SUCCESS:
-        return {
-          ...state,
-          isLoading: false,
-          success: "success",
-          scheduleDetails:action.payload,
-        };
-      case constants.EVENT_SCHEDULE_BY_ID_ERROR:
-        return {
-          ...state,
-          isLoading: false,
-          error: "error",
-          scheduleDetails:null,
-        };
+    case constants.EVENT_SCHEDULE_BY_ID_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+        scheduleDetails: null,
 
-        
-        case constants.LIST_SCHEDULE_REQUEST:
-        return {
-          ...state,
-          isLoading: true,
-          error: "",
-          eventSchedule:null,          
-        };
-      case constants.LIST_SCHEDULE_SUCCESS:
-        return {
-          ...state,
-          isLoading: false,
-          success: "success",
-          eventSchedule:action.payload,
-        };
-      case constants.LIST_SCHEDULE_ERROR:
-        return {
-          ...state,
-          isLoading: false,
-          error: "error",
-          eventSchedule:null,
-        };
+      };
+    case constants.EVENT_SCHEDULE_BY_ID_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "success",
+        scheduleDetails: action.payload,
+      };
+    case constants.EVENT_SCHEDULE_BY_ID_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+        scheduleDetails: null,
+      };
 
-      
+
+    case constants.LIST_SCHEDULE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+        eventSchedule: null,
+      };
+    case constants.LIST_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "success",
+        eventSchedule: action.payload,
+      };
+    case constants.LIST_SCHEDULE_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+        eventSchedule: null,
+      };
+
+
     default:
       return state;
   }

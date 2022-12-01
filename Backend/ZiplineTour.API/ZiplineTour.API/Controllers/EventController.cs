@@ -26,11 +26,50 @@ namespace ZiplineTour.API.Controllers
             _serverHandler = serverHandler;
         }
 
+
         [HttpGet]
-        [Route("events")]
-        public async Task<IActionResult> Events()
+        [Route("fetchEvent")]
+        public async Task<IActionResult> FetchEvent()
         {
-            return Ok(await _eventService.Events());
+            List<Result> objResult = new List<Result>();
+            try
+            {
+                var list = new ListDateAndTime();
+                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.FetchEvents, System.Data.CommandType.StoredProcedure);
+
+                list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
+                list.listtime = (await Events.ReadAsync<timeModel>()).ToList();
+
+                objResult = (from d in list.listDate
+                             select new Result
+                             {
+                                 Date = d.Date,
+                                 LstModal = (from lt in list.listtime
+                                             where lt.Date == d.Date
+                                             select new timeModel
+                                             {
+                                                 SlotId = lt.SlotId,
+                                                 EventName = lt.EventName,
+                                                 Price = lt.Price,
+                                                 Time = lt.Time,
+                                                 Date = lt.Date,
+                                                 EventCapacity = lt.EventCapacity,
+                                                 Min_Booking = lt.Min_Booking,
+                                                 Max_Booking = lt.Max_Booking,
+                                                 EventImage = lt.EventImage,
+                                                 Bookings = lt.Bookings,
+                                                 Available = lt.Available
+                                             }).ToList()
+
+                             }).ToList();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
+
+            return Ok(objResult);
         }
 
         [HttpGet("eventById/{eventId}")]
@@ -45,7 +84,7 @@ namespace ZiplineTour.API.Controllers
         {
             var events = await _eventService.EventDetails();
 
-            
+
             if (events.StatusCode == 200)
             {
                 return Ok(events);
@@ -60,7 +99,6 @@ namespace ZiplineTour.API.Controllers
         {
             return Ok(await _eventService.EventDetailsById(eventId));
         }
-
 
         [HttpPost]
         [Route("saveEvent")]
@@ -110,52 +148,5 @@ namespace ZiplineTour.API.Controllers
 
         }
 
-
-
-        [HttpGet]
-        [Route("fetchEvent")]
-        public async Task<IActionResult> FetchEvent()
-        {
-            List<Result> objResult = new List<Result>();
-            try
-            {
-                var list = new testResult();
-                Result result = new Result();
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.TestEvents, System.Data.CommandType.StoredProcedure);
-
-                list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
-                list.listtime = (await Events.ReadAsync<timeModel>()).ToList();
-
-                objResult = (from d in list.listDate
-                             select new Result
-                             {
-                                 Date = d.Date,
-                                 LstModal = (from lt in list.listtime
-                                             where lt.Date == d.Date
-                                             select new timeModel
-                                             {
-                                                 SlotId = lt.SlotId,
-                                                 EventName = lt.EventName,
-                                                 Price = lt.Price,
-                                                 Time = lt.Time,
-                                                 Date = lt.Date,
-                                                 EventCapacity = lt.EventCapacity,
-                                                 Min_Booking = lt.Min_Booking,
-                                                 Max_Booking = lt.Max_Booking,
-                                                 EventImage = lt.EventImage,
-                                                 Bookings = lt.Bookings,
-                                                 Available = lt.Available
-                                             }).ToList()
-
-                             }).ToList();
-            }
-            catch (Exception ex)
-            {
-                ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
-            }
-
-            return Ok(objResult);
-        }
     }
 }

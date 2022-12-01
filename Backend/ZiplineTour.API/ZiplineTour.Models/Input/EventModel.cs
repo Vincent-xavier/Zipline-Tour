@@ -17,7 +17,6 @@ namespace ZiplineTour.Models.Input
         public int Min_Booking { get; set; }
         public int Max_Booking { get; set; }
         public string EventImage { get; set; } = "";
-        public string ImagePath { get; set; } = "";
         public IFormFile ImgFile { get; set; }
     }
 
@@ -98,7 +97,7 @@ namespace ZiplineTour.Models.Input
         public DateTime Date { get; set; }
     }
 
-    public class testResult
+    public class ListDateAndTime
     {
         public List<DateModel> listDate { get; set; }
         public List<timeModel> listtime { get; set; }

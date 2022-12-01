@@ -5,18 +5,25 @@ import { eventDetails } from "../../../actions/Event";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as types from "../../../actions/types";
+import { ToastContainer, toast  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { eventData } = useSelector((state) => state.eventAPI);
+  const { eventData,success } = useSelector((state) => state.eventAPI);
 
   useEffect(() => {
     dispatch(eventDetails());
   }, []);
 
+  useEffect(() => {
+    if (success === "event Saved Successfully") {
+      toast("Event Scheduled Successfully")
+    }
+  }, [success]);
+
   const handleClick = () => {
-    // window.location.href = "/add-event-schedule";
     dispatch({ type: types.EVENT_DETAILS_BY_ID_REQUEST });
     navigate("/add-event-schedule");
   };
@@ -27,6 +34,7 @@ const EditProduct = () => {
       <Sidebar />
 
       <main id="main" className="main">
+        <ToastContainer />
         <div className="pagetitle">
           <h1 style={{ fontSize: "28px" }}>Update Events</h1>
         </div>

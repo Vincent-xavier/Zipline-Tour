@@ -11,20 +11,29 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns'
 import '@animxyz/core'
+import swal from "sweetalert";
 const Events = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+
+  
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <>
   <input type="text" className="form-control" onClick={onClick} ref={ref} value={format(startDate, "dd-MM-yyyy")} />
   </>
   ));
-  const { eventData } = useSelector((state) => state.eventAPI);
+  const { eventData,success } = useSelector((state) => state.eventAPI);
+  console.log(success);
 
   useEffect(() => {
     dispatch(events());
-  }, []);
+    if (success === "event Saved Successfully") {
+      swal("Event Scheduled Successfully")
+    }else if (success === "event Scheduled Successfully") {
+      swal("Event Scheduled Successfully")
+    }
+  }, [success]);
 
   return (
     <>
@@ -47,7 +56,7 @@ const Events = () => {
                     >
                       <div className="card">
                         <div className="card-body opacity-0.5 mb-0">
-                          <div className="row xyz-in" xyz="fade left stagger">
+                          <div className="row">
                             <div className="col-md-8">
                             <div className="row mt-3">
                                 <label

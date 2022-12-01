@@ -1,8 +1,11 @@
+
+export const LOGOUT = 'LOGOUT';
+export const CLEAR_SCHEDULE = 'CLEAR_SCHEDULE';
+
+
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
-
-export const LOGOUT = 'LOGOUT';
 
 export const EVENTS_REQUEST = 'EVENTS_REQUEST';
 export const EVENTS_SUCCESS = 'EVENTS_SUCCESS';

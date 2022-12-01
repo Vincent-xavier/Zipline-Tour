@@ -1,25 +1,23 @@
-﻿using System;
+﻿using Dapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using ZiplineTour.Common;
 using ZiplineTour.DBEngine;
 using ZiplineTour.Models.Input;
-using System.Data;
-using System.Linq;
-using Dapper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
-using Newtonsoft.Json.Linq;
 
 namespace ZiplineTour.Repository
 {
     public interface IEventRepository
     {
-        Task<List<DisplayEvent>> Events();
 
         Task<DisplayEvent> EventById(int eventId);
 
@@ -44,39 +42,6 @@ namespace ZiplineTour.Repository
         {
             _serverHandler = serverHandler;
             _webHostEnvironment = webHostEnvironment;
-        }
-        public async Task<List<DisplayEvent>> Events()
-        {
-            List<DisplayEvent> eventModels = new List<DisplayEvent>();
-
-            try
-            {
-                eventModels = (await _serverHandler.QueryAsync<DisplayEvent>(_serverHandler.Connection, StoredProc.Events, CommandType.StoredProcedure, null)).ToList();
-            }
-            catch (Exception ex)
-            {
-                var log = new ErrorLog();
-                log.SendErrorToText(ex);
-            }
-            return eventModels;
-        }
-        public async Task<Object> FetchAllEvents()
-        {
-                JObject json = new JObject();
-            try
-            {
-                var result = await _serverHandler.ExecuteScalarAsync<String>(_serverHandler.Connection, StoredProc.TestEvents, CommandType.StoredProcedure, null);
-                json = JObject.Parse(result);
-
-            }
-            catch (Exception ex)
-            {
-
-                var log = new ErrorLog();
-                log.SendErrorToText(ex);
-            }
-           
-            return json;
         }
 
         public async Task<DisplayEvent> EventById(int eventId)
@@ -208,8 +173,8 @@ namespace ZiplineTour.Repository
             {
                 param.Add("@ScheduleId", schedule.ScheduleId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@Name", schedule.Name, DbType.String, ParameterDirection.Input);
-                param.Add("@DateFrom", schedule.DateFrom, DbType.DateTime, ParameterDirection.Input);
-                param.Add("@DateTo", schedule.DateTo, DbType.DateTime, ParameterDirection.Input);
+                param.Add("@DateFrom", schedule.DateFrom, DbType.Date, ParameterDirection.Input);
+                param.Add("@DateTo", schedule.DateTo, DbType.Date, ParameterDirection.Input);
                 param.Add("@Times", schedule.Times, DbType.String, ParameterDirection.Input);
                 param.Add("@EventId", schedule.EventId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
