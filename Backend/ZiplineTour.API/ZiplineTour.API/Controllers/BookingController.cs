@@ -52,9 +52,9 @@ namespace ZiplineTour.API.Controllers
         }
 
         [HttpGet("getBookingDetails/{bookingId}")]
-        public async Task<IActionResult> BookingDetails(int bookingId)
+        public async Task<IActionResult> BookingDetailsById(int bookingId)
         {
-            var result = await _bookingService.BookingDetails(bookingId);
+            var result = await _bookingService.BookingDetailsById(bookingId);
 
             if (result.StatusCode == 200)
             {

@@ -11,7 +11,7 @@ namespace ZiplineTour.Services
     public interface IBookingService
     {
         Task<ResultArgs> SaveEventBooking(BookingModel bookingModel);
-        Task<ResultArgs> BookingDetails(int id);
+        Task<ResultArgs> BookingDetailsById(int id);
         Task<ResultArgs> FetchBooking();
 
     }
@@ -44,11 +44,11 @@ namespace ZiplineTour.Services
             return args;
         }
 
-        public async Task<ResultArgs> BookingDetails(int id)
+        public async Task<ResultArgs> BookingDetailsById(int id)
         {
             var args = new ResultArgs();
 
-            var result = await _bookingRepository.BookingDetails(id);
+            var result = await _bookingRepository.BookingDetailsById(id);
 
             if (result != null)
             {

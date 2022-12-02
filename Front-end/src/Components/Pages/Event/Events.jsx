@@ -17,6 +17,7 @@ const Events = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+  const { eventData, success } = useSelector((state) => state.eventAPI);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <>
@@ -29,7 +30,7 @@ const Events = () => {
       />
     </>
   ));
-  const { eventData, success } = useSelector((state) => state.eventAPI);
+  console.log(eventData);
 
   useEffect(() => {
     dispatch(events());
@@ -109,8 +110,8 @@ const Events = () => {
                         </div>
                       </div>
 
-                      {eventData && eventData.length ? (
-                        eventData?.map((value) => {
+                      {eventData && eventData ? (
+                        eventData?.resultData?.map((value) => {
                           return (
                             <div
                               className="display-events xyz-in"

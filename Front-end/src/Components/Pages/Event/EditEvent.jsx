@@ -62,12 +62,12 @@ const EditProduct = () => {
                         {eventData?.resultData ? (
                           eventData?.resultData.map((value) => {
                             return (
-                              <div>
+                              <div class="xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
                                 <table className="table">
                                   <tbody>
-                                    <tr className="inner-box">
+                                    <tr className="inner-box  xyz-in" xyz="fade left stagger">
                                       <td>
-                                        <div className="event-img">
+                                        <div className="event-img xyz-nested">
                                           <img
                                             src={
                                               types.IMAGE_PATH +
@@ -78,7 +78,7 @@ const EditProduct = () => {
                                         </div>
                                       </td>
                                       <td>
-                                        <div className="event-wrap">
+                                        <div className="event-wrap" >
                                           <h3>
                                             <Link
                                               to={`/edit-event-schedule/${value.eventId}`}

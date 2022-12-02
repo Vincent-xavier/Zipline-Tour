@@ -38,7 +38,7 @@ const BookingList = () => {
     },
     {
       name: "Event Time",
-      selector: (row) => moment(row?.eventTime).format("hh:mm A"),
+      selector: (row) => moment(row?.eventTime, ["hh:mm A"]).format("hh:mm A"),
     },
     {
       name: "Event Day",

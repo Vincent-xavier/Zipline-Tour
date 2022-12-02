@@ -14,9 +14,9 @@ namespace ZiplineTour.Repository
 {
     public interface IBookingRepository
     {
-        Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
-        Task<BookingResult> BookingDetails(int id);
         Task<List<BookingModel>> FetchBooking();
+        Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
+        Task<BookingResult> BookingDetailsById(int id);
     }
     public class BookingRepository : IBookingRepository
     {
@@ -27,7 +27,7 @@ namespace ZiplineTour.Repository
             _serverHandler = serverHandler;
         }
 
-
+        #region Save Event Booking Details
         public async Task<BookingResult> SaveEventBooking(BookingModel bookingModel)
         {
             DynamicParameters param = new DynamicParameters();
@@ -50,7 +50,7 @@ namespace ZiplineTour.Repository
                 param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.EventBooking, CommandType.StoredProcedure, param);
                 BookingId = param.Get<int>("@returnVal");
-                result = await BookingDetails(BookingId);
+                result = await BookingDetailsById(BookingId);
             }
             catch (Exception ex)
             {
@@ -60,28 +60,51 @@ namespace ZiplineTour.Repository
             }
             return result;
         }
+        #endregion
+
+        #region Fetching All Booking Details
 
         public async Task<List<BookingModel>> FetchBooking()
         {
-            return (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.FetchAll, CommandType.StoredProcedure, null)).ToList();
-        }
+            List<BookingModel> bookings = new List<BookingModel>();
+            try
+            {
+                bookings = (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.FetchAll, CommandType.StoredProcedure, null)).ToList();
+            }
+            catch (Exception ex)
+            {
 
-        public async Task<BookingResult> BookingDetails(int id)
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
+            return bookings;
+        }
+        #endregion
+
+        #region Fetch One Record By Booking Id
+        public async Task<BookingResult> BookingDetailsById(int id)
         {
             var booking = new BookingResult();
             var param = new DynamicParameters();
-
-            param.Add("@id", id, DbType.Int32, ParameterDirection.Input);
-            var mutiple = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.BookingDetails, CommandType.StoredProcedure, param);
-
-            if (mutiple != null)
+            try
             {
-                booking.listBooking = (await mutiple.ReadAsync<BookingModel>()).ToList();
-                booking.listUser = (await mutiple.ReadAsync<UserModel>()).ToList();
-            }
+                param.Add("@id", id, DbType.Int32, ParameterDirection.Input);
+                var mutiple = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.BookingDetails, CommandType.StoredProcedure, param);
 
+                if (mutiple != null)
+                {
+                    booking.listBooking = (await mutiple.ReadAsync<BookingModel>()).ToList();
+                    booking.listUser = (await mutiple.ReadAsync<UserModel>()).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
             return booking;
         }
-
+        #endregion
     }
 }

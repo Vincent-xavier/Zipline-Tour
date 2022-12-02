@@ -16,7 +16,6 @@ import {
   ScheduleById,
 } from "../../../actions/Event";
 import * as types from "../../../actions/types";
-import { format } from "date-fns";
 
 const EditEventSchedule = () => {
   const dispatch = useDispatch();
@@ -24,7 +23,6 @@ const EditEventSchedule = () => {
   const { eventDetails, eventSchedule, scheduleDetails } = useSelector(
     (state) => state.eventAPI
   );
-
   const { id } = useParams();
   const eventId = id;
   const [fileSelected, setFileSelected] = useState();
@@ -36,6 +34,8 @@ const EditEventSchedule = () => {
       ActivitiesData: "",
     },
   ]);
+
+
   var times = inputActivitiesFields
     .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
     .join();
@@ -47,36 +47,46 @@ const EditEventSchedule = () => {
   }, []);
 
   useEffect(() => {
-    if (scheduleDetails?.resultData) {
+    if (scheduleDetails && scheduleDetails?.resultData) {
       setScheduleData(scheduleDetails?.resultData);
-      const dateFrom = scheduleDetails?.resultData?.dateFrom.split("T")?.[0];
+    }
+
+    if (scheduleData) {
+      const dateFrom = scheduleData?.dateFrom?.split("T")?.[0];
       setStartDate(new Date(dateFrom));
-      const dateTo = scheduleDetails?.resultData?.dateTo.split("T")?.[0];
+      const dateTo = scheduleData?.dateTo?.split("T")?.[0];
       setEndDate(new Date(dateTo));
-      const times = scheduleDetails?.resultData?.times.split(",");
-      var newTimes = handleTimesToArray(times);
+      var eventTimes = scheduleData?.times?.split(",");
+      var newTimes = handleTimesToArray(eventTimes);
       setInputActivitiesFields(newTimes);
     }
-  }, [scheduleDetails?.resultData]);
-
-  const handleTimesToArray = (times) => {
-    var nietos = [];
-    var obj = {};
-    var i;
-    for (i = 0; i < times.length; i++) {
-      var obj = {};
-      obj["ActivitiesData"] = moment(times[i], ["hh:mm A"]).format("HH:mm");
-      nietos.push(obj);
-    }
-    return nietos;
-  };
+  }, [scheduleData,scheduleDetails?.resultData]);
 
   const handleNewSchedule = () => {
-    dispatch({ type: types.CLEAR_SCHEDULE });
+    dispatch({type: types.CLEAR_SCHEDULE})
+    setScheduleData(null);
+    setStartDate(null);
+    setEndDate(null);
+    setInputActivitiesFields([]);
   };
 
-  const handleOpenAccordin = (id) => {
-    dispatch(ScheduleById(id));
+  const handleOpenAccordin = (scheduleid) => {
+    dispatch(ScheduleById(scheduleid));
+    
+  };
+
+  const handleTimesToArray = (eventTimes) => {
+    if (eventTimes.length > 0) {
+      var nietos = [];
+      for (var i = 0; i < eventTimes.length; i++) {
+        var obj = {};
+        obj["ActivitiesData"] = moment(eventTimes[i], ["hh:mm A"]).format(
+          "HH:mm"
+        );
+        nietos.push(obj);
+      }
+      return nietos;
+    }
   };
 
   const handleScheduleDetails = () => {
@@ -163,7 +173,7 @@ const EditEventSchedule = () => {
       dateFrom: "",
       dateTo: "",
       times: "",
-      eventId: scheduleData ? scheduleData?.eventId : "",
+      eventId: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Enter schedule name"),
@@ -177,9 +187,7 @@ const EditEventSchedule = () => {
         times: times,
         eventId: eventId,
       };
-
       dispatch(saveEventSchedule(scheduleData));
-
       console.log(scheduleData);
     },
   });

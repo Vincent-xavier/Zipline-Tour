@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.Common;
 using ZiplineTour.DBEngine;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Services;
@@ -13,63 +9,30 @@ namespace ZiplineTour.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-
     //[Authorize(Roles ="Admin")]
     //[Authorize(Roles ="User")]
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly IServerHandler _serverHandler;
         public EventController(IEventService eventService, IServerHandler serverHandler)
         {
             _eventService = eventService;
-            _serverHandler = serverHandler;
         }
-
 
         [HttpGet]
         [Route("fetchEvent")]
         public async Task<IActionResult> FetchEvent()
         {
-            List<Result> objResult = new List<Result>();
-            try
+            var events = await _eventService.FetchEvents();
+
+            if (events.StatusCode == 200)
             {
-                var list = new ListDateAndTime();
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.FetchEvents, System.Data.CommandType.StoredProcedure);
-
-                list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
-                list.listtime = (await Events.ReadAsync<timeModel>()).ToList();
-
-                objResult = (from d in list.listDate
-                             select new Result
-                             {
-                                 Date = d.Date,
-                                 LstModal = (from lt in list.listtime
-                                             where lt.Date == d.Date
-                                             select new timeModel
-                                             {
-                                                 SlotId = lt.SlotId,
-                                                 EventName = lt.EventName,
-                                                 Price = lt.Price,
-                                                 Time = lt.Time,
-                                                 Date = lt.Date,
-                                                 EventCapacity = lt.EventCapacity,
-                                                 Min_Booking = lt.Min_Booking,
-                                                 Max_Booking = lt.Max_Booking,
-                                                 EventImage = lt.EventImage,
-                                                 Bookings = lt.Bookings,
-                                                 Available = lt.Available
-                                             }).ToList()
-
-                             }).ToList();
+                return Ok(events);
             }
-            catch (Exception ex)
+            else
             {
-                ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                return BadRequest();
             }
-
-            return Ok(objResult);
         }
 
         [HttpGet("eventById/{eventId}")]
@@ -94,6 +57,7 @@ namespace ZiplineTour.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpGet("eventDetailsById/{eventId}")]
         public async Task<IActionResult> EventDetailsById(int eventId)
         {

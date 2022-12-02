@@ -109,7 +109,7 @@ const EventDetails = () => {
       };
 
       dispatch(saveEventBooking(contactData, navigate));
-
+console.log(eventEditData && eventEditData?.resultData?.times);
       console.log(contactData);
     },
   });
@@ -150,9 +150,9 @@ const EventDetails = () => {
                         <a>
                           Event time
                           <span>
-                            {moment(
-                              eventEditData && eventEditData?.resultData?.times
-                            ).format("hh:mm a")}
+                            {
+                              
+                            eventEditData && eventEditData?.resultData?.times}
                           </span>
                         </a>
                       </li>
@@ -370,9 +370,7 @@ const EventDetails = () => {
                         type="number"
                         placeholder="Phone"
                         name="phone"
-                        minlength="4"
-                        maxlength="8"
-                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        maxLength={10}
                         onChange={contactForm.handleChange}
                         value={contactForm.values.phone}
                         onBlur={contactForm.handleBlur}
