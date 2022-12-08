@@ -12,14 +12,13 @@ namespace ZiplineTour.Repository
 {
     public interface IUserRepository
     {
-
         Task<List<UserModel>> Users();
 
         Task<UserModel> GetToken(string UserName, string Password);
 
         Task<int> Register(UserModel userModel);
-
     }
+
     public class UserRepository : IUserRepository
     {
         private readonly IServerHandler _serverHandler;
@@ -27,49 +26,61 @@ namespace ZiplineTour.Repository
         {
             _serverHandler = serverHandler;
         }
+
         public async Task<List<UserModel>> Users()
         {
-            
-            return (await _serverHandler.QueryAsync<UserModel>(_serverHandler.Connection, StoredProc.Users, CommandType.StoredProcedure, null)).ToList();
+            var listUsers = new List<UserModel>();
+
+            try
+            {
+                listUsers = (await _serverHandler.QueryAsync<UserModel>(_serverHandler.Connection, StoredProc.User.Users, CommandType.StoredProcedure, null)).ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
+            return listUsers;
         }
 
         public async Task<UserModel> GetToken(string Email, string Password)
         {
             var param = new DynamicParameters();
-            param.Add("@email", Email, DbType.String, ParameterDirection.Input);
-            param.Add("@pass", Password, DbType.String, ParameterDirection.Input);
-            return (await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.UserLogin, CommandType.StoredProcedure, param));
+            var user = new UserModel();
+            try
+            {
+                param.Add("@email", Email, DbType.String, ParameterDirection.Input);
+                param.Add("@pass", Password, DbType.String, ParameterDirection.Input);
+                user = await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
+            return user;
         }
+
 
         public async Task<int> Register(UserModel userModel)
         {
-            //string query = "INSERT INTO tbl_user(UserName,Password) VALUES(" + userModel.UserName + userModel.Password + ")";
-
-
-            //string query1 = "INSERT INTO tbl_user(UserName,Password) VALUES(" + "''" + userModel.UserName + "''" + userModel.Password + ")";
-
-
-            //string query2 = "INSERT INTO tbl_user(UserName,Password) VALUES('"+ userModel.UserName + "','" + userModel.Password + "')";
-
-
             var param = new DynamicParameters();
-            param.Add("@userName", userModel.Email, DbType.String, ParameterDirection.Input);
-            param.Add("@password", userModel.Password, DbType.String, ParameterDirection.Input);
-            param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-            //var dictionary = new Dictionary<string, object>
-            //{
-            //     { "@userName", userModel.UserName },
-            //     { "@password", userModel.Password }
-            //};
-            //var param = new DynamicParameters(dictionary);
-
-
-            await _serverHandler.ExecuteAsync(_serverHandler.Connection, "usp_User_Register", CommandType.StoredProcedure, param);
-
-
+            try
+            {
+                param.Add("@userName", userModel.Email, DbType.String, ParameterDirection.Input);
+                param.Add("@password", userModel.Password, DbType.String, ParameterDirection.Input);
+                param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, "usp_User_Register", CommandType.StoredProcedure, param);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.SendErrorToText(ex);
+            }
             return param.Get<int>("@returnVal");
-
         }
     }
 }

@@ -111,7 +111,7 @@ export const eventDetailsById = (id) => async (dispatch) => {
 };
 
 
-export const saveEvent = (eventData) => async (dispatch) => {
+export const saveEvent = (eventData, navigate) => async (dispatch) => {
   dispatch({
     type: constants.SAVE_EVENTS_REQUEST,
   });
@@ -130,6 +130,7 @@ export const saveEvent = (eventData) => async (dispatch) => {
           type: constants.SAVE_EVENTS_SUCCESS,
           payload: res.data,
         });
+        navigate("/edit-event")
       });
   } catch (err) {
     dispatch({
@@ -140,7 +141,7 @@ export const saveEvent = (eventData) => async (dispatch) => {
 
 
 
-export const saveEventSchedule = (scheduleData) => async (dispatch) => {
+export const saveEventSchedule = (scheduleData,navigate) => async (dispatch) => {
   dispatch({
     type: constants.SAVE_EVENT_SCHEDULE_REQUEST,
   });
@@ -158,6 +159,7 @@ export const saveEventSchedule = (scheduleData) => async (dispatch) => {
           type: constants.SAVE_EVENT_SCHEDULE_SUCCESS,
           payload: res.data,
         });
+        navigate("/event")
       });
   } catch (err) {
     dispatch({

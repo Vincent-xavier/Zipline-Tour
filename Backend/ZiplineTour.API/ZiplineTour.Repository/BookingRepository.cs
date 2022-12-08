@@ -48,7 +48,7 @@ namespace ZiplineTour.Repository
                 param.Add("@eventtime", bookingModel.EventTime, DbType.String, ParameterDirection.Input);
                 param.Add("@eventdate", bookingModel.EventDate, DbType.Date, ParameterDirection.Input);
                 param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.EventBooking, CommandType.StoredProcedure, param);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Booking.EventBooking, CommandType.StoredProcedure, param);
                 BookingId = param.Get<int>("@returnVal");
                 result = await BookingDetailsById(BookingId);
             }
@@ -67,9 +67,10 @@ namespace ZiplineTour.Repository
         public async Task<List<BookingModel>> FetchBooking()
         {
             List<BookingModel> bookings = new List<BookingModel>();
+
             try
             {
-                bookings = (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.FetchAll, CommandType.StoredProcedure, null)).ToList();
+                bookings = (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.Booking.FetchAll, CommandType.StoredProcedure, null)).ToList();
             }
             catch (Exception ex)
             {
@@ -89,7 +90,7 @@ namespace ZiplineTour.Repository
             try
             {
                 param.Add("@id", id, DbType.Int32, ParameterDirection.Input);
-                var mutiple = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.BookingDetails, CommandType.StoredProcedure, param);
+                var mutiple = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Booking.BookingDetails, CommandType.StoredProcedure, param);
 
                 if (mutiple != null)
                 {

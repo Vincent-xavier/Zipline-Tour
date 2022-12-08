@@ -1,7 +1,7 @@
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ReactDatePicker from "react-datepicker";
 import { useFormik } from "formik";
 import moment from "moment/moment";
@@ -17,24 +17,24 @@ import {
 } from "../../../actions/Event";
 import * as types from "../../../actions/types";
 
+
 const EditEventSchedule = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { eventDetails, eventSchedule, scheduleDetails } = useSelector(
     (state) => state.eventAPI
   );
   const { id } = useParams();
   const eventId = id;
   const [fileSelected, setFileSelected] = useState();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [scheduleData, setScheduleData] = useState();
   const [inputActivitiesFields, setInputActivitiesFields] = useState([
     {
       ActivitiesData: "",
     },
   ]);
-
 
   var times = inputActivitiesFields
     .map((t) => moment(t.ActivitiesData, ["hh:mm A"]).format("hh:mm A"))
@@ -60,10 +60,10 @@ const EditEventSchedule = () => {
       var newTimes = handleTimesToArray(eventTimes);
       setInputActivitiesFields(newTimes);
     }
-  }, [scheduleData,scheduleDetails?.resultData]);
+  }, [scheduleData, scheduleDetails?.resultData]);
 
   const handleNewSchedule = () => {
-    dispatch({type: types.CLEAR_SCHEDULE})
+    dispatch({ type: types.CLEAR_SCHEDULE });
     setScheduleData(null);
     setStartDate(null);
     setEndDate(null);
@@ -72,7 +72,6 @@ const EditEventSchedule = () => {
 
   const handleOpenAccordin = (scheduleid) => {
     dispatch(ScheduleById(scheduleid));
-    
   };
 
   const handleTimesToArray = (eventTimes) => {
@@ -160,7 +159,7 @@ const EditEventSchedule = () => {
         imgFile: fileSelected,
         eventImage: eventDetails?.resultData?.eventImage,
       };
-      dispatch(saveEvent(formData));
+      dispatch(saveEvent(formData,navigate));
     },
   });
 
@@ -181,13 +180,14 @@ const EditEventSchedule = () => {
     }),
     onSubmit: (values) => {
       const scheduleData = {
+        scheduleId : scheduleDetails?.resultData?.scheduleId,
         name: values.name,
         dateFrom: startDate,
         dateTo: endDate,
         times: times,
         eventId: eventId,
       };
-      dispatch(saveEventSchedule(scheduleData));
+      dispatch(saveEventSchedule(scheduleData,navigate));
       console.log(scheduleData);
     },
   });
@@ -361,7 +361,7 @@ const EditEventSchedule = () => {
                                 onBlur={eventForm.handleBlur}
                               />
                               <label htmlFor="floatingName">
-                                Manimum Booking
+                                Minimum Booking
                               </label>
                             </div>
                             {eventForm.touched.min_Booking &&
@@ -724,7 +724,11 @@ const EditEventSchedule = () => {
                                     selected={startDate}
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setStartDate(date)}
-                                    minDate={new Date()}
+                                    minDate={
+                                      startDate
+                                        ? new Date(startDate)
+                                        : new Date()
+                                    }
                                     showDisabledMonthNavigation
                                   />
                                 </div>
@@ -740,7 +744,11 @@ const EditEventSchedule = () => {
                                     selected={endDate}
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setEndDate(date)}
-                                    minDate={new Date()}
+                                    minDate={
+                                      startDate
+                                        ? new Date(endDate)
+                                        : new Date()
+                                    }
                                     showDisabledMonthNavigation
                                   />
                                 </div>

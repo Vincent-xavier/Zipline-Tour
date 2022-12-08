@@ -26,6 +26,11 @@ namespace ZiplineTour.API.Controllers
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("gettoken")]
         public async Task<IActionResult> GetToken(UserModel userModel)

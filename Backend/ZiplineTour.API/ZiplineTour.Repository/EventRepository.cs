@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace ZiplineTour.Repository
             ListDateAndTime list = new ListDateAndTime();
             try
             {
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.FetchEvents, System.Data.CommandType.StoredProcedure);
+                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, System.Data.CommandType.StoredProcedure);
 
                 list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
                 list.listtime = (await Events.ReadAsync<timeModel>()).ToList();
@@ -97,7 +98,7 @@ namespace ZiplineTour.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@id", eventId, DbType.Int32, ParameterDirection.Input);
-                result = await _serverHandler.QueryFirstOrDefaultAsync<DisplayEvent>(_serverHandler.Connection, StoredProc.EventById, CommandType.StoredProcedure, param);
+                result = await _serverHandler.QueryFirstOrDefaultAsync<DisplayEvent>(_serverHandler.Connection, StoredProc.Event.EventById, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
@@ -112,13 +113,14 @@ namespace ZiplineTour.Repository
             var events = new List<EventModel>();
             try
             {
-                events = (await _serverHandler.QueryAsync<EventModel>(_serverHandler.Connection, StoredProc.EventDetails, CommandType.StoredProcedure)).ToList();
+                events = (await _serverHandler.QueryAsync<EventModel>(_serverHandler.Connection, StoredProc.Event.EventDetails, CommandType.StoredProcedure)).ToList();
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
             }
+
             return events;
         }
 
@@ -129,13 +131,14 @@ namespace ZiplineTour.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@eId", eventId, DbType.Int32, ParameterDirection.Input);
-                result = await _serverHandler.QueryFirstOrDefaultAsync<EventModel>(_serverHandler.Connection, StoredProc.EventDetailsById, CommandType.StoredProcedure, param);
+                result = await _serverHandler.QueryFirstOrDefaultAsync<EventModel>(_serverHandler.Connection, StoredProc.Event.EventDetailsById, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
             }
+
             return result;
         }
 
@@ -164,7 +167,7 @@ namespace ZiplineTour.Repository
                 param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);
                 param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.SaveEvent, CommandType.StoredProcedure, param);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.SaveEvent, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
@@ -213,7 +216,8 @@ namespace ZiplineTour.Repository
         {
 
             var param = new DynamicParameters();
-            int scheduleId;
+            var DateIds = new List<int>();
+            int scheduleId, Result = 0;
 
             try
             {
@@ -224,58 +228,45 @@ namespace ZiplineTour.Repository
                 param.Add("@pTimes", schedule.Times, DbType.String, ParameterDirection.Input);
                 param.Add("@pEventId", schedule.EventId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@preturnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                await _serverHandler.ExecuteScalarAsync<EventSchedule>(_serverHandler.Connection, StoredProc.SaveEventSchedule, CommandType.StoredProcedure, param);
-                scheduleId = param.Get<int>("@returnVal");
+                await _serverHandler.ExecuteScalarAsync<EventSchedule>(_serverHandler.Connection, StoredProc.Event.SaveEventSchedule, CommandType.StoredProcedure, param);
+                scheduleId = param.Get<int>("@preturnVal");
 
                 if (scheduleId > 0)
                 {
-                    var DateIds = await SaveScheduleDate(schedule.DateFrom, schedule.DateTo, schedule.EventId, scheduleId);
-                    int Result = await SaveScheduleTimeSlot(schedule.Times, DateIds, schedule.EventId, scheduleId);
-                    return Result;
+                    var CheckIfExist = await RemoveScheduleDateAndTime(schedule.EventId, scheduleId);
+
+                    DateIds = await SaveScheduleDate(schedule.DateFrom, schedule.DateTo, schedule.EventId, scheduleId);
+
+                    Result = await SaveScheduleTimeSlot(schedule.Times, DateIds, schedule.EventId, scheduleId);
                 }
 
             }
             catch (Exception ex)
             {
-
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
             }
 
-            return 0;
+            return Result;
         }
 
-        #region Save Schedule Time Slots
-        public async Task<int> SaveScheduleTimeSlot(string times, List<int> DateIds, int EventId, int scheduleId)
+        public async Task<string> RemoveScheduleDateAndTime(int EventId, int ScheduleId)
         {
-            var Times = SplitTimes(times);
-            var timeParam = new DynamicParameters();
-
+            var param = new DynamicParameters();
+            string Sucess = "Successfully Removed";
             try
             {
-                foreach (var dateid in DateIds)
-                {
-
-                    foreach (var time in Times)
-                    {
-                        timeParam.Add("@ScheduleTime", time, DbType.String, ParameterDirection.Input);
-                        timeParam.Add("@eId", EventId, DbType.Int32, ParameterDirection.Input);
-                        timeParam.Add("@sId", scheduleId, DbType.Int32, ParameterDirection.Input);
-                        timeParam.Add("@dId", dateid, DbType.Int32, ParameterDirection.Input);
-                        await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.SaveTime, CommandType.StoredProcedure, timeParam);
-                    }
-
-                }
+                param.Add("@pEventId", EventId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@pScheduleId", ScheduleId, DbType.Int32, ParameterDirection.Input);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.RemoveAlreadyExists, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
-
             }
-            return 1;
+            return Sucess;
         }
-        #endregion
 
         #region Save Schedule Date
         public async Task<List<int>> SaveScheduleDate(DateTime DateFrom, DateTime DateTo, int EventId, int scheduleId)
@@ -288,11 +279,11 @@ namespace ZiplineTour.Repository
             {
                 foreach (var item in dates)
                 {
-                    param1.Add("@singleDate", item, DbType.DateTime, ParameterDirection.Input);
+                    param1.Add("@singleDate", item, DbType.Date, ParameterDirection.Input);
                     param1.Add("@eid", EventId, DbType.Int32, ParameterDirection.Input);
                     param1.Add("@sId", scheduleId, DbType.Int32, ParameterDirection.Input);
                     param1.Add("@dateId", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                    await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.GetDateId, CommandType.StoredProcedure, param1);
+                    await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.GetDateId, CommandType.StoredProcedure, param1);
                     int DateId = param1.Get<int>("@dateId");
                     DateIds.Add(DateId);
                 }
@@ -302,13 +293,10 @@ namespace ZiplineTour.Repository
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
-
             }
 
             return DateIds;
         }
-
-        #endregion
 
         #region Get Dates
         public Array GetDates(DateTime start, DateTime end)
@@ -324,6 +312,39 @@ namespace ZiplineTour.Repository
         }
         #endregion
 
+        #endregion
+
+        #region Save Schedule Time Slots
+        public async Task<int> SaveScheduleTimeSlot(string times, List<int> DateIds, int EventId, int scheduleId)
+        {
+            var Times = SplitTimes(times);
+            var timeParam = new DynamicParameters();
+
+            try
+            {
+                foreach (var dateid in DateIds)
+                {
+                    foreach (var time in Times)
+                    {
+                        timeParam.Add("@ScheduleTime", time, DbType.String, ParameterDirection.Input);
+                        timeParam.Add("@eId", EventId, DbType.Int32, ParameterDirection.Input);
+                        timeParam.Add("@sId", scheduleId, DbType.Int32, ParameterDirection.Input);
+                        timeParam.Add("@dId", dateid, DbType.Int32, ParameterDirection.Input);
+                        timeParam.Add("@returnval", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                        await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.SaveTime, CommandType.StoredProcedure, timeParam);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var log = new ErrorLog();
+                log.SendErrorToText(ex);
+
+            }
+
+            return timeParam.Get<int>("@returnval");
+        }
+
         #region Split Times
         public List<string> SplitTimes(string times)
         {
@@ -336,6 +357,8 @@ namespace ZiplineTour.Repository
 
         #endregion
 
+        #endregion
+
         public async Task<List<EventSchedule>> GetEventSchedule(int EventId)
         {
             List<EventSchedule> schedule = new List<EventSchedule>();
@@ -343,15 +366,15 @@ namespace ZiplineTour.Repository
             {
                 var param = new DynamicParameters();
                 param.Add("@id", EventId, DbType.Int32, ParameterDirection.Input);
-                schedule = (await _serverHandler.QueryAsync<EventSchedule>(_serverHandler.Connection, StoredProc.EventSchedule, CommandType.StoredProcedure, param)).ToList();
+                schedule = (await _serverHandler.QueryAsync<EventSchedule>(_serverHandler.Connection, StoredProc.Event.EventSchedule, CommandType.StoredProcedure, param)).ToList();
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
             }
-            return schedule;
 
+            return schedule;
         }
 
         public async Task<EventSchedule> ScheduleById(int ScheduleId)
@@ -361,15 +384,15 @@ namespace ZiplineTour.Repository
             try
             {
                 param.Add("@id", ScheduleId, DbType.Int32, ParameterDirection.Input);
-                schedule = await _serverHandler.QueryFirstOrDefaultAsync<EventSchedule>(_serverHandler.Connection, StoredProc.ScheduleById, CommandType.StoredProcedure, param);
+                schedule = await _serverHandler.QueryFirstOrDefaultAsync<EventSchedule>(_serverHandler.Connection, StoredProc.Event.ScheduleById, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
                 log.SendErrorToText(ex);
             }
-            return schedule;
 
+            return schedule;
         }
     }
 }

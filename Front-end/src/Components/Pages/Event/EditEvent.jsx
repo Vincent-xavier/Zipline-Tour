@@ -19,7 +19,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     if (success === "event Saved Successfully") {
-      toast("Event Scheduled Successfully")
+      toast("Event Saved Successfully")
     }
   }, [success]);
 
