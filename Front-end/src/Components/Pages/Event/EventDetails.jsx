@@ -26,7 +26,7 @@ const EventDetails = () => {
   }, []);
 
   useEffect(() => {
-    setCounter(1);
+    setCounter(eventEditData?.resultData?.min_Booking);
     seteventPrice(
       eventEditData?.resultData ? eventEditData?.resultData?.price : 10
     );
@@ -107,9 +107,7 @@ const EventDetails = () => {
           ? eventEditData?.resultData?.date
           : "",
       };
-
-      dispatch(saveEventBooking(contactData, navigate));
-console.log(eventEditData && eventEditData?.resultData?.times);
+      //dispatch(saveEventBooking(contactData, navigate));
       console.log(contactData);
     },
   });
@@ -150,9 +148,7 @@ console.log(eventEditData && eventEditData?.resultData?.times);
                         <a>
                           Event time
                           <span>
-                            {
-                              
-                            eventEditData && eventEditData?.resultData?.times}
+                            {eventEditData && eventEditData?.resultData?.time}
                           </span>
                         </a>
                       </li>
@@ -161,7 +157,9 @@ console.log(eventEditData && eventEditData?.resultData?.times);
                           Event Date
                           <span>
                             {eventEditData &&
-                              eventEditData?.resultData?.fullDate}
+                              moment(eventEditData?.resultData?.date).format(
+                                "DD MMM YYYY"
+                              )}
                           </span>
                         </a>
                       </li>
@@ -178,8 +176,7 @@ console.log(eventEditData && eventEditData?.resultData?.times);
                         <a>
                           Available
                           <span>
-                            {eventEditData &&
-                              eventEditData?.resultData?.available}{" "}
+                            {eventEditData?.resultData?.available == 0 ? eventEditData?.resultData?.eventCapacity : eventEditData?.resultData?.available}
                           </span>
                         </a>
                       </li>
@@ -211,12 +208,16 @@ console.log(eventEditData && eventEditData?.resultData?.times);
                                 disabled
                                 className="quantity-field border-0 text-center w-25"
                               />
-                              <input
-                                type="button"
-                                defaultValue="+"
-                                onClick={(e) => handleIncre(e)}
-                                className="button-plus border rounded-circle icon-shape icon-sm "
-                              />
+
+                              {counter <
+                              eventEditData?.resultData?.max_Booking ? (
+                                <input
+                                  type="button"
+                                  defaultValue="+"
+                                  onClick={(e) => handleIncre(e)}
+                                  className="button-plus border rounded-circle icon-shape icon-sm "
+                                />
+                              ) : null}
                             </div>
                           </div>
                         </div>

@@ -55,7 +55,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
 
             }
             return result;
@@ -76,7 +76,7 @@ namespace ZiplineTour.Repository
             {
 
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return bookings;
         }
@@ -102,7 +102,7 @@ namespace ZiplineTour.Repository
             {
 
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return booking;
         }

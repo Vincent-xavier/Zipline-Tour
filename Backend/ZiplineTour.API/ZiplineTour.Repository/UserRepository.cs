@@ -40,7 +40,7 @@ namespace ZiplineTour.Repository
             {
 
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return listUsers;
         }
@@ -59,7 +59,7 @@ namespace ZiplineTour.Repository
             {
 
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return user;
         }
@@ -78,7 +78,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return param.Get<int>("@returnVal");
         }

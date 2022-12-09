@@ -20,32 +20,6 @@ namespace ZiplineTour.Models.Input
         public IFormFile ImgFile { get; set; }
     }
 
-
-    public class DisplayEvent
-    {
-        public int EventId { get; set; }
-        public string EventName { get; set; }
-        public string EventDiscription { get; set; }
-        public int EventCapacity { get; set; }
-        public decimal Price { get; set; }
-        public int Min_Booking { get; set; }
-        public int Max_Booking { get; set; }
-        public string EventImage { get; set; } 
-        public int ScheduleId { get; set; }
-        public string Name { get; set; }
-        public int DateId { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd/mm/yyyy}")]
-        public DateTime Date { get; set; }
-        public int SlotId { get; set; }
-        public string Time { get; set; }
-        public string DayName { get; set; }
-        public string FullDate { get; set; }
-    }
-
-
-
     public class EventSchedule
     {
         public int EventId { get; set; }
@@ -76,8 +50,9 @@ namespace ZiplineTour.Models.Input
         public int DateId { get; set; }
 
     }
-    public class timeModel
+    public class TimeModel
     {
+        public int EventId { get; set; }
         public string EventName { get; set; }
         public decimal Price { get; set; }
         public DateTime Date { get; set; }
@@ -85,10 +60,13 @@ namespace ZiplineTour.Models.Input
         public int Min_Booking { get; set; }
         public int Max_Booking { get; set; }
         public string EventImage { get; set; }
-        public int SlotId { get; set; }
+        public string EventDiscription { get; set; }
         public int EventCapacity { get; set; }
         public int Bookings { get; set; }
         public int Available { get; set; }
+        public int ScheduleId { get; set; }
+        public int DateId { get; set; }
+        public int SlotId { get; set; }
 
     }
     public class DateModel
@@ -100,12 +78,12 @@ namespace ZiplineTour.Models.Input
     public class ListDateAndTime
     {
         public List<DateModel> listDate { get; set; }
-        public List<timeModel> listtime { get; set; }
+        public List<TimeModel> listtime { get; set; }
     }
 
     public class Result
     {
         public DateTime Date { get; set; }
-        public List<timeModel> LstModal { get; set; }
+        public List<TimeModel> LstModal { get; set; }
     }
 }

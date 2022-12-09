@@ -14,7 +14,7 @@ namespace ZiplineTour.API.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        public EventController(IEventService eventService, IServerHandler serverHandler)
+        public EventController(IEventService eventService)
         {
             _eventService = eventService;
         }

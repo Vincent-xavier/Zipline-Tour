@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +18,7 @@ namespace ZiplineTour.Repository
     {
         Task<List<Result>> FetchEvents();
 
-        Task<DisplayEvent> EventById(int eventId);
+        Task<TimeModel> EventById(int eventId);
 
         Task<List<EventModel>> EventDetails();
 
@@ -40,7 +37,7 @@ namespace ZiplineTour.Repository
         private readonly IServerHandler _serverHandler;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public EventRepository(IConfiguration configuration, IServerHandler serverHandler, IWebHostEnvironment webHostEnvironment)
+        public EventRepository(IServerHandler serverHandler, IWebHostEnvironment webHostEnvironment)
         {
             _serverHandler = serverHandler;
             _webHostEnvironment = webHostEnvironment;
@@ -56,7 +53,7 @@ namespace ZiplineTour.Repository
                 var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, System.Data.CommandType.StoredProcedure);
 
                 list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
-                list.listtime = (await Events.ReadAsync<timeModel>()).ToList();
+                list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
 
                 objResult = (from d in list.listDate
                              select new Result
@@ -64,8 +61,11 @@ namespace ZiplineTour.Repository
                                  Date = d.Date,
                                  LstModal = (from lt in list.listtime
                                              where lt.Date == d.Date
-                                             select new timeModel
+                                             select new TimeModel
                                              {
+                                                 EventId = lt.EventId,
+                                                 ScheduleId = lt.ScheduleId,
+                                                 DateId = lt.DateId,
                                                  SlotId = lt.SlotId,
                                                  EventName = lt.EventName,
                                                  Price = lt.Price,
@@ -84,26 +84,26 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 ErrorLog log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return objResult;
         }
         #endregion
 
-        public async Task<DisplayEvent> EventById(int eventId)
+        public async Task<TimeModel> EventById(int eventId)
         {
-            var result = new DisplayEvent();
+            var result = new TimeModel();
             try
             {
                 var param = new DynamicParameters();
                 param.Add("@id", eventId, DbType.Int32, ParameterDirection.Input);
-                result = await _serverHandler.QueryFirstOrDefaultAsync<DisplayEvent>(_serverHandler.Connection, StoredProc.Event.EventById, CommandType.StoredProcedure, param);
+                result = await _serverHandler.QueryFirstOrDefaultAsync<TimeModel>(_serverHandler.Connection, StoredProc.Event.EventById, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return result;
         }
@@ -118,7 +118,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return events;
@@ -136,7 +136,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return result;
@@ -172,7 +172,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return param.Get<int>("@returnVal");
         }
@@ -221,6 +221,7 @@ namespace ZiplineTour.Repository
 
             try
             {
+
                 param.Add("@pScheduleId", schedule.ScheduleId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@pName", schedule.Name, DbType.String, ParameterDirection.Input);
                 param.Add("@pDateFrom", schedule.DateFrom, DbType.Date, ParameterDirection.Input);
@@ -244,7 +245,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return Result;
@@ -263,7 +264,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
             return Sucess;
         }
@@ -292,7 +293,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return DateIds;
@@ -338,7 +339,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
 
             }
 
@@ -371,7 +372,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return schedule;
@@ -389,7 +390,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 var log = new ErrorLog();
-                log.SendErrorToText(ex);
+                log.WriteErrorToText(ex);
             }
 
             return schedule;

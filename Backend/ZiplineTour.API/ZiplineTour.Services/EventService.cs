@@ -141,11 +141,11 @@ namespace ZiplineTour.Services
         public async Task<ResultArgs> SaveEventSchedule(EventSchedule schedule)
         {
             var args = new ResultArgs();
-            int Success = 1;
+            int Success = 0;
 
             int result = await _eventRepository.SaveEventSchedule(schedule);
 
-            if (result == Success)
+            if (result > Success)
             {
                 args.StatusCode = 200;
                 args.StatusMessage = "Saved Successfully";

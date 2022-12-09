@@ -1,4 +1,3 @@
-import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -17,7 +16,6 @@ import {
 } from "../../../actions/Event";
 import * as types from "../../../actions/types";
 
-
 const EditEventSchedule = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,8 +25,8 @@ const EditEventSchedule = () => {
   const { id } = useParams();
   const eventId = id;
   const [fileSelected, setFileSelected] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [scheduleData, setScheduleData] = useState();
   const [inputActivitiesFields, setInputActivitiesFields] = useState([
     {
@@ -159,7 +157,7 @@ const EditEventSchedule = () => {
         imgFile: fileSelected,
         eventImage: eventDetails?.resultData?.eventImage,
       };
-      dispatch(saveEvent(formData,navigate));
+      dispatch(saveEvent(formData, navigate));
     },
   });
 
@@ -180,14 +178,14 @@ const EditEventSchedule = () => {
     }),
     onSubmit: (values) => {
       const scheduleData = {
-        scheduleId : scheduleDetails?.resultData?.scheduleId,
+        scheduleId: scheduleDetails?.resultData?.scheduleId,
         name: values.name,
         dateFrom: startDate,
         dateTo: endDate,
         times: times,
         eventId: eventId,
       };
-      dispatch(saveEventSchedule(scheduleData,navigate));
+      dispatch(saveEventSchedule(scheduleData, navigate));
       console.log(scheduleData);
     },
   });
@@ -722,13 +720,16 @@ const EditEventSchedule = () => {
                                   </label>
                                   <ReactDatePicker
                                     selected={startDate}
+                                    isClearable
+                                    className="form-control"
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setStartDate(date)}
-                                    minDate={
-                                      startDate
-                                        ? new Date(startDate)
-                                        : new Date()
-                                    }
+                                    // minDate={
+                                    //   startDate
+                                    //     ? new Date(startDate)
+                                    //     : new Date()
+                                    // }
+                                    minDate={new Date()}
                                     showDisabledMonthNavigation
                                   />
                                 </div>
@@ -744,11 +745,15 @@ const EditEventSchedule = () => {
                                     selected={endDate}
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setEndDate(date)}
-                                    minDate={
-                                      startDate
-                                        ? new Date(endDate)
-                                        : new Date()
-                                    }
+                                    // minDate={
+                                    //   startDate
+                                    //     ? new Date(endDate)
+                                    //     : new Date()
+                                    // }
+                                    minDate={new Date()}
+                                    isClearable
+                                    className="form-control"
+                                    // maxDate={(new Date(startDate), 5)}
                                     showDisabledMonthNavigation
                                   />
                                 </div>

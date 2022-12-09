@@ -7,7 +7,7 @@ namespace ZiplineTour.Common
     {
         private static String ErrorlineNo, Errormsg, extype, ErrorLocation;
 
-        public void SendErrorToText(Exception ex)
+        public void WriteErrorToText(Exception ex)
         {
             var line = Environment.NewLine + Environment.NewLine;
 

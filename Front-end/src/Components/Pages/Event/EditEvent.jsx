@@ -1,4 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css';
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,9 +14,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     dispatch(eventDetails());
-  }, []);
-
-  useEffect(() => {
+    
     if (success === "event Saved Successfully") {
       toast("Event Saved Successfully")
     }
