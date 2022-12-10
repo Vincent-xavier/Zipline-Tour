@@ -176,7 +176,9 @@ const EventDetails = () => {
                         <a>
                           Available
                           <span>
-                            {eventEditData?.resultData?.available == 0 ? eventEditData?.resultData?.eventCapacity : eventEditData?.resultData?.available}
+                            {eventEditData?.resultData?.available == 0
+                              ? eventEditData?.resultData?.eventCapacity
+                              : eventEditData?.resultData?.available}
                           </span>
                         </a>
                       </li>
@@ -195,12 +197,16 @@ const EventDetails = () => {
                               className="input-group w-auto justify-content-end align-items-center"
                               id="guests"
                             >
-                              <input
-                                type="button"
-                                defaultValue="-"
-                                className="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-                                onClick={(e) => handleDecre(e)}
-                              />
+                              {counter >
+                              eventEditData?.resultData?.min_Booking ? (
+                                <input
+                                  type="button"
+                                  defaultValue="-"
+                                  className="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
+                                  onClick={(e) => handleDecre(e)}
+                                />
+                              ) : null}
+
                               <input
                                 type="text"
                                 value={counter}

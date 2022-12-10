@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
 using System.Threading.Tasks;
 using ZiplineTour.DBEngine;
 using ZiplineTour.Models.Input;
+using ZiplineTour.Repository;
 using ZiplineTour.Services;
 
 namespace ZiplineTour.API.Controllers
@@ -14,9 +20,11 @@ namespace ZiplineTour.API.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        public EventController(IEventService eventService)
+        private readonly IServerHandler _serverHandler;
+        public EventController(IEventService eventService, IServerHandler serverHandler)
         {
             _eventService = eventService;
+            _serverHandler = serverHandler;
         }
 
         [HttpGet]
@@ -110,6 +118,44 @@ namespace ZiplineTour.API.Controllers
             }
             return BadRequest();
 
+        }
+
+        [HttpPost]
+        [Route("BulkInsert")]
+        public async Task<IActionResult> BulkInsert()
+        {
+
+            string ConnectionString = "Server=192.168.1.7;Port=3306;Database=zipline;Uid=sjc;Pwd=admin@sjc;";
+            StringBuilder sCommand = new StringBuilder("INSERT INTO test_usernames (Date,ScheduleId,EventId) VALUES ");
+            using (MySqlConnection mConnection = new MySqlConnection(ConnectionString))
+            {
+                List<string> Rows = new List<string>();
+                int scheduleId = 8;
+                int eventId = 5;
+                var dates = new List<DateTime>();
+                dates.Add(DateTime.Now);
+
+                //for (int i = 0; i < 10; i++)
+                //{
+                //    Rows.Add(string.Format("('{0}')", MySqlHelper.EscapeString("test")));
+
+                //}
+                foreach (var item in dates)
+                {
+                    Rows.Add(string.Format("('{0}','{1}','{2}')",item,scheduleId,eventId));
+                }
+                sCommand.Append(string.Join(",", Rows));
+                sCommand.Append(";");
+                mConnection.Open();
+                using (MySqlCommand myCmd = new MySqlCommand(sCommand.ToString(), mConnection))
+                {
+                    myCmd.CommandType = CommandType.Text;
+                    var result = myCmd.ExecuteNonQuery();
+                }
+            }
+
+
+            return Ok();
         }
 
     }
