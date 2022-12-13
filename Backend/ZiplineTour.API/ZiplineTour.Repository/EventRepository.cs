@@ -162,7 +162,6 @@ namespace ZiplineTour.Repository
                 param.Add("@eName", eventModel.EventName, DbType.String, ParameterDirection.Input);
                 param.Add("@eDiscri", eventModel.EventDiscription, DbType.String, ParameterDirection.Input);
                 param.Add("@e_price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
-                param.Add("@eCapacity", eventModel.EventCapacity, DbType.Int32, ParameterDirection.Input);
                 param.Add("@maxBook", eventModel.Max_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);

@@ -20,6 +20,15 @@ namespace ZiplineTour.Models.Input
         public DateTime EventDate { get; set; }
         public string EventName { get; set; }
     }
-
+       
+    public class Payment
+    {
+        public int PaymentId { get; set; } = 0;
+        public string PayerName { get; set; }
+        public Int64 CardNumber { get; set; }
+        public string ExpiryDate { get; set; }
+        public Int16 Cvv { get; set; }
+        public int BookingId { get; set; }
+    }
 
 }

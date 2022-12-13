@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { events } from "../../actions/Event";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
+import * as types from "../../actions/types";
+import moment from "moment";
 
 export const Dashboard = () => {
+  const dispatch = useDispatch();
+  const { eventData } = useSelector((state) => state.eventAPI);
+  const [roaster, setRoaster] = useState();
+
+  const handleRoaster = (i,events) =>{
+    // <Link to={"/roster"} state={testState} ></Link>
+    setRoaster(i,events)
+  }
+
+  console.log(roaster);
+  useEffect(() => {
+    dispatch(events());
+  }, []);
   return (
     <>
       <Header />
@@ -24,77 +41,91 @@ export const Dashboard = () => {
                       >
                         <div className="table-responsive">
                           <table className="table">
-                            <thead>
-                              <tr>
-                                <th className="text-center" scope="col">
-                                  Oct 26, 2022
-                                </th>
-                                <th colSpan={"4"} scope="col">
-                                  Wednesday
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr className="inner-box">
-                                <th scope="row">
-                                  <div className="time">
-                                    <span
-                                      style={{
-                                        fontWeight: "bold",
-                                        fontSize: "17px",
-                                      }}
-                                    >
-                                      05:30 PM
-                                    </span>
-                                  </div>
-                                </th>
-                                <td>
-                                  <div className="event-img">
-                                    <img
-                                      src="/admin/assets/img/event-img.jpg"
-                                      alt
-                                    />
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="event-wrap">
-                                    <h3>
-                                      <Link to={"/event-details"}>
-                                        Flying baba mountain
-                                      </Link>
-                                    </h3>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div
-                                    className="event-date text-center"
-                                    style={{
-                                      fontWeight: "bold",
-                                      fontSize: "17px",
-                                    }}
-                                  >
-                                    <span>25</span>
-                                    <p>Available</p>
-                                  </div>
-                                </td>
-                                <td>
-                                  <Link to={"/roster"}>
-                                    <span className="text-center ms-3">
-                                      <i className="bi bi-arrow-right-square-fill" />
-                                    </span>
+                            {eventData && eventData?.resultData?.length > 0
+                              ? eventData?.resultData.map((e, i) => {
+                                  return (
+                                    <>
+                                      <thead key={i}>
+                                        <tr>
+                                          <th
+                                            colSpan={"2"}
+                                            className="text-center"
+                                            scope="col"
+                                          >
+                                            {moment(e.date).format(
+                                              "DD MMMM yyyy"
+                                            )}
+                                          </th>
+                                          <th colSpan={"4"} scope="col">
+                                            {moment(e.date).format("dddd")}
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {e?.lstModal.map((events, index) => {
+                                          return (
+                                            <>
+                                              <tr className="inner-box" key={index}>
+                                                <th scope="row">
+                                                  <div className="time">
+                                                    <span style={{fontSize:"13px"}}>{events?.time}</span>
+                                                  </div>
+                                                </th>
+                                                <td>
+                                                  <div className="event-img">
+                                                    <img
+                                                      style={{
+                                                        width: "50px",
+                                                        height: "50px",
+                                                      }}
+                                                      src={
+                                                        types.IMAGE_PATH +
+                                                        events?.eventImage
+                                                      }
+                                                      alt
+                                                    />
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <div className="event-wrap d-flex">
+                                                    <h5>{events?.eventName}</h5>
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <div className="event-date text-center">
+                                                    <span>
+                                                      <b>
+                                                        {events?.eventCapacity}
+                                                      </b>
+                                                    </span>
+                                                    <p>Capacity</p>
+                                                  </div>
+                                                </td>
+                                                <td onClick={()=> handleRoaster(e, index)}>
+                                                  
+                                                    <span className="text-center ms-3">
+                                                      <i className="bi bi-arrow-right-square-fill" />
+                                                    </span>
 
-                                    <p
-                                      style={{
-                                        fontWeight: "bold",
-                                        fontSize: "17px",
-                                      }}
-                                    >
-                                      Roster
-                                    </p>
-                                  </Link>
-                                </td>
-                              </tr>
-                            </tbody>
+                                                    <p
+                                                      style={{
+                                                        fontWeight: "bold",
+                                                        fontSize: "17px",
+                                                      }}
+                                                    >
+                                                      Roster
+                                                    </p>
+                                                  
+                                                </td>
+                                              </tr>
+                                            </>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </>
+                                  );
+                                })
+                              : null}
                           </table>
                         </div>
                       </div>

@@ -2,51 +2,48 @@ import { useFormik } from "formik";
 import moment from "moment/moment";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import swal from "sweetalert";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as Yup from "yup";
 import "@animxyz/core";
+import { savePayment } from "../../../actions/Order";
+import { useNavigate } from "react-router-dom";
 const Payment = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bookingdata } = useSelector((state) => state.orderAPI);
   const [customer, setCustomer] = useState();
   const fullName =
     customer?.listUser[0].firstName + " " + customer?.listUser[0].lastName;
+  const cusData = JSON.parse(localStorage.getItem("customerData"));
 
   useEffect(() => {
-    setCustomer(bookingdata?.resultData);
-  }, [bookingdata?.resultData, customer]);
+    setCustomer( bookingdata?.resultData ? bookingdata?.resultData : cusData?.resultData);
+  }, []);
 
-  console.log(bookingdata);
-
-  const handlePay = () => {
-    swal({
-      title: "Payment Success!",
-      icon: "success",
-    });
-  };
 
   const paymentForm = useFormik({
     initialValues: {
-      name: "",
+      PayerName: "",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Enter Card Holder Name").max(50),
+      PayerName: Yup.string().required("Enter Card Holder Name").max(50),
       cardNumber: Yup.number().required("Enter Card Number"),
       cvv: Yup.number().required("Enter cvv Number"),
     }),
     onSubmit: (values) => {
       const paymentData = {
-        name: values.name,
+        PayerName: values.PayerName,
         cardNumber: values.cardNumber,
         expiryDate: values.expiryDate,
         cvv: values.cvv,
+        bookingId: bookingdata?.resultData ? bookingdata?.resultData?.listBooking[0]?.bookingId : cusData?.resultData?.listBooking[0]?.bookingId,
       };
-
+      dispatch(savePayment(paymentData,navigate));
       console.log(paymentData);
     },
   });
@@ -124,7 +121,7 @@ const Payment = () => {
                   <h3 className="card-title">Payment Method</h3>
                   <div className="row">
                     <div className="col-md-12">
-                      <div className="form-check ">
+                      <div className="form-check">
                         <input
                           className="form-check-input"
                           type="radio"
@@ -140,29 +137,29 @@ const Payment = () => {
                       </div>
                       <hr />
                       <h3 className="card-title">Payment</h3>
-                      <form className="row">
+                      <form className="row" onSubmit={paymentForm.handleSubmit}>
                         <div className="col-md-12">
                           <label htmlFor="inputName5" className="form-label">
-                            Name
+                            Card Holder Name
                           </label>
                           <input
                             type="text"
                             className={
-                              paymentForm.touched.name &&
-                              paymentForm.errors.name
+                              paymentForm.touched.PayerName &&
+                              paymentForm.errors.PayerName
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
-                            name="name"
+                            name="PayerName"
                             maxLength={50}
                             onChange={paymentForm.handleChange}
-                            value={paymentForm.values.name}
+                            value={paymentForm.values.PayerName}
                             onBlur={paymentForm.handleBlur}
                           />
-                          {paymentForm.touched.name &&
-                          paymentForm.errors.name ? (
+                          {paymentForm.touched.PayerName &&
+                          paymentForm.errors.PayerName ? (
                             <small className="text-danger ">
-                              {paymentForm.errors.name}
+                              {paymentForm.errors.PayerName}
                             </small>
                           ) : null}
                         </div>
@@ -196,7 +193,7 @@ const Payment = () => {
                             Expiry date
                           </label>
                           <input
-                            type="date"
+                            type="month"
                             className={
                               paymentForm.touched.expiryDate &&
                               paymentForm.errors.expiryDate
@@ -243,8 +240,7 @@ const Payment = () => {
 
                         <div className="text-center mt-4">
                           <button
-                            type="button"
-                            onClick={() => handlePay()}
+                            type="submit"
                             className="btn btn-primary"
                           >
                             Pay Now

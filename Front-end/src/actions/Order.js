@@ -18,6 +18,7 @@ export const saveEventBooking = (bookingData,navigate) => async (dispatch) => {
               type: constants.EVENT_BOOKING_SUCCESS,
               payload: res.data,
             });
+            localStorage.setItem("customerData", JSON.stringify(res.data))
             navigate("/payment");
           });
     } catch (error) {
@@ -74,6 +75,34 @@ export const fetchbooking = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: constants.FETCH_BOOKING_ERROR
+        })
+    }
+}
+
+
+export const savePayment = (paymentData,navigate) => async (dispatch) => {
+    dispatch({
+        type: constants.PAYMENT_REQUEST
+    });
+    const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    try {
+        axios.post(`/api/Booking/payment`, paymentData, {
+            headers: headers,
+          })
+          .then((res) => {
+            dispatch({
+              type: constants.PAYMENT_SUCCESS,
+              payload: res.data,
+            });
+            localStorage.removeItem("customerData")
+            navigate("/event");
+          });
+    } catch (error) {
+        dispatch({
+            type: constants.PAYMENT_ERROR
         })
     }
 }

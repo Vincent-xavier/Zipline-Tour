@@ -40,6 +40,8 @@ namespace ZiplineTour.Common
             public const string EventBooking = "usp_Booking_SaveEventBooking";
             public const string BookingDetails = "usp_Booking_BookingById";
             public const string FetchAll = "usp_Booking_FetchBookingDetails";
+            public const string Payment = "usp_Booking_SavePayment";
+
         }
 
 

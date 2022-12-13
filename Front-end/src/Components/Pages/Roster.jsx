@@ -3,8 +3,12 @@ import Header from '../Layout/Header'
 import Sidebar from '../Layout/Sidebar'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './Event/Event.css'
+import { useLocation } from 'react-router-dom';
 
 const RosterView = () => {
+    const location = useLocation();
+  const state = location.state;
+ console.log(state);
     return (
         <>
             <Header />
@@ -13,9 +17,9 @@ const RosterView = () => {
             <main id="main" className="main">
                 <section className="section">
                     <div className="container">
-                        <Tabs>
+                        <Tabs defaultIndex={1}>
                             <TabList >
-                                <Tab disabled >
+                                <Tab disabled  readOnly>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <h4><small>31 oct</small> Monday</h4>
@@ -37,8 +41,7 @@ const RosterView = () => {
                                     </div>
                                 </Tab>
                             </TabList>
-                            <TabPanel>
-                            </TabPanel>
+                            <TabPanel  />
                             <TabPanel>
                                 <div className="container">
                                     <div className="card">

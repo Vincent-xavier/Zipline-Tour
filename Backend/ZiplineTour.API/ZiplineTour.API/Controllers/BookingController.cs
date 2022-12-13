@@ -65,5 +65,21 @@ namespace ZiplineTour.API.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpPost]
+        [Route("payment")]
+        public async Task<IActionResult> Payment(Payment pay)
+        {
+            var result = await _bookingService.Payment(pay);
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }

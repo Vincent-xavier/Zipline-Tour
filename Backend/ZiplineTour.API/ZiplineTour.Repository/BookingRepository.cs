@@ -17,6 +17,7 @@ namespace ZiplineTour.Repository
         Task<List<BookingModel>> FetchBooking();
         Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
         Task<BookingResult> BookingDetailsById(int id);
+        Task<int> Payment(Payment pay);
     }
     public class BookingRepository : IBookingRepository
     {
@@ -107,5 +108,31 @@ namespace ZiplineTour.Repository
             return booking;
         }
         #endregion
+
+        public async Task<int> Payment(Payment pay)
+        {
+            var param = new DynamicParameters();
+            try
+            {
+                param.Add("@pPaymentId", pay.PaymentId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@pPayerName", pay.PayerName, DbType.String, ParameterDirection.Input);
+                param.Add("@pCardNumber", pay.CardNumber, DbType.Int64, ParameterDirection.Input);
+                param.Add("@pExpiryDate", pay.ExpiryDate, DbType.String, ParameterDirection.Input);
+                param.Add("@pCvv", pay.Cvv, DbType.Int32, ParameterDirection.Input);
+                param.Add("@pBookingId", pay.BookingId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@ReturnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Booking.Payment, CommandType.StoredProcedure, param);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+
+            return param.Get<int>("@ReturnVal");
+
+        }
     }
+
+    
 }

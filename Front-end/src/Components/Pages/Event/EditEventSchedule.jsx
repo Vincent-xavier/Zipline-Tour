@@ -129,9 +129,6 @@ const EditEventSchedule = () => {
       price: eventDetails ? eventDetails?.resultData?.price : "",
       max_Booking: eventDetails ? eventDetails?.resultData?.max_Booking : "",
       min_Booking: eventDetails ? eventDetails?.resultData?.min_Booking : "",
-      eventCapacity: eventDetails
-        ? eventDetails?.resultData?.eventCapacity
-        : "",
       eventDiscription: eventDetails
         ? eventDetails?.resultData?.eventDiscription
         : "",
@@ -143,7 +140,6 @@ const EditEventSchedule = () => {
       min_Booking: Yup.number().required("Enter minimum Booking"),
       max_Booking: Yup.number().required("Enter maximum Booking"),
       eventDiscription: Yup.string().required("Enter event discription"),
-      eventCapacity: Yup.string().required("Enter Capacity"),
     }),
     onSubmit: (values) => {
       const formData = {
@@ -152,7 +148,6 @@ const EditEventSchedule = () => {
         price: values.price,
         max_Booking: values.max_Booking,
         min_Booking: values.min_Booking,
-        eventCapacity: values.eventCapacity,
         eventDiscription: values.eventDiscription,
         imgFile: fileSelected,
         eventImage: eventDetails?.resultData?.eventImage,
@@ -301,39 +296,6 @@ const EditEventSchedule = () => {
                               <small>
                                 <span className={"text-danger "}>
                                   {eventForm.errors.price}
-                                </span>
-                              </small>
-                            ) : null}
-                          </div>
-                        </div>
-
-                        <div className="row mt-3">
-                          <div className="col-md-6">
-                            <div className="form-floating">
-                              <input
-                                type="number"
-                                className={
-                                  eventForm.touched.price &&
-                                  eventForm.errors.price
-                                    ? "form-control is-invalid"
-                                    : "form-control"
-                                }
-                                id="floatingName"
-                                placeholder="eventCapacity"
-                                name="eventCapacity"
-                                onChange={eventForm.handleChange}
-                                value={eventForm.values.eventCapacity}
-                                onBlur={eventForm.handleBlur}
-                              />
-                              <label htmlFor="floatingName">
-                                eventCapacity
-                              </label>
-                            </div>
-                            {eventForm.touched.eventCapacity &&
-                            eventForm.errors.eventCapacity ? (
-                              <small>
-                                <span className={"text-danger "}>
-                                  {eventForm.errors.eventCapacity}
                                 </span>
                               </small>
                             ) : null}

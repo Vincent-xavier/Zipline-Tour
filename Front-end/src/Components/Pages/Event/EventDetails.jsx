@@ -101,13 +101,13 @@ const EventDetails = () => {
           ? eventEditData?.resultData?.slotId
           : values.slotId,
         eventTime: eventEditData?.resultData
-          ? moment(eventEditData?.resultData?.times).format("hh:mm A")
+          ? eventEditData?.resultData?.time
           : "",
         eventDate: eventEditData?.resultData
           ? eventEditData?.resultData?.date
           : "",
       };
-      //dispatch(saveEventBooking(contactData, navigate));
+      dispatch(saveEventBooking(contactData, navigate));
       console.log(contactData);
     },
   });
@@ -190,8 +190,8 @@ const EventDetails = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="d-flex justify-content-between">
-                            <div>
-                              <p className="text-dark">Guests</p>
+                            <div className="mt-3">
+                              <p className="text-dark"><b>Guests</b></p>
                             </div>
                             <div
                               className="input-group w-auto justify-content-end align-items-center"

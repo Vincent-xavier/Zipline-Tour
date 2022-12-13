@@ -6,6 +6,7 @@ const initialState = {
     error: "",
     orderData: "",
     bookingdata: "",
+    payment:"",
 }
 
 
@@ -79,6 +80,30 @@ export default function (state = initialState, action) {
                     isLoading: false,
                     success: null,
                     bookingdata: null,
+                    error: "error",
+                };
+
+                case constants.PAYMENT_REQUEST:
+                return {
+                    ...state,
+                    isLoading: true,
+                    success: null,
+                    error: null,
+                    payment: null,
+                };
+            case constants.PAYMENT_SUCCESS:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: "Event Booked Successfully",
+                    payment: action.payload,
+                };
+            case constants.PAYMENT_ERROR:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: null,
+                    payment: null,
                     error: "error",
                 };
 
