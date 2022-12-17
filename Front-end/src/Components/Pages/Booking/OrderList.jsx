@@ -1,57 +1,95 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Header from '../../Layout/Header'
-import Sidebar from '../../Layout/Sidebar'
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import Header from "../../Layout/Header";
+import Sidebar from "../../Layout/Sidebar";
+
+import MaterialReactTable from "material-react-table";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders } from "../../../actions/Order";
+import { Button } from "react-bootstrap";
 
 const OrderList = () => {
-    return (
-        <>
-            <Header />
-            <Sidebar />
+  const dispatch = useDispatch();
+  const { bookingdata } = useSelector((state) => state?.orderAPI);
+  const [bData, setBData] = useState();
 
-            <main id="main" className="main">
-                <section className="section">
-                    <div className="container">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Order List</h5>
-                                {/* Table with stripped rows */}
-                                <table className="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Oder Id</th>
-                                            <th scope="col">Event Name</th>
-                                            <th scope="col">Order Date</th>
-                                            <th scope="col">Customer</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Order Status</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Brandon Jacob</td>
-                                            <td>2016-05-25</td>
-                                            <td>Vincent</td>
-                                            <td>$ 200</td>
-                                            <td>Completed</td>
-                                            <td>
-                                            <i className="bi bi-trash" />
-                                            <i className="bi bi-eye ms-2" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                {/* End Table with stripped rows */}
-                            </div>
-                        </div>
+  console.log(bookingdata);
 
-                    </div>
-                </section>
-            </main>
-        </>
-    )
-}
+  const Data = [
+    {
+      date: "No data Found",
+    },
+  ];
 
-export default OrderList
+  useEffect(() => {
+    dispatch(fetchOrders());
+  }, []);
+
+  useEffect(() => {
+    if (bookingdata) {
+      setBData(bookingdata?.resultData);
+    }
+  }, [bookingdata?.resultData, bData]);
+
+  const columns = useMemo(
+    () => [
+      {
+        header: "Order Id",
+        accessorKey: "bookingId", //simple accessorKey pointing to flat data
+        size: 60,
+      },
+      {
+        header: "Name",
+        accessorKey: "eventName", //simple accessorKey pointing to flat data
+      },
+      {
+        header: "Customer",
+        accessorKey: "firstName", //simple accessorKey pointing to flat data
+        size: 80,
+      },
+      {
+        header: "Amount",
+        accessorKey: "totalPrice", //simple accessorKey pointing to flat data
+        size: 80,
+      },
+      {
+        header: "Order Date",
+        accessorKey: "bookingDate", //simple accessorKey pointing to flat data
+      },
+      {
+        header: "Order Status",
+        accessorKey: "paymentStatus", //simple accessorKey pointing to flat data
+        size: 80,
+      },
+    ],
+    []
+  );
+
+  return (
+    <>
+      <Header />
+      <Sidebar />
+
+      <main id="main" className="main">
+        <section className="section">
+          <MaterialReactTable
+            columns={columns}
+            data={bData ? bData : Data}
+            enableRowActions
+            renderRowActions={({ row }) => (
+              <div
+                style={{ display: "flex", flexWrap: "nowrap", gap: "0.5rem" }}
+              >
+                <Link to={`/roster/${row.original.slotId}`}>
+                <button className="btn bg-primary text-white">Show</button>
+                </Link>
+              </div>
+            )}
+          />
+        </section>
+      </main>
+    </>
+  );
+};
+
+export default OrderList;

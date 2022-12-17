@@ -11,7 +11,9 @@ const EditProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { eventData, success } = useSelector((state) => state.eventAPI);
+
   const [searchValue, setSearchValue] = useState("");
+
   useEffect(() => {
     dispatch(eventDetails());
 
@@ -73,7 +75,7 @@ const EditProduct = () => {
                       role="tabpanel"
                     >
                       <div className="table-responsive">
-                        {eventData?.resultData?.length > 0 ? (
+                        {eventData?.resultData ? (
                           eventData?.resultData
                             ?.filter((d) =>
                               d?.eventName

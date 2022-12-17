@@ -1,27 +1,49 @@
 import { useFormik } from "formik";
 import moment from "moment/moment";
 import React, { useEffect } from "react";
+import * as Yup from "yup";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { bookingDetails, savePayment } from "../../../actions/Order";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
-import * as Yup from "yup";
 import "@animxyz/core";
-import { savePayment } from "../../../actions/Order";
-import { useNavigate } from "react-router-dom";
+import { decryptSingleData } from "../../../actions/types";
+
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bookingdata } = useSelector((state) => state.orderAPI);
+  const { bookingdata, customerDetails } = useSelector(
+    (state) => state?.orderAPI
+  );
   const [customer, setCustomer] = useState();
-  const fullName =
-    customer?.listUser[0].firstName + " " + customer?.listUser[0].lastName;
+  const { bookingId } = useParams();
+
   const cusData = JSON.parse(localStorage.getItem("customerData"));
 
-  useEffect(() => {
-    setCustomer( bookingdata?.resultData ? bookingdata?.resultData : cusData?.resultData);
-  }, []);
+  console.log(customerDetails);
+  console.log(customer);
 
+  useEffect(() => {
+    if (bookingId) {
+      const dcryptId = decryptSingleData(bookingId);
+      dispatch(bookingDetails(dcryptId));
+    }
+  }, [bookingId]);
+
+  useEffect(() => {
+    // if (customerDetails) {
+    //   setCustomer(
+    //     customerDetails?.resultData ? customerDetails?.resultData : cusData?.resultData
+    //   );
+    // }
+    setCustomer(
+      customerDetails?.resultData
+        ? customerDetails?.resultData
+        : cusData?.resultData
+    );
+  }, []);
 
   const paymentForm = useFormik({
     initialValues: {
@@ -41,9 +63,11 @@ const Payment = () => {
         cardNumber: values.cardNumber,
         expiryDate: values.expiryDate,
         cvv: values.cvv,
-        bookingId: bookingdata?.resultData ? bookingdata?.resultData?.listBooking[0]?.bookingId : cusData?.resultData?.listBooking[0]?.bookingId,
+        bookingId: bookingdata?.resultData
+          ? bookingdata?.resultData?.listBooking[0]?.bookingId
+          : cusData?.resultData?.listBooking[0]?.bookingId,
       };
-      dispatch(savePayment(paymentData,navigate));
+      dispatch(savePayment(paymentData, navigate));
       console.log(paymentData);
     },
   });
@@ -66,7 +90,7 @@ const Payment = () => {
                   <div className="card shadow-sm ">
                     <div className="card-body xyz-nested">
                       <h5 className="card-title">
-                        {customer?.listBooking[0].eventName}
+                        {customer?.listBooking[0]?.eventName}
                       </h5>
                       <ul style={{ display: "flex", listStyleType: "none" }}>
                         <li className="p-2">
@@ -87,7 +111,7 @@ const Payment = () => {
                         <div className="col-md-4">
                           Guest
                           <span className="ms-5">
-                            {customer?.listBooking[0].guests} X
+                            {customer?.listBooking[0]?.guests} X
                           </span>
                         </div>
                         <div className="col-md-4 text-center">
@@ -239,10 +263,7 @@ const Payment = () => {
                         </div>
 
                         <div className="text-center mt-4">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                          >
+                          <button type="submit" className="btn btn-primary">
                             Pay Now
                           </button>
                         </div>
@@ -260,7 +281,11 @@ const Payment = () => {
                 <div className="card-body ">
                   <h5 className="card-title">Contact Information</h5>
                   <div className="ms-4 mt-0">
-                    <h6>{fullName}</h6>
+                    <h6>
+                      {customer?.listUser[0]?.firstName +
+                        " " +
+                        customer?.listUser[0]?.lastName}
+                    </h6>
                     <h6>{customer && customer?.listUser[0]?.email}</h6>
                     <h6>{customer?.listUser[0]?.phone}</h6>
                   </div>

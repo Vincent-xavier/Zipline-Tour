@@ -31,8 +31,13 @@ namespace ZiplineTour.Common
             public const string SaveTime = "usp_Event_SaveEventTimeSlot";
             public const string EventSchedule = "usp_Event_FetchScheduleDetails";
             public const string ScheduleById = "usp_Event_ScheduleById";
-            public const string RemoveAlreadyExists = "usp_Event_RemoveScheduleDateAndTime";
+            public const string DeleteEventDates = "usp_Event_DeleteEventDates";
 
+
+
+            //testing
+            public const string delete = "test_RemoveScheduleDateAndTime";
+         
         }
 
         public class Booking
@@ -40,8 +45,9 @@ namespace ZiplineTour.Common
             public const string EventBooking = "usp_Booking_SaveEventBooking";
             public const string BookingDetails = "usp_Booking_BookingById";
             public const string FetchAll = "usp_Booking_FetchBookingDetails";
+            public const string BookingListBySlotId = "usp_Booking_FetchBookingListBySlotId";
             public const string Payment = "usp_Booking_SavePayment";
-
+            public const string FetchOrders = "usp_Booking_FetchOrderList";
         }
 
 

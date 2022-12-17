@@ -189,7 +189,7 @@ login-page {
 }
 
 .event-schedule-area-two .tab-content .table tbody tr td {
-    padding: 20px 20px;
+    padding: 5px 20px;
     vertical-align: middle;
 }
 
@@ -697,4 +697,39 @@ icon-shape {
 
 .react-tabs__tab--selected {
     padding-left: 21px;
+}
+
+.event-tablist{
+    overflow: hidden;
+    overflow-y: auto;
+    width: 650px;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none;
+}
+
+.event-timeslot{
+    height: 80vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none;
+}
+
+.event_timeslot-list:hover {
+    background-color: #ccc;
+    transition: .5s;
+    
+}
+
+.selected {
+    background-color: #ccc;
+}
+
+
+
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
 }

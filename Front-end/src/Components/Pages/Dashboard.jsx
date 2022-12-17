@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { events } from "../../actions/Event";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
@@ -9,18 +9,17 @@ import moment from "moment";
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { eventData } = useSelector((state) => state.eventAPI);
-  const [roaster, setRoaster] = useState();
 
-  const handleRoaster = (i,events) =>{
-    // <Link to={"/roster"} state={testState} ></Link>
-    setRoaster(i,events)
-  }
+  const handleRoaster = (slotId) => {
+    navigate(`/roster/${slotId}`);
+  };
 
-  console.log(roaster);
   useEffect(() => {
     dispatch(events());
   }, []);
+
   return (
     <>
       <Header />
@@ -28,6 +27,14 @@ export const Dashboard = () => {
 
       <main id="main" className="main">
         <section className="section dashboard">
+          <div
+            className="row mb-3 border-bottom"
+            style={{ height: "55px", margin: "-20px -35px" }}
+          >
+            <div className="col-md-4 mt-1 d-flex">
+              {/* <p className="me-2"> Search</p>    <input type="search" className="form-control" name="search" id="search-btn" /> */}
+            </div>
+          </div>
           <div className="row">
             <div className="event-schedule-area-two bg-color pad100">
               <div className="container">
@@ -42,10 +49,17 @@ export const Dashboard = () => {
                         <div className="table-responsive">
                           <table className="table">
                             {eventData && eventData?.resultData?.length > 0
-                              ? eventData?.resultData.map((e, i) => {
+                              ? eventData?.resultData?.map((e, i) => {
                                   return (
                                     <>
-                                      <thead key={i}>
+                                      <thead
+                                        key={i}
+                                        style={{
+                                          background: "#000",
+                                          color: "#fff",
+                                          opacity: ".8",
+                                        }}
+                                      >
                                         <tr>
                                           <th
                                             colSpan={"2"}
@@ -62,15 +76,36 @@ export const Dashboard = () => {
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {e?.lstModal.map((events, index) => {
+                                        {e?.lstModal?.map((events, index) => {
                                           return (
                                             <>
-                                              <tr className="inner-box" key={index}>
+                                              <tr
+                                                className="inner-box"
+                                                key={index}
+                                              >
                                                 <th scope="row">
                                                   <div className="time">
-                                                    <span style={{fontSize:"13px"}}>{events?.time}</span>
+                                                    <span
+                                                      style={{
+                                                        fontSize: "13px",
+                                                      }}
+                                                    >
+                                                      {events?.time}
+                                                    </span>
                                                   </div>
                                                 </th>
+                                                <td>
+                                                  <div className="event-date text-center">
+                                                    <span>
+                                                      <b>
+                                                        {events?.available > 0
+                                                          ? events?.available
+                                                          : events?.eventCapacity}
+                                                      </b>
+                                                    </span>
+                                                    <p>Capacity</p>
+                                                  </div>
+                                                </td>
                                                 <td>
                                                   <div className="event-img">
                                                     <img
@@ -91,31 +126,24 @@ export const Dashboard = () => {
                                                     <h5>{events?.eventName}</h5>
                                                   </div>
                                                 </td>
-                                                <td>
-                                                  <div className="event-date text-center">
-                                                    <span>
-                                                      <b>
-                                                        {events?.eventCapacity}
-                                                      </b>
-                                                    </span>
-                                                    <p>Capacity</p>
-                                                  </div>
-                                                </td>
-                                                <td onClick={()=> handleRoaster(e, index)}>
-                                                  
-                                                    <span className="text-center ms-3">
-                                                      <i className="bi bi-arrow-right-square-fill" />
-                                                    </span>
 
-                                                    <p
-                                                      style={{
-                                                        fontWeight: "bold",
-                                                        fontSize: "17px",
-                                                      }}
-                                                    >
-                                                      Roster
-                                                    </p>
-                                                  
+                                                <td
+                                                  onClick={() =>
+                                                    handleRoaster(events?.slotId)
+                                                  }
+                                                >
+                                                  <span className="text-center ms-3">
+                                                    <i className="bi bi-arrow-right-square-fill" />
+                                                  </span>
+
+                                                  <p
+                                                    style={{
+                                                      fontWeight: "bold",
+                                                      fontSize: "17px",
+                                                    }}
+                                                  >
+                                                    Roster
+                                                  </p>
                                                 </td>
                                               </tr>
                                             </>

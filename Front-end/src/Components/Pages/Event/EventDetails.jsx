@@ -11,6 +11,8 @@ import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 import "@animxyz/core";
+import { ToastContainer, toast  } from 'react-toastify';
+import { useLayoutEffect } from "react";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     dispatch(eventById(id));
+    
   }, []);
 
   useEffect(() => {
@@ -33,15 +36,33 @@ const EventDetails = () => {
     settotalPrice(eventPrice);
   }, [setCounter, seteventPrice, settotalPrice, eventPrice, eventEditData]);
 
+  useEffect(()=>{
+    if (counter === eventEditData?.resultData?.max_Booking) {
+      toast.warn('Maximum Booking Reached!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+  },[counter])
+
   const handleIncre = (e) => {
     setCounter(counter + 1);
     settotalPrice((counter + 1) * eventPrice);
   };
 
+
   const handleDecre = (e) => {
     setCounter(counter - 1);
     settotalPrice((counter - 1) * eventPrice);
   };
+
+
 
   // Event Registration Form
   const contactForm = useFormik({
@@ -101,7 +122,7 @@ const EventDetails = () => {
           ? eventEditData?.resultData?.slotId
           : values.slotId,
         eventTime: eventEditData?.resultData
-          ? eventEditData?.resultData?.time
+          ?eventEditData?.resultData?.time
           : "",
         eventDate: eventEditData?.resultData
           ? eventEditData?.resultData?.date
@@ -119,6 +140,7 @@ const EventDetails = () => {
 
       <main id="main" className="main">
         <section className="section">
+          <ToastContainer />
           <div className="container" xyz="fade small-100%">
             <div className="product-content product-wrap clearfix product-deatil xyz-none xyz-in">
               <div className="row">
@@ -190,8 +212,8 @@ const EventDetails = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="d-flex justify-content-between">
-                            <div className="mt-3">
-                              <p className="text-dark"><b>Guests</b></p>
+                            <div>
+                              <p className="text-dark">Guests</p>
                             </div>
                             <div
                               className="input-group w-auto justify-content-end align-items-center"

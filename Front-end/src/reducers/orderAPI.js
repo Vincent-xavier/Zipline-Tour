@@ -6,7 +6,6 @@ const initialState = {
     error: "",
     orderData: "",
     bookingdata: "",
-    payment:"",
 }
 
 
@@ -24,7 +23,8 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoading: false,
                 success: "Event Booked SuccessFully",
-                bookingdata: action.payload,
+                // bookingdata: action.payload,
+                customerDetails : action.payload,
             };
         case constants.EVENT_BOOKING_ERROR:
             return {
@@ -48,7 +48,7 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoading: false,
                 success: "success",
-                orderData: action.payload,
+                customerDetails: action.payload,
             };
         case constants.BOOKING_DETAILS_ERROR:
             return {
@@ -104,6 +104,53 @@ export default function (state = initialState, action) {
                     isLoading: false,
                     success: null,
                     payment: null,
+                    error: "error",
+                };
+
+                case constants.FETCH_ORDERS_REQUEST:
+                    return {
+                        ...state,
+                        isLoading: true,
+                        success: null,
+                        error: null,
+                    };
+                case constants.FETCH_ORDERS_SUCCESS:
+                    return {
+                        ...state,
+                        isLoading: false,
+                        success: "Fetch order Success",
+                        bookingdata: action.payload,
+                    };
+                case constants.FETCH_ORDERS_ERROR:
+                    return {
+                        ...state,
+                        isLoading: false,
+                        success: null,
+                        error: "error",
+                    };
+
+
+                case constants.FETCH_BOOKING_BY_SLOAT_ID_REQUEST:
+                return {
+                    ...state,
+                    isLoading: true,
+                    success: null,
+                    error: null,
+                    bookingdata: null,
+                };
+            case constants.FETCH_BOOKING_BY_SLOAT_ID_SUCCESS:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: "success",
+                    bookingdata: action.payload,
+                };
+            case constants.FETCH_BOOKING_BY_SLOAT_ID_ERROR:
+                return {
+                    ...state,
+                    isLoading: false,
+                    success: null,
+                    bookingdata: null,
                     error: "error",
                 };
 

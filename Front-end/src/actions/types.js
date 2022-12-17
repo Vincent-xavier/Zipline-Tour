@@ -48,13 +48,43 @@ export const BOOKING_DETAILS_REQUEST = 'BOOKING_DETAILS_REQUEST';
 export const BOOKING_DETAILS_SUCCESS = 'BOOKING_DETAILS_SUCCESS';
 export const BOOKING_DETAILS_ERROR = 'BOOKING_DETAILS_ERROR';
 
-export const FETCH_BOOKING_REQUEST = 'FETCH_BOOKING_REQUEST';
-export const FETCH_BOOKING_SUCCESS = 'FETCH_BOOKING_SUCCESS';
-export const FETCH_BOOKING_ERROR = 'FETCH_BOOKING_ERROR';
-
 export const PAYMENT_REQUEST = 'PAYMENT_REQUEST';
 export const PAYMENT_SUCCESS = 'PAYMENT_SUCCESS';
 export const PAYMENT_ERROR = 'PAYMENT_ERROR';
 
 
+export const FETCH_BOOKING_REQUEST = 'FETCH_BOOKING_REQUEST';
+export const FETCH_BOOKING_SUCCESS = 'FETCH_BOOKING_SUCCESS';
+export const FETCH_BOOKING_ERROR = 'FETCH_BOOKING_ERROR';
+
+export const FETCH_ORDERS_REQUEST = 'FETCH_ORDERS_REQUEST';
+export const FETCH_ORDERS_SUCCESS = 'FETCH_ORDERS_SUCCESS';
+export const FETCH_ORDERS_ERROR = 'FETCH_ORDERS_ERROR';
+
+
+export const FETCH_BOOKING_BY_SLOAT_ID_REQUEST = 'FETCH_BOOKING_BY_SLOAT_ID_REQUEST';
+export const FETCH_BOOKING_BY_SLOAT_ID_SUCCESS = 'FETCH_BOOKING_BY_SLOAT_ID_SUCCESS';
+export const FETCH_BOOKING_BY_SLOAT_ID_ERROR = 'FETCH_BOOKING_BY_SLOAT_ID_ERROR';
+
+
 export const IMAGE_PATH = 'https://localhost:44306/EventImage/';
+
+
+//To encypt single data
+export function encryptSingleData(encData) {
+    if (encData) {
+      var retData = btoa((encData + 122354125410));
+      return retData;
+    }
+  }
+  
+  //To Decrypt single data
+  export function decryptSingleData(encData) {
+    if (encData) {
+      var smp = atob(encData);
+      if ((smp)) {
+        var retData = atob(encData) - 122354125410;
+        return retData
+      }
+    }
+  }

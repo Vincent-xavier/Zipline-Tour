@@ -12,7 +12,7 @@ import Sidebar from "../../Layout/Sidebar";
 import { events } from "../../../actions/Event";
 import * as types from "../../../actions/types";
 import { format } from "date-fns";
-import { ToastContainer, toast  } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const Events = () => {
   const dispatch = useDispatch();
@@ -35,9 +35,10 @@ const Events = () => {
 
   useEffect(() => {
     dispatch(events());
-    
-  if (success === "event Scheduled Successfully") {
-    toast("Event Scheduled Successfully");
+    if (success === "event Scheduled Successfully") {
+      toast("Event Scheduled Successfully");
+    } else if (success === "Event Booked SuccessFully") {
+      toast("Event Booked SuccessFully");
     }
   }, [success]);
 
@@ -46,7 +47,7 @@ const Events = () => {
       <Header />
       <Sidebar />
       <main id="main" className="main">
-      <ToastContainer />
+        <ToastContainer />
         <div className="pagetitle">
           <h1 style={{ fontSize: "28px" }}>Events</h1>
         </div>

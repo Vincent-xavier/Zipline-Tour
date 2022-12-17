@@ -13,6 +13,8 @@ namespace ZiplineTour.Services
         Task<ResultArgs> SaveEventBooking(BookingModel bookingModel);
         Task<ResultArgs> BookingDetailsById(int id);
         Task<ResultArgs> FetchBooking();
+        Task<ResultArgs> FetchOrders();
+        Task<ResultArgs> BookingListBySlotId(int slotId);
         Task<ResultArgs> Payment(Payment pay);
 
     }
@@ -31,6 +33,27 @@ namespace ZiplineTour.Services
             var result = await _bookingRepository.SaveEventBooking(bookingModel);
 
             if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "Saved Successfully";
+                args.ResultData = result;
+            }
+            else
+            {
+                args.StatusCode = 500;
+                args.StatusMessage = "failed";
+            }
+
+            return args;
+        }
+
+        public async Task<ResultArgs> Payment(Payment pay)
+        {
+            var args = new ResultArgs();
+
+            var result = await _bookingRepository.Payment(pay);
+
+            if (result > 0)
             {
                 args.StatusCode = 200;
                 args.StatusMessage = "Saved Successfully";
@@ -86,17 +109,36 @@ namespace ZiplineTour.Services
 
             return args;
         }
-
-        public async Task<ResultArgs> Payment(Payment pay)
+        public async Task<ResultArgs> FetchOrders()
         {
             var args = new ResultArgs();
 
-            var result = await _bookingRepository.Payment(pay);
+            var result = await _bookingRepository.FetchOrders();
 
-            if (result > 0)
+            if (result != null)
             {
                 args.StatusCode = 200;
-                args.StatusMessage = "Payment Successfully";
+                args.StatusMessage = "Success";
+                args.ResultData = result;
+            }
+            else
+            {
+                args.StatusCode = 500;
+                args.StatusMessage = "failed";
+            }
+
+            return args;
+        }
+        public async Task<ResultArgs> BookingListBySlotId(int slotId)
+        {
+            var args = new ResultArgs();
+
+            var result = await _bookingRepository.BookingListBySlotId(slotId);
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "Success";
                 args.ResultData = result;
             }
             else

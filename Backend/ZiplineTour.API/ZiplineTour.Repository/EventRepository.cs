@@ -162,6 +162,7 @@ namespace ZiplineTour.Repository
                 param.Add("@eName", eventModel.EventName, DbType.String, ParameterDirection.Input);
                 param.Add("@eDiscri", eventModel.EventDiscription, DbType.String, ParameterDirection.Input);
                 param.Add("@e_price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
+                param.Add("@eCapacity", eventModel.EventCapacity, DbType.Int32, ParameterDirection.Input);
                 param.Add("@maxBook", eventModel.Max_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
                 param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);
@@ -215,7 +216,6 @@ namespace ZiplineTour.Repository
         {
 
             var param = new DynamicParameters();
-            var DateIds = new List<int>();
             int scheduleId, Result = 0;
 
             try
@@ -233,10 +233,9 @@ namespace ZiplineTour.Repository
 
                 if (scheduleId > 0)
                 {
-                    var CheckIfExist = await RemoveScheduleDateAndTime(schedule.EventId, scheduleId);
+                    await DeleteScheduleDate(schedule.EventId, scheduleId);
 
-                    DateIds = await SaveScheduleDate(schedule.DateFrom, schedule.DateTo, schedule.EventId, scheduleId);
-
+                    var DateIds = await SaveScheduleDate(schedule.DateFrom, schedule.DateTo, schedule.EventId, scheduleId);
                     Result = await SaveScheduleTimeSlot(schedule.Times, DateIds, schedule.EventId, scheduleId);
                 }
 
@@ -248,24 +247,6 @@ namespace ZiplineTour.Repository
             }
 
             return Result;
-        }
-
-        public async Task<string> RemoveScheduleDateAndTime(int EventId, int ScheduleId)
-        {
-            var param = new DynamicParameters();
-            string Sucess = "Successfully Removed";
-            try
-            {
-                param.Add("@pEventId", EventId, DbType.Int32, ParameterDirection.Input);
-                param.Add("@pScheduleId", ScheduleId, DbType.Int32, ParameterDirection.Input);
-                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.RemoveAlreadyExists, CommandType.StoredProcedure, param);
-            }
-            catch (Exception ex)
-            {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
-            }
-            return Sucess;
         }
 
         #region Save Schedule Date
@@ -297,7 +278,22 @@ namespace ZiplineTour.Repository
 
             return DateIds;
         }
+        public async Task DeleteScheduleDate(int EventId, int scheduleId)
+        {
+            var param1 = new DynamicParameters();
+            try
+            {
+                param1.Add("@i_eventId", EventId, DbType.Int32, ParameterDirection.Input);
+                param1.Add("@i_scheduleId", scheduleId, DbType.Int32, ParameterDirection.Input);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.DeleteEventDates, CommandType.StoredProcedure, param1);
+            }
+            catch (Exception ex)
+            {
+                var log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
 
+        }
         #region Get Dates
         public Array GetDates(DateTime start, DateTime end)
         {
@@ -322,6 +318,7 @@ namespace ZiplineTour.Repository
 
             try
             {
+
                 foreach (var dateid in DateIds)
                 {
                     foreach (var time in Times)

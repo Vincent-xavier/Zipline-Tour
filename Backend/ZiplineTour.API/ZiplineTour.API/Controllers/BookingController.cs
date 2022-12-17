@@ -35,11 +35,42 @@ namespace ZiplineTour.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("payment")]
+        public async Task<IActionResult> Payment(Payment pay)
+        {
+            var result = await _bookingService.Payment(pay);
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
         [HttpGet]
         [Route("fetchAllBookings")]
         public async Task<IActionResult> FetchBooking()
         {
             var result = await _bookingService.FetchBooking();
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+        [HttpGet]
+        [Route("fetchorders")]
+        public async Task<IActionResult> FetchOrders()
+       {
+            var result = await _bookingService.FetchOrders();
 
             if (result.StatusCode == 200)
             {
@@ -66,11 +97,11 @@ namespace ZiplineTour.API.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("payment")]
-        public async Task<IActionResult> Payment(Payment pay)
+        [HttpGet]
+        [Route("fetch-booking-by-slotid/{slotId}")]
+        public async Task<IActionResult> BookingListBySlotId(int slotId)
         {
-            var result = await _bookingService.Payment(pay);
+            var result = await _bookingService.BookingListBySlotId(slotId);
 
             if (result.StatusCode == 200)
             {

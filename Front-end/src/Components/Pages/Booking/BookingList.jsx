@@ -6,9 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchbooking } from "../../../actions/Order";
 import moment from "moment";
 import "@animxyz/core";
+import { useNavigate } from "react-router-dom";
+import { encryptSingleData } from "../../../actions/types";
+
+
+
+
 
 const BookingList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bookingdata } = useSelector((state) => state.orderAPI);
   const [bData, setBData] = React.useState();
   const [pending, setPending] = React.useState(true);
@@ -25,8 +32,29 @@ const BookingList = () => {
     return () => clearTimeout(timeout);
   }, [bookingdata?.resultData]);
 
-  console.log(bData);
+const redirectPayment = (bookingId) =>{
+  const encryptId = encryptSingleData(bookingId)
+  navigate(`/payment/${encryptId}`)
+}
+
+
+  
   const columns = [
+    {
+      cell: (row) => (
+        <div className="row d-flex">
+          <button
+            className="btn bg-warning d-inline mr-2 p-1"
+             onClick={(e) => redirectPayment(row?.bookingId)}
+            id={row?.bookingId}
+          >
+            Resume
+          </button>
+          
+        </div>
+      ),
+      name: "ACTION",
+    },
     {
       name: "Booking code",
       selector: (row) => "EB00" + row?.bookingId,

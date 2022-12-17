@@ -15,6 +15,8 @@ namespace ZiplineTour.Repository
     public interface IBookingRepository
     {
         Task<List<BookingModel>> FetchBooking();
+        Task<List<Booking>> FetchOrders();
+        Task<List<Booking>> BookingListBySlotId(int slotId);
         Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
         Task<BookingResult> BookingDetailsById(int id);
         Task<int> Payment(Payment pay);
@@ -68,9 +70,10 @@ namespace ZiplineTour.Repository
         public async Task<List<BookingModel>> FetchBooking()
         {
             List<BookingModel> bookings = new List<BookingModel>();
-
+            
             try
             {
+                
                 bookings = (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.Booking.FetchAll, CommandType.StoredProcedure, null)).ToList();
             }
             catch (Exception ex)
@@ -81,7 +84,65 @@ namespace ZiplineTour.Repository
             }
             return bookings;
         }
+        public async Task<List<Booking>> FetchOrders()
+            {
+            List<Booking> bookings = new List<Booking>();
+            
+            try
+            {
+                
+                bookings = (await _serverHandler.QueryAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrders, CommandType.StoredProcedure, null)).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+            return bookings;
+        }
         #endregion
+        public async Task<int> Payment(Payment pay)
+        {
+            var param = new DynamicParameters();
+            try
+            {
+                param.Add("@pPaymentId", pay.PaymentId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@pPayerName", pay.PayerName, DbType.String, ParameterDirection.Input);
+                param.Add("@pCardNumber", pay.CardNumber, DbType.Int64, ParameterDirection.Input);
+                param.Add("@pExpiryDate", pay.ExpiryDate, DbType.String, ParameterDirection.Input);
+                param.Add("@pCvv", pay.Cvv, DbType.Int32, ParameterDirection.Input);
+                param.Add("@pBookingId", pay.BookingId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@ReturnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Booking.Payment, CommandType.StoredProcedure, param);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+
+            return param.Get<int>("@ReturnVal");
+
+        }
+
+        public async Task<List<Booking>> BookingListBySlotId(int slotId)
+        {
+            List<Booking> bookings = new List<Booking>();
+            var param = new DynamicParameters();
+            try
+            {
+                param.Add("@pSlotId", slotId, DbType.Int32, ParameterDirection.Input);
+                bookings = (await _serverHandler.QueryAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.BookingListBySlotId, CommandType.StoredProcedure, param)).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+            return bookings;
+        }
 
         #region Fetch One Record By Booking Id
         public async Task<BookingResult> BookingDetailsById(int id)
@@ -108,31 +169,5 @@ namespace ZiplineTour.Repository
             return booking;
         }
         #endregion
-
-        public async Task<int> Payment(Payment pay)
-        {
-            var param = new DynamicParameters();
-            try
-            {
-                param.Add("@pPaymentId", pay.PaymentId, DbType.Int32, ParameterDirection.Input);
-                param.Add("@pPayerName", pay.PayerName, DbType.String, ParameterDirection.Input);
-                param.Add("@pCardNumber", pay.CardNumber, DbType.Int64, ParameterDirection.Input);
-                param.Add("@pExpiryDate", pay.ExpiryDate, DbType.String, ParameterDirection.Input);
-                param.Add("@pCvv", pay.Cvv, DbType.Int32, ParameterDirection.Input);
-                param.Add("@pBookingId", pay.BookingId, DbType.Int32, ParameterDirection.Input);
-                param.Add("@ReturnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Booking.Payment, CommandType.StoredProcedure, param);
-            }
-            catch (Exception ex)
-            {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
-            }
-
-            return param.Get<int>("@ReturnVal");
-
-        }
     }
-
-    
 }

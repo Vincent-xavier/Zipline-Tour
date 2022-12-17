@@ -22,6 +22,7 @@ const URLRoutes = () => {
       <Route path="/event" element={<Events />} />
       <Route path="/event-details/:id" element={<EventDetails />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/payment/:bookingId" element={<Payment />} />
       <Route path="*" element={<ErrorPage />} />
 
       <Route element={<PrivateRoutes />}>
@@ -35,6 +36,7 @@ const URLRoutes = () => {
         <Route path="/booking-list" element={<BookingList />} />
         <Route path="/edit-event" element={<EditEvent />} />
         <Route path="/roster" element={<RosterView />} />
+        <Route path="/roster/:slotId" element={<RosterView />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
