@@ -13,6 +13,7 @@ namespace ZiplineTour.Services
     public interface IEventService
     {
         Task<ResultArgs> FetchEvents();
+        Task<ResultArgs> FetchEventsBySlotId(int SlotId);
 
         Task<ResultArgs> EventById(int eventId);
 
@@ -40,6 +41,25 @@ namespace ZiplineTour.Services
         {
             var args = new ResultArgs();
             var events = await _eventRepository.FetchEvents();
+
+            if (events != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "success";
+                args.ResultData = events;
+            }
+            else
+            {
+                args.StatusCode = 404;
+                args.StatusMessage = "error";
+            }
+
+            return args;
+        }
+        public async Task<ResultArgs> FetchEventsBySlotId(int SlotId)
+        {
+            var args = new ResultArgs();
+            var events = await _eventRepository.FetchEventsBySlotId(SlotId);
 
             if (events != null)
             {

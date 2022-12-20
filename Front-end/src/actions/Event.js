@@ -224,3 +224,31 @@ export const ScheduleById = (ScheduleId) => async (dispatch) => {
     });
   }
 };
+
+export const eventBySlotId = (id) => async (dispatch) => {
+  dispatch({
+    type: constants.EVENT_FOR_ROSTER_REQUEST,
+  });
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios
+      .get(
+        `/api/Event/fetchEvent/${id}`,
+        {},
+        { headers: headers }
+      )
+      .then((res) => {
+        dispatch({
+          type: constants.EVENT_FOR_ROSTER_SUCCESS,
+          payload: res.data,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: constants.EVENT_FOR_ROSTER_ERROR,
+    });
+  }
+};

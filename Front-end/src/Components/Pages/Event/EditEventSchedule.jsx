@@ -73,9 +73,9 @@ const EditEventSchedule = () => {
   };
 
   const handleTimesToArray = (eventTimes) => {
-    if (eventTimes.length > 0) {
+    if (eventTimes?.length > 0) {
       var nietos = [];
-      for (var i = 0; i < eventTimes.length; i++) {
+      for (var i = 0; i < eventTimes?.length; i++) {
         var obj = {};
         obj["ActivitiesData"] = moment(eventTimes[i], ["hh:mm A"]).format(
           "HH:mm"
@@ -186,7 +186,7 @@ const EditEventSchedule = () => {
         eventId: eventId,
       };
       dispatch(saveEventSchedule(scheduleData, navigate));
-      console.log(scheduleData);
+      // console.log(scheduleData);
     },
   });
 
@@ -724,7 +724,7 @@ const EditEventSchedule = () => {
                                     className="form-control"
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setStartDate(date)}
-                                    minDate={new Date()}
+                                    minDate={new Date(startDate)}
                                     showDisabledMonthNavigation
                                   />
                                 </div>
@@ -740,7 +740,7 @@ const EditEventSchedule = () => {
                                     selected={endDate}
                                     dateFormat="dd/MM/yyyy"
                                     onChange={(date) => setEndDate(date)}
-                                    minDate={new Date()}
+                                    minDate={new Date(endDate)}
                                     isClearable
                                     className="form-control"
                                     showDisabledMonthNavigation

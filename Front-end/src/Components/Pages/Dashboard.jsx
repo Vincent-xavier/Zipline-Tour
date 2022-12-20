@@ -28,7 +28,7 @@ export const Dashboard = () => {
       <main id="main" className="main">
         <section className="section dashboard">
           <div
-            className="row mb-3 border-bottom"
+            className="row mb-3"
             style={{ height: "55px", margin: "-20px -35px" }}
           >
             <div className="col-md-4 mt-1 d-flex">
@@ -46,116 +46,114 @@ export const Dashboard = () => {
                         id="home"
                         role="tabpanel"
                       >
-                        <div className="table-responsive">
-                          <table className="table">
-                            {eventData && eventData?.resultData?.length > 0
-                              ? eventData?.resultData?.map((e, i) => {
-                                  return (
-                                    <>
-                                      <thead
-                                        key={i}
-                                        style={{
-                                          background: "#000",
-                                          color: "#fff",
-                                          opacity: ".8",
-                                        }}
-                                      >
-                                        <tr>
-                                          <th
-                                            colSpan={"2"}
-                                            className="text-center"
-                                            scope="col"
-                                          >
-                                            {moment(e.date).format(
-                                              "DD MMMM yyyy"
-                                            )}
-                                          </th>
-                                          <th colSpan={"4"} scope="col">
-                                            {moment(e.date).format("dddd")}
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {e?.lstModal?.map((events, index) => {
-                                          return (
-                                            <>
-                                              <tr
-                                                className="inner-box"
-                                                key={index}
-                                              >
-                                                <th scope="row">
-                                                  <div className="time">
-                                                    <span
-                                                      style={{
-                                                        fontSize: "13px",
-                                                      }}
-                                                    >
-                                                      {events?.time}
-                                                    </span>
-                                                  </div>
-                                                </th>
-                                                <td>
-                                                  <div className="event-date text-center">
-                                                    <span>
-                                                      <b>
-                                                        {events?.available > 0
-                                                          ? events?.available
-                                                          : events?.eventCapacity}
-                                                      </b>
-                                                    </span>
-                                                    <p>Capacity</p>
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  <div className="event-img">
-                                                    <img
-                                                      style={{
-                                                        width: "50px",
-                                                        height: "50px",
-                                                      }}
-                                                      src={
-                                                        types.IMAGE_PATH +
-                                                        events?.eventImage
-                                                      }
-                                                      alt
-                                                    />
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  <div className="event-wrap d-flex">
-                                                    <h5>{events?.eventName}</h5>
-                                                  </div>
-                                                </td>
-
-                                                <td
-                                                  onClick={() =>
-                                                    handleRoaster(events?.slotId)
-                                                  }
-                                                >
-                                                  <span className="text-center ms-3">
-                                                    <i className="bi bi-arrow-right-square-fill" />
-                                                  </span>
-
-                                                  <p
+                        <table className="table">
+                          {eventData && eventData?.resultData?.length > 0
+                            ? eventData?.resultData?.map((e, i) => {
+                                return (
+                                  <>
+                                    <thead
+                                      key={i}
+                                      style={{
+                                        background: "#fff",
+                                        color: "#000",
+                                        opacity: ".8",
+                                      }}
+                                    >
+                                      <tr>
+                                        <th
+                                          colSpan={"2"}
+                                          className="text-center"
+                                          scope="col"
+                                        >
+                                          {moment(e.date).format(
+                                            "DD MMMM yyyy"
+                                          )}
+                                        </th>
+                                        <th colSpan={"4"} scope="col">
+                                          {moment(e.date).format("dddd")}
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {e?.lstModal?.map((events, index) => {
+                                        return (
+                                          <>
+                                            <tr
+                                              className="inner-box"
+                                              key={index}
+                                            >
+                                              <th scope="row">
+                                                <div className="time">
+                                                  <span
                                                     style={{
-                                                      fontWeight: "bold",
-                                                      fontSize: "17px",
+                                                      fontSize: "13px",
                                                     }}
                                                   >
-                                                    Roster
-                                                  </p>
-                                                </td>
-                                              </tr>
-                                            </>
-                                          );
-                                        })}
-                                      </tbody>
-                                    </>
-                                  );
-                                })
-                              : null}
-                          </table>
-                        </div>
+                                                    {events?.time}
+                                                  </span>
+                                                </div>
+                                              </th>
+                                              <td>
+                                                <div className="event-date text-center">
+                                                  <span>
+                                                    <b>
+                                                      {events?.available > 0
+                                                        ? events?.available
+                                                        : events?.eventCapacity}
+                                                    </b>
+                                                  </span>
+                                                  <p>Capacity</p>
+                                                </div>
+                                              </td>
+                                              <td>
+                                                <div className="event-img">
+                                                  <img
+                                                    style={{
+                                                      width: "50px",
+                                                      height: "50px",
+                                                    }}
+                                                    src={
+                                                      types.IMAGE_PATH +
+                                                      events?.eventImage
+                                                    }
+                                                    alt
+                                                  />
+                                                </div>
+                                              </td>
+                                              <td>
+                                                <div className="event-wrap d-flex">
+                                                  <h5>{events?.eventName}</h5>
+                                                </div>
+                                              </td>
+
+                                              <td
+                                                onClick={() =>
+                                                  handleRoaster(events?.slotId)
+                                                }
+                                              >
+                                                <span className="text-center ms-3">
+                                                  <i className="bi bi-arrow-right-square-fill" />
+                                                </span>
+
+                                                <p
+                                                  style={{
+                                                    fontWeight: "bold",
+                                                    fontSize: "17px",
+                                                  }}
+                                                >
+                                                  Roster
+                                                </p>
+                                              </td>
+                                            </tr>
+                                          </>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </>
+                                );
+                              })
+                            : null}
+                        </table>
                       </div>
                     </div>
                   </div>

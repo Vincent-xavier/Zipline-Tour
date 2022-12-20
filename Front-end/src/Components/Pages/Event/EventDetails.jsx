@@ -12,7 +12,6 @@ import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 import "@animxyz/core";
 import { ToastContainer, toast  } from 'react-toastify';
-import { useLayoutEffect } from "react";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
@@ -25,7 +24,6 @@ const EventDetails = () => {
 
   useEffect(() => {
     dispatch(eventById(id));
-    
   }, []);
 
   useEffect(() => {
@@ -56,13 +54,10 @@ const EventDetails = () => {
     settotalPrice((counter + 1) * eventPrice);
   };
 
-
   const handleDecre = (e) => {
     setCounter(counter - 1);
     settotalPrice((counter - 1) * eventPrice);
   };
-
-
 
   // Event Registration Form
   const contactForm = useFormik({
@@ -129,7 +124,7 @@ const EventDetails = () => {
           : "",
       };
       dispatch(saveEventBooking(contactData, navigate));
-      console.log(contactData);
+      // console.log(contactData);
     },
   });
 

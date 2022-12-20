@@ -1,20 +1,20 @@
-import { useFormik } from "formik";
-import moment from "moment/moment";
-import React, { useEffect } from "react";
+import "@animxyz/core";
 import * as Yup from "yup";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { bookingDetails, savePayment } from "../../../actions/Order";
-import { useNavigate, useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import moment from "moment/moment";
 import Header from "../../Layout/Header";
+import React, { useEffect } from "react";
 import Sidebar from "../../Layout/Sidebar";
-import "@animxyz/core";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { decryptSingleData } from "../../../actions/types";
+import { bookingDetails, savePayment } from "../../../actions/Order";
 
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bookingdata, customerDetails } = useSelector(
+  const {  customerDetails } = useSelector(
     (state) => state?.orderAPI
   );
   const [customer, setCustomer] = useState();
@@ -22,22 +22,15 @@ const Payment = () => {
 
   const cusData = JSON.parse(localStorage.getItem("customerData"));
 
-  console.log(customerDetails);
-  console.log(customer);
-
   useEffect(() => {
     if (bookingId) {
+      localStorage.removeItem("customerData")
       const dcryptId = decryptSingleData(bookingId);
       dispatch(bookingDetails(dcryptId));
     }
   }, [bookingId]);
 
   useEffect(() => {
-    // if (customerDetails) {
-    //   setCustomer(
-    //     customerDetails?.resultData ? customerDetails?.resultData : cusData?.resultData
-    //   );
-    // }
     setCustomer(
       customerDetails?.resultData
         ? customerDetails?.resultData
@@ -63,8 +56,8 @@ const Payment = () => {
         cardNumber: values.cardNumber,
         expiryDate: values.expiryDate,
         cvv: values.cvv,
-        bookingId: bookingdata?.resultData
-          ? bookingdata?.resultData?.listBooking[0]?.bookingId
+        bookingId: customerDetails?.resultData
+          ? customerDetails?.resultData?.listBooking[0]?.bookingId
           : cusData?.resultData?.listBooking[0]?.bookingId,
       };
       dispatch(savePayment(paymentData, navigate));

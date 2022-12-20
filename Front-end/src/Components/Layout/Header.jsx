@@ -13,13 +13,13 @@ const Header = () => {
     localStorage.removeItem("user");
     dispatch({ type: LOGOUT });
     navigate("/login");
-    // window.location.href = "/login";
   };
   return (
     <>
       <header
         id="header"
-        className="header fixed-top d-flex align-items-center xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back"
+        className="header fixed-top d-flex align-items-center xyz-in"
+        xyz="fade flip-down stagger duration-10 delay-2 ease-out-back"
       >
         <div className="d-flex align-items-center justify-content-between">
           <Link to={"/dashboard"} className="logo d-flex align-items-center">
@@ -28,7 +28,6 @@ const Header = () => {
           </Link>
           {/* <i className="bi bi-list toggle-sidebar-btn" /> */}
         </div>
-
         {(isLogedIn && isLogedIn.userdata) ||
         (isAuthenticated && isAuthenticated == true) ? null : (
           <>
@@ -100,7 +99,12 @@ const Header = () => {
                     <li>
                       <p className="dropdown-item d-flex align-items-center">
                         <i className="bi bi-box-arrow-right" />
-                        <span style={{cursor:"pointer"}} onClick={() => handleSignOut()}>Sign Out</span>
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleSignOut()}
+                        >
+                          Sign Out
+                        </span>
                       </p>
                     </li>
                   </ul>

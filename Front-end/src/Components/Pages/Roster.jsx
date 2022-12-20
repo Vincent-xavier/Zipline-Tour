@@ -2,18 +2,18 @@ import React, { useEffect } from "react";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
 import "./Event/Event.css";
-import { useDispatch, useSelector } from "react-redux";
-import DataTable from "react-data-table-component";
 import moment from "moment";
+import DataTable from "react-data-table-component";
+import { useDispatch, useSelector } from "react-redux";
 import { getBookingBySlotId } from "../../actions/Order";
-import { events } from "../../actions/Event";
+import { eventBySlotId } from "../../actions/Event";
 import { useNavigate, useParams } from "react-router-dom";
 import { encryptSingleData } from "../../actions/types";
 
 const RosterView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { eventData } = useSelector((state) => state.eventAPI);
+  const { roster } = useSelector((state) => state.eventAPI);
   const { bookingdata } = useSelector((state) => state.orderAPI);
   const [eventName, setEventName] = React.useState();
   const [bData, setBData] = React.useState();
@@ -21,11 +21,8 @@ const RosterView = () => {
   const { slotId } = useParams();
 
   useEffect(() => {
-    dispatch(events());
-  }, []);
-
-  useEffect(() => {
     if (slotId > 0) {
+      dispatch(eventBySlotId(slotId));
       dispatch(getBookingBySlotId(slotId));
       active == slotId ? setActive(null) : setActive(slotId);
       if (bookingdata?.resultData != null) {
@@ -83,9 +80,9 @@ const RosterView = () => {
       name: "ACTION",
     },
   ];
+
   const handleBookingDetails = (event) => {
     setEventName(event.eventName);
-    console.log(event);
     dispatch(getBookingBySlotId(event.slotId));
     active == event.slotId ? setActive(null) : setActive(event.slotId);
   };
@@ -102,8 +99,8 @@ const RosterView = () => {
               <div className="col-md-5">
                 <div className="event-timeslot card">
                   <div className="eventwrapper p-3 card-body">
-                    {eventData && eventData?.resultData?.length > 0
-                      ? eventData?.resultData?.map((e, i) => {
+                    {roster && roster?.resultData?.length > 0
+                      ? roster?.resultData?.map((e, i) => {
                           return (
                             <>
                               <h5 className="mb-2 bg-secondary p-4 text-white">

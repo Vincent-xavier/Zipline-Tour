@@ -24,6 +24,7 @@ namespace ZiplineTour.Common
             public const string EventDetails = "usp_Event_EventDetails";
             public const string EventDetailsById = "usp_Event_EventDetailsById";
             public const string SaveEvent = "usp_Event_SaveEvent";
+            public const string FetchEventForRoster = "usp_Event_FetchEventRosterView";
 
             // Event Schedules
             public const string SaveEventSchedule = "usp_Event_SaveEventSchedule";

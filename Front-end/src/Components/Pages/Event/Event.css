@@ -157,7 +157,6 @@ login-page {
     margin-bottom: 0;
 }
 
-
 .event-schedule-area-two .tab-content .table thead tr th {
     padding: 20px;
     border: 0;
@@ -280,7 +279,6 @@ login-page {
     opacity: 1;
 }
 
-
 .product-content {
     border: 1px solid #dfe5e9;
     margin-bottom: 15px;
@@ -348,7 +346,6 @@ login-page {
     font-size: 12.5px;
     background: #fff
 }
-
 
 .product-content .product-info a.add-to-cart {
     color: #2f383d;
@@ -447,8 +444,6 @@ login-page {
     top: -7px;
     left: -7px
 }
-
-
 
 .description-tabs .tab-content {
     padding: 10px 0
@@ -646,9 +641,6 @@ icon-shape {
     height: 300px;
 }
 
-
-
-
 .react-tabs {
     display: flex;
     padding: 10px;
@@ -725,9 +717,6 @@ icon-shape {
 .selected {
     background-color: #ccc;
 }
-
-
-
 
 ::-webkit-scrollbar {
     width: 0px;

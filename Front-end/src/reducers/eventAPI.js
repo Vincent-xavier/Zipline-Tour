@@ -189,12 +189,33 @@ export default function (state = initialState, action) {
         eventSchedule: null,
       };
 
-      case constants.CLEAR_SCHEDULE :
-        return{
-          ...state,
-          scheduleDetails : null,
-        }
 
+    case constants.EVENT_FOR_ROSTER_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: "",
+        eventData: null,
+      };
+    case constants.EVENT_FOR_ROSTER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "success",
+        roster: action.payload,
+      };
+    case constants.EVENT_FOR_ROSTER_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: "error",
+        eventData: null,
+      };
+    case constants.CLEAR_SCHEDULE:
+      return {
+        ...state,
+        scheduleDetails: null,
+      }
 
     default:
       return state;
