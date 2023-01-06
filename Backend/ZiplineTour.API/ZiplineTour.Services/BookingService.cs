@@ -14,6 +14,7 @@ namespace ZiplineTour.Services
         Task<ResultArgs> BookingDetailsById(int id);
         Task<ResultArgs> FetchBooking();
         Task<ResultArgs> FetchOrders();
+        Task<ResultArgs> FetchOrderById(int bookingId);
         Task<ResultArgs> BookingListBySlotId(int slotId);
         Task<ResultArgs> Payment(Payment pay);
 
@@ -114,6 +115,26 @@ namespace ZiplineTour.Services
             var args = new ResultArgs();
 
             var result = await _bookingRepository.FetchOrders();
+
+            if (result != null)
+            {
+                args.StatusCode = 200;
+                args.StatusMessage = "Success";
+                args.ResultData = result;
+            }
+            else
+            {
+                args.StatusCode = 500;
+                args.StatusMessage = "failed";
+            }
+
+            return args;
+        }
+        public async Task<ResultArgs> FetchOrderById(int bookingId)
+        {
+            var args = new ResultArgs();
+
+            var result = await _bookingRepository.FetchOrderById(bookingId);
 
             if (result != null)
             {

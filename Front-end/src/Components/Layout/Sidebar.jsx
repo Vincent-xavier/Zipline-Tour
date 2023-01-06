@@ -67,6 +67,12 @@ const Sidebar = () => {
                   data-bs-parent="#sidebar-nav"
                 >
                   <li>
+                    <Link to={"/abandoned-list"}>
+                      <i className="bi bi-circle" />
+                      <span>Abandoned Orders</span>
+                    </Link>
+                  </li>
+                  <li>
                     <Link to={"/booking-list"}>
                       <i className="bi bi-circle" />
                       <span>Booking List</span>

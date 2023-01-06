@@ -319,14 +319,14 @@ const EditEventSchedule = () => {
                                     : "form-control"
                                 }
                                 id="floatingName"
-                                placeholder="eventCapacity"
+                                placeholder="Event Capacity"
                                 name="eventCapacity"
                                 onChange={eventForm.handleChange}
                                 value={eventForm.values.eventCapacity}
                                 onBlur={eventForm.handleBlur}
                               />
                               <label htmlFor="floatingName">
-                                eventCapacity
+                              Event Capacity
                               </label>
                             </div>
                             {eventForm.touched.eventCapacity &&
@@ -496,7 +496,7 @@ const EditEventSchedule = () => {
                               All
                             </button>
                           </li>
-                          <li className="nav-item" role="presentation">
+                          {/* <li className="nav-item" role="presentation">
                             <button
                               className="nav-link"
                               id="pills-profile-tab"
@@ -523,7 +523,7 @@ const EditEventSchedule = () => {
                             >
                               Expried
                             </button>
-                          </li>
+                          </li> */}
                         </ul>
                         <div className="tab-content pt-2" id="myTabContent">
                           <div

@@ -70,8 +70,23 @@ namespace ZiplineTour.API.Controllers
         [HttpGet]
         [Route("fetchorders")]
         public async Task<IActionResult> FetchOrders()
-       {
+        {
             var result = await _bookingService.FetchOrders();
+
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+        [HttpGet]
+        [Route("fetchorderById/{bookingId}")]
+        public async Task<IActionResult> FetchOrderById(int bookingId)
+        {
+            var result = await _bookingService.FetchOrderById(bookingId);
 
             if (result.StatusCode == 200)
             {

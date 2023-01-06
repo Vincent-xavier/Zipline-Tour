@@ -16,6 +16,7 @@ namespace ZiplineTour.Repository
     {
         Task<List<BookingModel>> FetchBooking();
         Task<List<Booking>> FetchOrders();
+        Task<Booking> FetchOrderById(int bookingId);
         Task<List<Booking>> BookingListBySlotId(int slotId);
         Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
         Task<BookingResult> BookingDetailsById(int id);
@@ -92,6 +93,23 @@ namespace ZiplineTour.Repository
             {
                 
                 bookings = (await _serverHandler.QueryAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrders, CommandType.StoredProcedure, null)).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+            return bookings;
+        }
+        public async Task<Booking> FetchOrderById(int bookingId)
+        {
+            Booking bookings = new Booking();
+            var param = new DynamicParameters();
+            try
+            {
+                param.Add("@pBookingId", bookingId, DbType.Int32, ParameterDirection.Input);
+                bookings = (await _serverHandler.QueryFirstOrDefaultAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrderById, CommandType.StoredProcedure, param));
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@ export const saveEventBooking = (bookingData, navigate) => async (dispatch) => {
             });
     } catch (error) {
         dispatch({
-            type: constants.EVENT_BOOKING_ERROR
+            type: constants.EVENT_BOOKING_ERROR,
         })
     }
 }
@@ -102,6 +102,31 @@ export const fetchOrders = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: constants.FETCH_ORDERS_ERROR
+        })
+    }
+}
+
+export const fetchOrderById = (id) => async (dispatch) => {
+    dispatch({
+        type: constants.FETCH_ORDER_BY_ID_REQUEST
+    });
+    const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    try {
+        axios.get(`/api/Booking/fetchorderById/${id}`, {}, {
+            headers: headers,
+        })
+            .then((res) => {
+                dispatch({
+                    type: constants.FETCH_ORDER_BY_ID_SUCCESS,
+                    payload: res.data,
+                });
+            });
+    } catch (error) {
+        dispatch({
+            type: constants.FETCH_ORDER_BY_ID_ERROR
         })
     }
 }

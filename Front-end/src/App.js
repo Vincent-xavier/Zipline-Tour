@@ -5,9 +5,7 @@ import '@animxyz/core'
 
 function App() {
   return (
-
     <URLRoutes />
-
   );
 }
 

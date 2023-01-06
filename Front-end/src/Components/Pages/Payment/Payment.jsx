@@ -235,7 +235,7 @@ const Payment = () => {
                           </label>
 
                           <input
-                            type="number"
+                            type="password"
                             id="CVV"
                             maxLength={3}
                             className={

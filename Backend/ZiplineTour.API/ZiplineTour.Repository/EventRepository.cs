@@ -53,35 +53,38 @@ namespace ZiplineTour.Repository
             try
             {
                 var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, System.Data.CommandType.StoredProcedure);
+                if (Events != null)
+                {
 
-                list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
-                list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
+                    list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
+                    list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
 
-                objResult = (from d in list.listDate
-                             select new Result
-                             {
-                                 Date = d.Date,
-                                 LstModal = (from lt in list.listtime
-                                             where lt.Date == d.Date
-                                             select new TimeModel
-                                             {
-                                                 EventId = lt.EventId,
-                                                 ScheduleId = lt.ScheduleId,
-                                                 DateId = lt.DateId,
-                                                 SlotId = lt.SlotId,
-                                                 EventName = lt.EventName,
-                                                 Price = lt.Price,
-                                                 Time = lt.Time,
-                                                 Date = lt.Date,
-                                                 EventCapacity = lt.EventCapacity,
-                                                 Min_Booking = lt.Min_Booking,
-                                                 Max_Booking = lt.Max_Booking,
-                                                 EventImage = lt.EventImage,
-                                                 Bookings = lt.Bookings,
-                                                 Available = lt.Available
-                                             }).ToList()
+                    objResult = (from d in list.listDate
+                                 select new Result
+                                 {
+                                     Date = d.Date,
+                                     LstModal = (from lt in list.listtime
+                                                 where lt.Date == d.Date
+                                                 select new TimeModel
+                                                 {
+                                                     EventId = lt.EventId,
+                                                     ScheduleId = lt.ScheduleId,
+                                                     DateId = lt.DateId,
+                                                     SlotId = lt.SlotId,
+                                                     EventName = lt.EventName,
+                                                     Price = lt.Price,
+                                                     Time = lt.Time,
+                                                     Date = lt.Date,
+                                                     EventCapacity = lt.EventCapacity,
+                                                     Min_Booking = lt.Min_Booking,
+                                                     Max_Booking = lt.Max_Booking,
+                                                     EventImage = lt.EventImage,
+                                                     Bookings = lt.Bookings,
+                                                     Available = lt.Available
+                                                 }).ToList()
 
-                             }).ToList();
+                                 }).ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -92,7 +95,7 @@ namespace ZiplineTour.Repository
             return objResult;
         }
         #endregion
-        
+
         public async Task<List<Result>> FetchEventsBySlotId(int SlotId)
         {
             List<Result> objResult = new List<Result>();
@@ -101,7 +104,7 @@ namespace ZiplineTour.Repository
             try
             {
                 param.Add("@pSlotId", SlotId, DbType.Int32, ParameterDirection.Input);
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEventForRoster, System.Data.CommandType.StoredProcedure,param);
+                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEventForRoster, System.Data.CommandType.StoredProcedure, param);
 
                 list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
                 list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
@@ -140,7 +143,7 @@ namespace ZiplineTour.Repository
 
             return objResult;
         }
-    
+
 
         public async Task<TimeModel> EventById(int eventId)
         {

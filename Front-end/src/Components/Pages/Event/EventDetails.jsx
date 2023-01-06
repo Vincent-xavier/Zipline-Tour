@@ -11,7 +11,7 @@ import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 import "@animxyz/core";
-import { ToastContainer, toast  } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
@@ -34,20 +34,20 @@ const EventDetails = () => {
     settotalPrice(eventPrice);
   }, [setCounter, seteventPrice, settotalPrice, eventPrice, eventEditData]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (counter === eventEditData?.resultData?.max_Booking) {
-      toast.warn('Maximum Booking Reached!', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
+      toast.warn("Maximum Booking Reached!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
-  }
-  },[counter])
+    }
+  }, [counter]);
 
   const handleIncre = (e) => {
     setCounter(counter + 1);
@@ -117,7 +117,7 @@ const EventDetails = () => {
           ? eventEditData?.resultData?.slotId
           : values.slotId,
         eventTime: eventEditData?.resultData
-          ?eventEditData?.resultData?.time
+          ? eventEditData?.resultData?.time
           : "",
         eventDate: eventEditData?.resultData
           ? eventEditData?.resultData?.date
@@ -246,7 +246,9 @@ const EventDetails = () => {
                         </div>
 
                         <div className="col-12 mt-3 mb-0 xyz-nested">
-                          <h4>Total $ {totalPrice}.00</h4>
+                          <h4>
+                            Total <b> $ {totalPrice}.00</b>
+                          </h4>
                         </div>
                       </div>
                     </div>
@@ -391,7 +393,7 @@ const EventDetails = () => {
                   <div className="col-md-6">
                     <div className="form-floating">
                       <input
-                        type="number"
+                        type="tel"
                         placeholder="Phone"
                         name="phone"
                         maxLength={10}

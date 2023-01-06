@@ -60,17 +60,12 @@ export const Dashboard = () => {
                                       }}
                                     >
                                       <tr>
-                                        <th
-                                          colSpan={"2"}
-                                          className="text-center"
-                                          scope="col"
-                                        >
-                                          {moment(e.date).format(
+                                        <th className="text-left" colSpan={"6"} scope="col" style={{borderBottom:"1px solid #ccc"}}>
+                                          {moment(e?.date).format(
                                             "DD MMMM yyyy"
-                                          )}
-                                        </th>
-                                        <th colSpan={"4"} scope="col">
-                                          {moment(e.date).format("dddd")}
+                                          ) +
+                                            ",  " +
+                                            moment(e?.date).format("dddd")}
                                         </th>
                                       </tr>
                                     </thead>
@@ -130,6 +125,7 @@ export const Dashboard = () => {
                                                 onClick={() =>
                                                   handleRoaster(events?.slotId)
                                                 }
+                                                style={{cursor:"pointer"}}
                                               >
                                                 <span className="text-center ms-3">
                                                   <i className="bi bi-arrow-right-square-fill" />

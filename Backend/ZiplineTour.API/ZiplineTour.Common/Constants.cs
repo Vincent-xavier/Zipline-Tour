@@ -49,6 +49,7 @@ namespace ZiplineTour.Common
             public const string BookingListBySlotId = "usp_Booking_FetchBookingListBySlotId";
             public const string Payment = "usp_Booking_SavePayment";
             public const string FetchOrders = "usp_Booking_FetchOrderList";
+            public const string FetchOrderById = "usp_Booking_FetchOrderById";
         }
 
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import AbandonedList from "../Pages/Booking/AbandonedList";
 import BookingList from "../Pages/Booking/BookingList";
 import OrderList from "../Pages/Booking/OrderList";
 import { Dashboard } from "../Pages/Dashboard";
@@ -33,6 +34,7 @@ const URLRoutes = () => {
           element={<EditEventSchedule />}
         />
         <Route path="/add-event-schedule/" element={<EditEventSchedule />} />
+        <Route path="/abandoned-list" element={<AbandonedList />} />
         <Route path="/booking-list" element={<BookingList />} />
         <Route path="/edit-event" element={<EditEvent />} />
         <Route path="/roster" element={<RosterView />} />
