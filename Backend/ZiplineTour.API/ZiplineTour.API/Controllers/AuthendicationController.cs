@@ -49,6 +49,7 @@ namespace ZiplineTour.API.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                     new Claim("FirstName",user.FirstName),
+                    new Claim("RoleId", user.RollId.ToString()),
                     new Claim("LastName",user.LastName),
                     new Claim("Email",user.Email),
                     new Claim("Phone",user.Phone),
@@ -76,5 +77,15 @@ namespace ZiplineTour.API.Controllers
             }
 
         }
+
+        [HttpGet("userRights/{rollbaseId}")]
+
+        public async Task<IActionResult> GetUserRights(int rollbaseId)
+        {
+            var user = await _userRepository.GetUserRights(rollbaseId);
+
+            return Ok(user);
+        }
+
     }
 }

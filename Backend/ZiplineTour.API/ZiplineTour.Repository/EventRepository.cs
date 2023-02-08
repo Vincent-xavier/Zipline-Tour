@@ -442,7 +442,6 @@ namespace ZiplineTour.Repository
                 var log = new ErrorLog();
                 log.WriteErrorToText(ex);
             }
-
             return schedule;
         }
     }

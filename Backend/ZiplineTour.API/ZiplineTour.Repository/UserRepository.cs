@@ -17,6 +17,7 @@ namespace ZiplineTour.Repository
         Task<UserModel> GetToken(string UserName, string Password);
 
         Task<int> Register(UserModel userModel);
+        Task<List<UserRights>> GetUserRights(int rollbaseId);
     }
 
     public class UserRepository : IUserRepository
@@ -51,8 +52,8 @@ namespace ZiplineTour.Repository
             var user = new UserModel();
             try
             {
-                param.Add("@email", Email, DbType.String, ParameterDirection.Input);
-                param.Add("@pass", Password, DbType.String, ParameterDirection.Input);
+                param.Add("@P_email", Email, DbType.String, ParameterDirection.Input);
+                param.Add("@P_pass", Password, DbType.String, ParameterDirection.Input);
                 user = await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
@@ -81,6 +82,24 @@ namespace ZiplineTour.Repository
                 log.WriteErrorToText(ex);
             }
             return param.Get<int>("@returnVal");
+        }
+
+        public async Task<List<UserRights>> GetUserRights(int rollbaseId)
+        {
+            var param = new DynamicParameters();
+            var result = new List<UserRights>();
+            try
+            {
+                param.Add("@P_RollId", rollbaseId, DbType.Int16, ParameterDirection.Input);
+                result = (await _serverHandler.QueryAsync<UserRights>(_serverHandler.Connection, StoredProc.User.UserRights, CommandType.StoredProcedure, param)).ToList(); ;
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLog log = new ErrorLog();
+                log.WriteErrorToText(ex);
+            }
+            return result;
         }
     }
 }

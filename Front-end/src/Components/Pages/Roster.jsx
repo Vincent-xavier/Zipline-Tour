@@ -128,7 +128,7 @@ const RosterView = () => {
                                 {moment(e.date).format("DD MMM YYYY")}
                               </h5>
                               <ul className="list-group border-0">
-                                {e?.lstModal?.map((events, index) => {
+                                {e?.lstModal?.map((events) => {
                                   return (
                                     <>
                                       <li

@@ -1,10 +1,21 @@
+import jwtDecode from "jwt-decode";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { userRights } from "../../actions/User";
 
 const Sidebar = () => {
-  const { isAuthenticated } = useSelector((state) => state.userAPI);
+  const { isAuthenticated, menuItems } = useSelector((state) => state.userAPI);
+
   const isLogedIn = JSON.parse(localStorage.getItem("user"));
+  const { userdata } = JSON.parse(localStorage.getItem("user"));
+  const { RoleId } = jwtDecode(userdata);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(userRights(RoleId));
+  }, []);
 
   return (
     <>
@@ -14,78 +25,90 @@ const Sidebar = () => {
           {(isLogedIn && isLogedIn.userdata) ||
           (isAuthenticated && isAuthenticated == true) ? (
             <>
-              <li className="nav-item">
-                <Link to={"/dashboard"} className="nav-link">
-                  <i className="bi bi-grid" />
-                  <span>Dashboard</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/event"} className="nav-link collapsed">
-                  <i className="bi bi-calendar2-event" />
-                  <span>Events</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link collapsed"
-                  data-bs-target="#components-nav"
-                  data-bs-toggle="collapse"
-                  href="#"
-                >
-                  <i className="bi bi-menu-button-wide" />
-                  <span>Products</span>
-                  <i className="bi bi-chevron-down ms-auto" />
-                </a>
-                <ul
-                  id="components-nav"
-                  className="nav-content collapse "
-                  data-bs-parent="#sidebar-nav"
-                >
-                  <li>
-                    <Link to={"/edit-event"}>
-                      <i className="bi bi-circle" />
-                      <span>Edit Event</span>
+              {menuItems?.map((item) => {
+                return (
+                  <li className="nav-item">
+                    <Link to={"/dashboard"} className="nav-link">
+                      <i className={item.menuIcon} />
+                      <span>{item.menuItem}</span>
                     </Link>
                   </li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link collapsed"
-                  data-bs-target="#forms-nav"
-                  data-bs-toggle="collapse"
-                  href="#"
-                >
-                  <i className="bi bi-journals" />
-                  <span>Bookings</span>
-                  <i className="bi bi-chevron-down ms-auto" />
-                </a>
-                <ul
-                  id="forms-nav"
-                  className="nav-content collapse "
-                  data-bs-parent="#sidebar-nav"
-                >
-                  <li>
-                    <Link to={"/abandoned-list"}>
-                      <i className="bi bi-circle" />
-                      <span>Abandoned Orders</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={"/booking-list"}>
-                      <i className="bi bi-circle" />
-                      <span>Booking List</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={"/order-list"}>
-                      <i className="bi bi-circle" />
-                      <span>Order List</span>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
+                );
+              })}
+              {/* <>
+                <li className="nav-item">
+                  <Link to={"/dashboard"} className="nav-link">
+                    <i className="bi bi-grid" />
+                    <span>Dashboard</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={"/event"} className="nav-link collapsed">
+                    <i className="bi bi-calendar2-event" />
+                    <span>Events</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link collapsed"
+                    data-bs-target="#components-nav"
+                    data-bs-toggle="collapse"
+                    href="#"
+                  >
+                    <i className="bi bi-menu-button-wide" />
+                    <span>Products</span>
+                    <i className="bi bi-chevron-down ms-auto" />
+                  </a>
+                  <ul
+                    id="components-nav"
+                    className="nav-content collapse "
+                    data-bs-parent="#sidebar-nav"
+                  >
+                    <li>
+                      <Link to={"/edit-event"}>
+                        <i className="bi bi-circle" />
+                        <span>Edit Event</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link collapsed"
+                    data-bs-target="#forms-nav"
+                    data-bs-toggle="collapse"
+                    href="#"
+                  >
+                    <i className="bi bi-journals" />
+                    <span>Bookings</span>
+                    <i className="bi bi-chevron-down ms-auto" />
+                  </a>
+                  <ul
+                    id="forms-nav"
+                    className="nav-content collapse "
+                    data-bs-parent="#sidebar-nav"
+                  >
+                    <li>
+                      <Link to={"/abandoned-list"}>
+                        <i className="bi bi-circle" />
+                        <span>Abandoned Orders</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/booking-list"}>
+                        <i className="bi bi-circle" />
+                        <span>Booking List</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/order-list"}>
+                        <i className="bi bi-circle" />
+                        <span>Order List</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              </> */}
             </>
           ) : (
             <>
@@ -103,4 +126,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

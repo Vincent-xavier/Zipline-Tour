@@ -9,6 +9,7 @@ const Header = () => {
   const { isAuthenticated } = useSelector((state) => state.userAPI);
   const isLogedIn = JSON.parse(localStorage.getItem("user"));
 
+
   const handleSignOut = () => {
     localStorage.removeItem("user");
     dispatch({ type: LOGOUT });

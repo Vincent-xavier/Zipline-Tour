@@ -13,6 +13,7 @@ namespace ZiplineTour.Common
         {
             public const string UserLogin = "usp_User_Login";
             public const string Users = "usp_User_GetUsers";
+            public const string UserRights = "usp_User_UserRights";
 
         }
 

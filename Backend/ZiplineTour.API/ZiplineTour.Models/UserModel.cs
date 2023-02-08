@@ -12,7 +12,16 @@ namespace ZiplineTour.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-        public int Role { get; set; }
+        public int RollId { get; set; }
         public string UserRole { get; set; }
+    }
+
+
+    public class UserRights
+    {
+        public int RollId { get; set; }
+        public string Roll { get; set; }
+        public string MenuIcon { get; set; }
+        public string MenuItem { get; set; }
     }
 }

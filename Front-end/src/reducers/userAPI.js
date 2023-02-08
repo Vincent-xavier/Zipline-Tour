@@ -6,6 +6,7 @@ const initialState = {
   success: "",
   userData: null,
   isAuthenticated: false,
+  menuItems: [],
 };
 
 export default function (state = initialState, action) {
@@ -15,7 +16,7 @@ export default function (state = initialState, action) {
         ...state,
         isLoading: true,
         error: "",
-        isAuthenticated: false
+        isAuthenticated: false,
       };
     case constants.LOGIN_SUCCESS:
       return {
@@ -23,19 +24,39 @@ export default function (state = initialState, action) {
         isLoading: false,
         success: "login success",
         userData: action.payload,
-        isAuthenticated: true
+        isAuthenticated: true,
       };
     case constants.LOGIN_ERROR:
       return {
         ...state,
         isLoading: false,
         error: "login error",
-        isAuthenticated: false
+        isAuthenticated: false,
       };
-      case constants.LOGOUT:
-        return {
-          initialState
-        };
+
+    case constants.USER_RIGHTS_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        menuItems: [],
+      };
+    case constants.USER_RIGHTS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        menuItems: action.payload,
+      };
+    case constants.USER_RIGHTS_REQUEST:
+      return {
+        ...state,
+        isLoading: false,
+        menuItems: [],
+      };
+
+    case constants.LOGOUT:
+      return {
+        initialState,
+      };
     default:
       return state;
   }
