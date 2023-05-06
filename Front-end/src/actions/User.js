@@ -25,31 +25,3 @@ export const userLogin = (data) => async (dispatch) => {
     });
   }
 };
-
-export const userRights = (rollbaseId) => async (dispatch) => {
-  dispatch({
-    type: constants.USER_RIGHTS_REQUEST,
-  });
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
-  try {
-    await axios
-      .get(
-        `/api/Authendication/userRights/${rollbaseId}`,
-        {},
-        { headers: headers }
-      )
-      .then((res) => {
-        dispatch({
-          type: constants.USER_RIGHTS_SUCCESS,
-          payload: res.data,
-        });
-      });
-  } catch (err) {
-    dispatch({
-      type: constants.USER_RIGHTS_ERROR,
-    });
-  }
-};

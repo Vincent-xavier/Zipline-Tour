@@ -1,21 +1,11 @@
-import jwtDecode from "jwt-decode";
 import React from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { userRights } from "../../actions/User";
 
 const Sidebar = () => {
-  const { isAuthenticated, menuItems } = useSelector((state) => state.userAPI);
+  const { isAuthenticated } = useSelector((state) => state.userAPI);
 
   const isLogedIn = JSON.parse(localStorage.getItem("user"));
-  const { userdata } = JSON.parse(localStorage.getItem("user"));
-  const { RoleId } = jwtDecode(userdata);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(userRights(RoleId));
-  }, []);
 
   return (
     <>
@@ -25,17 +15,7 @@ const Sidebar = () => {
           {(isLogedIn && isLogedIn.userdata) ||
           (isAuthenticated && isAuthenticated == true) ? (
             <>
-              {menuItems?.map((item) => {
-                return (
-                  <li className="nav-item">
-                    <Link to={"/dashboard"} className="nav-link">
-                      <i className={item.menuIcon} />
-                      <span>{item.menuItem}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-              {/* <>
+              <>
                 <li className="nav-item">
                   <Link to={"/dashboard"} className="nav-link">
                     <i className="bi bi-grid" />
@@ -108,7 +88,7 @@ const Sidebar = () => {
                     </li>
                   </ul>
                 </li>
-              </> */}
+              </>
             </>
           ) : (
             <>

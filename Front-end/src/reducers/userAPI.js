@@ -34,25 +34,6 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
       };
 
-    case constants.USER_RIGHTS_REQUEST:
-      return {
-        ...state,
-        isLoading: true,
-        menuItems: [],
-      };
-    case constants.USER_RIGHTS_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        menuItems: action.payload,
-      };
-    case constants.USER_RIGHTS_REQUEST:
-      return {
-        ...state,
-        isLoading: false,
-        menuItems: [],
-      };
-
     case constants.LOGOUT:
       return {
         initialState,
