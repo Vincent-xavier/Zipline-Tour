@@ -4,7 +4,6 @@ import "@animxyz/core";
 import React, { forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactDatePicker from "react-datepicker";
-import swal from "sweetalert";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
 import Header from "../../Layout/Header";
@@ -12,7 +11,7 @@ import Sidebar from "../../Layout/Sidebar";
 import { events } from "../../../actions/Event";
 import * as types from "../../../actions/types";
 import { format } from "date-fns";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Events = () => {
   const dispatch = useDispatch();
@@ -47,7 +46,6 @@ const Events = () => {
       <Header />
       <Sidebar />
       <main id="main" className="main">
-        <ToastContainer />
         <div className="pagetitle">
           <h1 style={{ fontSize: "28px" }}>Events</h1>
         </div>

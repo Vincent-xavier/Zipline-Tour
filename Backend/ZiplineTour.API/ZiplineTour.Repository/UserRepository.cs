@@ -14,7 +14,7 @@ namespace ZiplineTour.Repository
     {
         Task<List<UserModel>> Users();
 
-        Task<UserModel> GetToken(string UserName, string Password);
+        Task<ResultArgs> GetToken(string UserName, string Password);
 
         Task<int> Register(UserModel userModel);
         Task<List<UserRights>> GetUserRights(int rollbaseId);

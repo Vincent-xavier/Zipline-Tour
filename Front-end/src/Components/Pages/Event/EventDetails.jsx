@@ -11,7 +11,7 @@ import Sidebar from "../../Layout/Sidebar";
 import { eventById } from "../../../actions/Event";
 import { saveEventBooking } from "../../../actions/Order";
 import "@animxyz/core";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const EventDetails = () => {
   const dispatch = useDispatch();
@@ -135,7 +135,6 @@ const EventDetails = () => {
 
       <main id="main" className="main">
         <section className="section">
-          <ToastContainer />
           <div className="container" xyz="fade small-100%">
             <div className="product-content product-wrap clearfix product-deatil xyz-none xyz-in">
               <div className="row">

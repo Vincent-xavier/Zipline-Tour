@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { userLogin } from "../../actions/User";
 import Header from "../Layout/Header";
-import '@animxyz/core'
+import "@animxyz/core";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -19,15 +19,12 @@ const Login = () => {
       (userData && userData?.userData?.message == "Login Success") ||
       (isLogedIn && isLogedIn?.userdata)
     ) {
-      navigate("/dashboard");
+      toast("Login Successfully");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } else if (userData?.error === "login error") {
-      swal("please check your username and password");
-      swal({
-        title: "Sign-in Failed",
-        text: "please check your username and password!",
-        icon: "error",
-        button: "try again!",
-      });
+      toast.error("please check your username and password");
     }
   }, [userData, isLogedIn]);
 
@@ -37,9 +34,7 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string()
-        .required("Please enter your password")
-        .max(255),
+      password: Yup.string().required("Please enter your password").max(255),
     }),
 
     validate: (values) => {
@@ -73,7 +68,10 @@ const Login = () => {
             className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
           >
             <Header />
-            <div className="container xyz-in" xyz="fade flip-down stagger duration-10 delay-2 ease-out-back">
+            <div
+              className="container xyz-in"
+              xyz="fade flip-down stagger duration-10 delay-2 ease-out-back"
+            >
               <div className="row justify-content-center">
                 <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                   <div className="card mb-3">
@@ -96,7 +94,12 @@ const Login = () => {
                             <input
                               type="text"
                               name="email"
-                              className={loginForm.touched.email && loginForm.errors.email ? "form-control is-invalid" : "form-control"}
+                              className={
+                                loginForm.touched.email &&
+                                loginForm.errors.email
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               onChange={loginForm.handleChange}
                               value={loginForm.values.email}
                               onBlur={loginForm.handleBlur}

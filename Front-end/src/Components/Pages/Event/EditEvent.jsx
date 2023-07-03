@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { eventDetails } from "../../../actions/Event";
-import { ToastContainer, toast } from "react-toastify";
 import Header from "../../Layout/Header";
 import Sidebar from "../../Layout/Sidebar";
 import * as types from "../../../actions/types";
+import { toast } from "react-toastify";
 
 const EditProduct = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,6 @@ const EditProduct = () => {
       <Sidebar />
 
       <main id="main" className="main">
-        <ToastContainer />
         <div className="pagetitle">
           <h1 style={{ fontSize: "28px" }}>Update Events</h1>
         </div>

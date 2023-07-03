@@ -14,9 +14,7 @@ import { bookingDetails, savePayment } from "../../../actions/Order";
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {  customerDetails } = useSelector(
-    (state) => state?.orderAPI
-  );
+  const { customerDetails } = useSelector((state) => state?.orderAPI);
   const [customer, setCustomer] = useState();
   const { bookingId } = useParams();
 
@@ -24,7 +22,7 @@ const Payment = () => {
 
   useEffect(() => {
     if (bookingId) {
-      localStorage.removeItem("customerData")
+      localStorage.removeItem("customerData");
       const dcryptId = decryptSingleData(bookingId);
       dispatch(bookingDetails(dcryptId));
     }
@@ -45,6 +43,7 @@ const Payment = () => {
       expiryDate: "",
       cvv: "",
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       PayerName: Yup.string().required("Enter Card Holder Name").max(50),
       cardNumber: Yup.number().required("Enter Card Number"),
