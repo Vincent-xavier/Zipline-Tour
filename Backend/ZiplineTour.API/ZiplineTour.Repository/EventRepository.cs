@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using ZiplineTour.Common.Helper;
+using Dapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -88,8 +89,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return objResult;
@@ -137,8 +137,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return objResult;
@@ -156,8 +155,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return result;
         }
@@ -171,8 +169,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return events;
@@ -189,81 +186,12 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
-            }
+                new ErrorLog().WriteLog(ex);
 
+            }
             return result;
         }
 
-        #region Save Event
-        public async Task<int> SaveEvent(EventModel eventModel)
-        {
-            var param = new DynamicParameters();
-            string EventImage = string.Empty;
-            try
-            {
-                if (eventModel.ImgFile != null)
-                {
-                    // upload Image and get Image Name
-                    EventImage = await UploadEventImage(eventModel.ImgFile);
-                }
-                else
-                {
-                    EventImage = eventModel.EventImage;
-                }
-                param.Add("@eId", eventModel.EventId, DbType.Int32, ParameterDirection.Input);
-                param.Add("@eName", eventModel.EventName, DbType.String, ParameterDirection.Input);
-                param.Add("@eDiscri", eventModel.EventDiscription, DbType.String, ParameterDirection.Input);
-                param.Add("@e_price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
-                param.Add("@eCapacity", eventModel.EventCapacity, DbType.Int32, ParameterDirection.Input);
-                param.Add("@maxBook", eventModel.Max_Booking, DbType.Int32, ParameterDirection.Input);
-                param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
-                param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);
-                param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.SaveEvent, CommandType.StoredProcedure, param);
-            }
-            catch (Exception ex)
-            {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
-            }
-            return param.Get<int>("@returnVal");
-        }
-
-        #region Upload Image
-        public async Task<string> UploadEventImage(IFormFile ImageFile)
-        {
-            try
-            {
-                if (ImageFile != null)
-                {
-                    string ImageName = new String(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-                    ImageName = ImageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(ImageFile.FileName);
-                    var ImagePath = Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot", "EventImage", ImageName);
-
-                    var fileInfo = new FileInfo(ImageName);
-
-                    using (var fileStream = new FileStream(ImagePath, FileMode.Create))
-                    {
-
-                        await ImageFile.CopyToAsync(fileStream);
-                    }
-                    return ImageName;
-                }
-                else
-                {
-                    return "Failed";
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message.ToString();
-            }
-        }
-
-        #endregion
-        #endregion
 
         #region Save Event Schedule
         public async Task<int> SaveEventSchedule(EventSchedule schedule)
@@ -296,8 +224,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return Result;
@@ -326,8 +253,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return DateIds;
@@ -343,8 +269,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
         }
@@ -388,8 +313,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
 
             }
 
@@ -421,8 +345,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return schedule;
@@ -439,10 +362,76 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                var log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return schedule;
         }
+
+
+        public async Task<string> UploadEventImage(IFormFile ImageFile)
+        {
+            string ImageName = string.Empty;
+            try
+            {
+
+                if (ImageFile != null)
+                {
+                    ImageName = new String(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+                    ImageName = ImageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(ImageFile.FileName);
+                    var ImagePath = Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot", "EventImage", ImageName);
+
+                    var fileInfo = new FileInfo(ImageName);
+
+                    using (var fileStream = new FileStream(ImagePath, FileMode.Create))
+                    {
+
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+                else
+                {
+                    return "Failed";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+            return ImageName;
+        }
+
+        public async Task<int> SaveEvent(EventModel eventModel)
+        {
+            var param = new DynamicParameters();
+            string EventImage = string.Empty;
+            try
+            {
+                if (eventModel.ImgFile != null)
+                {
+                    // upload Image and get Image Name
+                    EventImage = await UploadEventImage(eventModel.ImgFile);
+                }
+                else
+                {
+                    EventImage = eventModel.EventImage;
+                }
+                param.Add("@eId", eventModel.EventId, DbType.Int32, ParameterDirection.Input);
+                param.Add("@eName", eventModel.EventName, DbType.String, ParameterDirection.Input);
+                param.Add("@eDiscri", eventModel.EventDiscription, DbType.String, ParameterDirection.Input);
+                param.Add("@e_price", eventModel.Price, DbType.Decimal, ParameterDirection.Input);
+                param.Add("@eCapacity", eventModel.EventCapacity, DbType.Int32, ParameterDirection.Input);
+                param.Add("@maxBook", eventModel.Max_Booking, DbType.Int32, ParameterDirection.Input);
+                param.Add("@minBook", eventModel.Min_Booking, DbType.Int32, ParameterDirection.Input);
+                param.Add("@eImg", EventImage, DbType.String, ParameterDirection.Input);
+                param.Add("@returnVal", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                await _serverHandler.ExecuteAsync(_serverHandler.Connection, StoredProc.Event.SaveEvent, CommandType.StoredProcedure, param);
+            }
+            catch (Exception ex)
+            {
+                new ErrorLog().WriteLog(ex);
+            }
+            return param.Get<int>("@returnVal");
+        }
     }
 }
+

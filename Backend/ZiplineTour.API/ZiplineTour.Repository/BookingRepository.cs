@@ -9,6 +9,7 @@ using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Models.Output;
 using System.Collections.Generic;
+using ZiplineTour.Common.Helper;
 
 namespace ZiplineTour.Repository
 {
@@ -58,8 +59,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
 
             }
             return result;
@@ -80,8 +80,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
@@ -97,8 +96,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
@@ -114,8 +112,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
@@ -136,8 +133,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
 
             return param.Get<int>("@ReturnVal");
@@ -156,8 +152,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
@@ -181,8 +176,7 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return booking;
         }

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using ZiplineTour.Common.Helper;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,7 +15,7 @@ namespace ZiplineTour.Repository
     {
         Task<List<UserModel>> Users();
 
-        Task<ResultArgs> GetToken(string UserName, string Password);
+        Task<UserModel> userAsync(UserCredentialDTO user);
 
         Task<int> Register(UserModel userModel);
         Task<List<UserRights>> GetUserRights(int rollbaseId);
@@ -40,29 +41,27 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return listUsers;
         }
 
-        public async Task<UserModel> GetToken(string Email, string Password)
+        public async Task<UserModel> userAsync(UserCredentialDTO user)
         {
             var param = new DynamicParameters();
-            var user = new UserModel();
+            var response = new UserModel();
             try
             {
-                param.Add("@P_email", Email, DbType.String, ParameterDirection.Input);
-                param.Add("@P_pass", Password, DbType.String, ParameterDirection.Input);
-                user = await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
+                param.Add("@P_email", user.UserName, DbType.String, ParameterDirection.Input);
+                param.Add("@P_pass", user.Password, DbType.String, ParameterDirection.Input);
+                response = await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {
 
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
-            return user;
+            return response;
         }
 
 
@@ -78,8 +77,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return param.Get<int>("@returnVal");
         }
@@ -96,8 +94,7 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-                ErrorLog log = new ErrorLog();
-                log.WriteErrorToText(ex);
+                new ErrorLog().WriteLog(ex);
             }
             return result;
         }

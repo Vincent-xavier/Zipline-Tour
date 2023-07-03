@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ZiplineTour.Common.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,7 @@ using ZiplineTour.Common;
 using ZiplineTour.DBEngine;
 using ZiplineTour.Models;
 using ZiplineTour.Repository;
+using ZiplineTour.Services;
 
 namespace ZiplineTour.API.Controllers
 {
@@ -21,32 +23,30 @@ namespace ZiplineTour.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly JWTSetting authentication;
-        public AuthendicationController(IConfiguration configuration, IUserRepository userRepository, IServerHandler serverHandler)
+        public AuthendicationController(IConfiguration configuration, IUserRepository userRepository, IUserService userService)
         {
             _userRepository = userRepository;
+            _userService = userService;
             _configuration = configuration;
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userModel"></param>
-        /// <returns></returns>
+       
+
         [HttpPost]
-        [Route("gettoken")]
-        public async Task<IActionResult> GetToken(UserModel userModel)
+        [Route("UserAsync")]
+        public async Task<IActionResult> UserAsync([FromBody] UserCredentialDTO user)
         {
-            if (userModel != null && userModel.Email != null && userModel.Password != null)
+            ResultArgs response = new ResultArgs();
+            
+
+            try
             {
-                var response = new ResultArgs();
-
-                response = await _userRepository.GetToken(userModel.Email, userModel.Password);
-                if (response.ResultData == null || response.StatusCode != 200)
+                response = await _userService.UserAsync(user);
+                if (response == null || response.StatusCode != 200)
                     return Ok(response);
-
-
 
 
                 var tokenhandler = new JwtSecurityTokenHandler();
@@ -58,94 +58,51 @@ namespace ZiplineTour.API.Controllers
                 }
                 byte[] key128 = new byte[16];
                 Array.Copy(hashBytes, key128, 16);
-                UserCredentialResult objUserDetail = new UserCredentialResult();
-                objUserDetail = (UserCredentialResult)Response.ResultData;
+                UserCredentialResult objResult = new UserCredentialResult();
+                objResult = (UserCredentialResult)response.ResultData;
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(
                         new Claim[]
                         {
-                        new Claim(ClaimTypes.Name,objUserDetail?.objUserDetail?.Name),
-                        new Claim(ClaimTypes.Role,objUserDetail?.objUserDetail?.PrimaryRoleID.ToString())
+                                new Claim(ClaimTypes.Name,objResult.objUserDetail.FirstName),
+                                new Claim(ClaimTypes.Role,objResult.objUserDetail.UserRole)
                         }
-                    ),
+                 ),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key128), SecurityAlgorithms.HmacSha256)
                 };
                 var token = tokenhandler.CreateToken(tokenDescriptor);
                 string finaltoken = tokenhandler.WriteToken(token);
-                objUserDetail.objUserDetail.Token = finaltoken;
-                Response.ResultData = objUserDetail;
+                objResult.objUserDetail.Token = finaltoken;
+                response.ResultData = objResult;
+
             }
-			catch (Exception ex)
-			{
+
+            catch (Exception ex)
+            {
                 new ErrorLog().WriteLog(ex);
                 return Unauthorized();
+
             }
             return Ok(Response);
+
         }
 
 
 
 
+        //[HttpGet("userRights/{rollbaseId}")]
 
-
-
-
-
-
-
-
-
-
-
-
-        //    if (response != null)
-        //    {
-
-        //        //create claims details based on the user information
-        //        var claims = new[] {
-        //        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-        //        new Claim("FirstName",user.FirstName),
-        //        new Claim("RoleId", user.RollId.ToString()),
-        //        new Claim("LastName",user.LastName),
-        //        new Claim("Email",user.Email),
-        //        new Claim("Phone",user.Phone),
-        //        new Claim("role",user.UserRole),
-        //       };
-
-        //        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-        //        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        //        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
-        //        var data = new JwtSecurityTokenHandler().WriteToken(token);
-
-        //        return StatusCode(StatusCodes.Status200OK, new { Message = "Login Success", Userdata = data });
-        //    }
-        //    else
-        //    {
-        //        return StatusCode(StatusCodes.Status404NotFound, new { Message = "Invalid credentials" });
-        //    }
-        //}
-        //else
+        //public async Task<IActionResult> GetUserRights(int rollbaseId)
         //{
-        //    return BadRequest();
+        //    var user = await _userRepository.GetUserRights(rollbaseId);
 
+        //    return Ok(user);
         //}
 
     }
 
-    [HttpGet("userRights/{rollbaseId}")]
-
-    public async Task<IActionResult> GetUserRights(int rollbaseId)
-    {
-        var user = await _userRepository.GetUserRights(rollbaseId);
-
-        return Ok(user);
-    }
-
 }
-}
+
