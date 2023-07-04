@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ZiplineTour.Common.Helper;
+using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
 using ZiplineTour.Repository;
 using ZiplineTour.Services;

@@ -1,4 +1,4 @@
-﻿namespace ZiplineTour.Common
+﻿namespace ZiplineTour.FrameWork
 {
     public class Constants
     {

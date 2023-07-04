@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ZiplineTour.Common.Helper
+namespace ZiplineTour.FrameWork.Helper
 {
     /// <summary>
     /// Summary description for ErrorLog new

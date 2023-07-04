@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ZiplineTour.Common.Helper
+namespace ZiplineTour.FrameWork.Helper
 {
     public class ConfigSettings
     {

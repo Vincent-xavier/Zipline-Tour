@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.Services", "ZiplineTour.Services\ZiplineTour.Services.csproj", "{8A11D0B6-72AC-4DB3-AACC-AE07DC8E351C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A425CA56-9640-449E-83AB-BADFD139C2B1} = {A425CA56-9640-449E-83AB-BADFD139C2B1}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.FrameWork", "ZiplineTour.Common\ZiplineTour.FrameWork.csproj", "{A425CA56-9640-449E-83AB-BADFD139C2B1}"
 EndProject

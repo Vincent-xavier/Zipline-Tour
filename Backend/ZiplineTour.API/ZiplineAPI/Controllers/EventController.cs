@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ZiplineTour.DBEngine;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Services;
 
@@ -9,9 +10,9 @@ namespace ZiplineTour.API.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly IServerHandler _serverHandler;
+        private readonly ISQLServerHandler _serverHandler;
 
-        public EventController(IEventService eventService, IServerHandler serverHandler)
+        public EventController(IEventService eventService, ISQLServerHandler serverHandler)
         {
             _eventService = eventService;
             _serverHandler = serverHandler;

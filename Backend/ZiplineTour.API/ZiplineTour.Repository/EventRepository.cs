@@ -8,8 +8,9 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.Common;
-using ZiplineTour.Common.Helper;
+using ZiplineTour.FrameWork.Helper;
+using ZiplineTour.DBEngine;
+using ZiplineTour.FrameWork;
 using ZiplineTour.Models.Input;
 
 namespace ZiplineTour.Repository
@@ -37,10 +38,10 @@ namespace ZiplineTour.Repository
 
     public class EventRepository : ControllerBase, IEventRepository
     {
-        private readonly IServerHandler _serverHandler;
+        private readonly ISQLServerHandler _serverHandler;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public EventRepository(IServerHandler serverHandler, IWebHostEnvironment webHostEnvironment)
+        public EventRepository(ISQLServerHandler serverHandler, IWebHostEnvironment webHostEnvironment)
         {
             _serverHandler = serverHandler;
             _webHostEnvironment = webHostEnvironment;

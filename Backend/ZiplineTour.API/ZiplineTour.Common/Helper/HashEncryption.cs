@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace ZiplineTour.Common.Helper
+namespace ZiplineTour.FrameWork.Helper
 {
     public static class HashEncryption
     {

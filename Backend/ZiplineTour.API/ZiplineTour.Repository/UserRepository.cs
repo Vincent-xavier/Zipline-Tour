@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.Common;
-using ZiplineTour.Common.Helper;
+using ZiplineTour.FrameWork.Helper;
+using ZiplineTour.DBEngine;
+using ZiplineTour.FrameWork;
 using ZiplineTour.Models;
 
 namespace ZiplineTour.Repository
@@ -23,9 +24,9 @@ namespace ZiplineTour.Repository
 
     public class UserRepository : IUserRepository
     {
-        private readonly IServerHandler _serverHandler;
+        private readonly ISQLServerHandler _serverHandler;
 
-        public UserRepository(IServerHandler serverHandler)
+        public UserRepository(ISQLServerHandler serverHandler)
         {
             _serverHandler = serverHandler;
         }
