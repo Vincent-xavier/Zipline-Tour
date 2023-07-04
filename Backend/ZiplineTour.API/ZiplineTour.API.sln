@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.API", "ZiplineTour.API\ZiplineTour.API.csproj", "{1F33729A-12F7-4672-93C2-FC9006F3FAE5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.Services", "ZiplineTour.Services\ZiplineTour.Services.csproj", "{8A11D0B6-72AC-4DB3-AACC-AE07DC8E351C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.Common", "ZiplineTour.Common\ZiplineTour.Common.csproj", "{A425CA56-9640-449E-83AB-BADFD139C2B1}"
@@ -15,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.Models", "Zipli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.DBEngine", "ZiplineTour.DBEngine\ZiplineTour.DBEngine.csproj", "{B29CD82A-20F1-4CDB-B28A-C5E4A018CED1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZiplineAPI", "ZiplineAPI\ZiplineAPI.csproj", "{32A3863A-44EC-4661-84E7-98EF84094C72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.API", "ZiplineAPI\ZiplineTour.API.csproj", "{32A3863A-44EC-4661-84E7-98EF84094C72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1F33729A-12F7-4672-93C2-FC9006F3FAE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F33729A-12F7-4672-93C2-FC9006F3FAE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F33729A-12F7-4672-93C2-FC9006F3FAE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F33729A-12F7-4672-93C2-FC9006F3FAE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A11D0B6-72AC-4DB3-AACC-AE07DC8E351C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A11D0B6-72AC-4DB3-AACC-AE07DC8E351C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A11D0B6-72AC-4DB3-AACC-AE07DC8E351C}.Release|Any CPU.ActiveCfg = Release|Any CPU
