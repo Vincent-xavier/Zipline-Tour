@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ZiplineTour.Models.Input;
+﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
+using ZiplineTour.Models.Input;
 using ZiplineTour.Repository;
 
 namespace ZiplineTour.Services
@@ -11,17 +8,24 @@ namespace ZiplineTour.Services
     public interface IBookingService
     {
         Task<ResultArgs> SaveEventBooking(BookingModel bookingModel);
-        Task<ResultArgs> BookingDetailsById(int id);
-        Task<ResultArgs> FetchBooking();
-        Task<ResultArgs> FetchOrders();
-        Task<ResultArgs> FetchOrderById(int bookingId);
-        Task<ResultArgs> BookingListBySlotId(int slotId);
-        Task<ResultArgs> Payment(Payment pay);
 
+        Task<ResultArgs> BookingDetailsById(int id);
+
+        Task<ResultArgs> FetchBooking();
+
+        Task<ResultArgs> FetchOrders();
+
+        Task<ResultArgs> FetchOrderById(int bookingId);
+
+        Task<ResultArgs> BookingListBySlotId(int slotId);
+
+        Task<ResultArgs> Payment(Payment pay);
     }
+
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;
+
         public BookingService(IBookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
@@ -110,6 +114,7 @@ namespace ZiplineTour.Services
 
             return args;
         }
+
         public async Task<ResultArgs> FetchOrders()
         {
             var args = new ResultArgs();
@@ -130,6 +135,7 @@ namespace ZiplineTour.Services
 
             return args;
         }
+
         public async Task<ResultArgs> FetchOrderById(int bookingId)
         {
             var args = new ResultArgs();
@@ -150,6 +156,7 @@ namespace ZiplineTour.Services
 
             return args;
         }
+
         public async Task<ResultArgs> BookingListBySlotId(int slotId)
         {
             var args = new ResultArgs();

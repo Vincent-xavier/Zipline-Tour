@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
 
 namespace ZiplineTour.Models.Input
 {
-   public class EventModel
+    public class EventModel
     {
         public int EventId { get; set; } = 0;
         public string EventName { get; set; }
@@ -48,8 +45,8 @@ namespace ZiplineTour.Models.Input
         public int EventId { get; set; }
         public int ScheduleId { get; set; }
         public int DateId { get; set; }
-
     }
+
     public class TimeModel
     {
         public int EventId { get; set; }
@@ -67,8 +64,8 @@ namespace ZiplineTour.Models.Input
         public int ScheduleId { get; set; }
         public int DateId { get; set; }
         public int SlotId { get; set; }
-
     }
+
     public class DateModel
     {
         public int DateId { get; set; }

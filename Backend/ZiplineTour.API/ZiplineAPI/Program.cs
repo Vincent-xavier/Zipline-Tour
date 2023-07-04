@@ -4,14 +4,13 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using System.Text;
-using ZiplineTour.DBEngine;
+using ZiplineTour.API;
 using ZiplineTour.Models;
-using ZiplineTour.Repository;
-using ZiplineTour.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,9 +35,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "OptionC CHMS",
+        Title = "Zipline Tour",
         Version = "v1",
-        Description = "An API to perform church management system project",
+        Description = "An API to perform event management system",
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -90,16 +89,6 @@ builder.Services.AddAuthentication(au =>
         ClockSkew = TimeSpan.Zero
     };
 });
-
-//
-
-builder.Services.AddTransient<IServerHandler, ServerHandler>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IEventService, EventService>();
-builder.Services.AddTransient<IEventRepository, EventRepository>();
-builder.Services.AddTransient<IBookingService, BookingService>();
-builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 
 var app = builder.Build();
 

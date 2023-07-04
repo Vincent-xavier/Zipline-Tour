@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ZiplineTour.Common
+﻿namespace ZiplineTour.Common
 {
     public class Constants
     {
     }
+
     public class StoredProc
     {
         public class User
@@ -14,7 +11,6 @@ namespace ZiplineTour.Common
             public const string UserLogin = "usp_User_Login";
             public const string Users = "usp_User_GetUsers";
             public const string UserRights = "usp_User_UserRights";
-
         }
 
         public class Event
@@ -29,17 +25,15 @@ namespace ZiplineTour.Common
 
             // Event Schedules
             public const string SaveEventSchedule = "usp_Event_SaveEventSchedule";
+
             public const string GetDateId = "usp_Event_SaveEventDates";
             public const string SaveTime = "usp_Event_SaveEventTimeSlot";
             public const string EventSchedule = "usp_Event_FetchScheduleDetails";
             public const string ScheduleById = "usp_Event_ScheduleById";
             public const string DeleteEventDates = "usp_Event_DeleteEventDates";
 
-
-
             //testing
             public const string delete = "test_RemoveScheduleDateAndTime";
-         
         }
 
         public class Booking
@@ -52,7 +46,5 @@ namespace ZiplineTour.Common
             public const string FetchOrders = "usp_Booking_FetchOrderList";
             public const string FetchOrderById = "usp_Booking_FetchOrderById";
         }
-
-
     }
 }

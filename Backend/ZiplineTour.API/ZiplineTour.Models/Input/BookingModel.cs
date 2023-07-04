@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ZiplineTour.Models.Input
 {
@@ -20,7 +18,6 @@ namespace ZiplineTour.Models.Input
         public DateTime EventDate { get; set; }
         public string EventName { get; set; }
     }
-
 
     public class Booking
     {

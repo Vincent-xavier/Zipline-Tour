@@ -1,5 +1,4 @@
-﻿using ZiplineTour.Common.Helper;
-using Dapper;
+﻿using Dapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ZiplineTour.Common;
-using ZiplineTour.DBEngine;
+using ZiplineTour.Common.Helper;
 using ZiplineTour.Models.Input;
 
 namespace ZiplineTour.Repository
@@ -35,6 +34,7 @@ namespace ZiplineTour.Repository
 
         Task<EventSchedule> ScheduleById(int ScheduleId);
     }
+
     public class EventRepository : ControllerBase, IEventRepository
     {
         private readonly IServerHandler _serverHandler;
@@ -47,6 +47,7 @@ namespace ZiplineTour.Repository
         }
 
         #region Fetch Events
+
         public async Task<List<Result>> FetchEvents()
         {
             List<Result> objResult = new List<Result>();
@@ -56,7 +57,6 @@ namespace ZiplineTour.Repository
                 var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, System.Data.CommandType.StoredProcedure);
                 if (Events != null)
                 {
-
                     list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
                     list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
 
@@ -83,7 +83,6 @@ namespace ZiplineTour.Repository
                                                      Bookings = lt.Bookings,
                                                      Available = lt.Available
                                                  }).ToList()
-
                                  }).ToList();
                 }
             }
@@ -94,7 +93,8 @@ namespace ZiplineTour.Repository
 
             return objResult;
         }
-        #endregion
+
+        #endregion Fetch Events
 
         public async Task<List<Result>> FetchEventsBySlotId(int SlotId)
         {
@@ -132,7 +132,6 @@ namespace ZiplineTour.Repository
                                                  Bookings = lt.Bookings,
                                                  Available = lt.Available
                                              }).ToList()
-
                              }).ToList();
             }
             catch (Exception ex)
@@ -142,7 +141,6 @@ namespace ZiplineTour.Repository
 
             return objResult;
         }
-
 
         public async Task<TimeModel> EventById(int eventId)
         {
@@ -187,22 +185,19 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
-
             }
             return result;
         }
 
-
         #region Save Event Schedule
+
         public async Task<int> SaveEventSchedule(EventSchedule schedule)
         {
-
             var param = new DynamicParameters();
             int scheduleId, Result = 0;
 
             try
             {
-
                 param.Add("@pScheduleId", schedule.ScheduleId, DbType.Int32, ParameterDirection.Input);
                 param.Add("@pName", schedule.Name, DbType.String, ParameterDirection.Input);
                 param.Add("@pDateFrom", schedule.DateFrom, DbType.Date, ParameterDirection.Input);
@@ -220,7 +215,6 @@ namespace ZiplineTour.Repository
                     var DateIds = await SaveScheduleDate(schedule.DateFrom, schedule.DateTo, schedule.EventId, scheduleId);
                     Result = await SaveScheduleTimeSlot(schedule.Times, DateIds, schedule.EventId, scheduleId);
                 }
-
             }
             catch (Exception ex)
             {
@@ -231,6 +225,7 @@ namespace ZiplineTour.Repository
         }
 
         #region Save Schedule Date
+
         public async Task<List<int>> SaveScheduleDate(DateTime DateFrom, DateTime DateTo, int EventId, int scheduleId)
         {
             var dates = GetDates(DateFrom, DateTo);
@@ -249,7 +244,6 @@ namespace ZiplineTour.Repository
                     int DateId = param1.Get<int>("@dateId");
                     DateIds.Add(DateId);
                 }
-
             }
             catch (Exception ex)
             {
@@ -258,6 +252,7 @@ namespace ZiplineTour.Repository
 
             return DateIds;
         }
+
         public async Task DeleteScheduleDate(int EventId, int scheduleId)
         {
             var param1 = new DynamicParameters();
@@ -271,9 +266,10 @@ namespace ZiplineTour.Repository
             {
                 new ErrorLog().WriteLog(ex);
             }
-
         }
+
         #region Get Dates
+
         public Array GetDates(DateTime start, DateTime end)
         {
             var dates = new List<DateTime>();
@@ -285,11 +281,13 @@ namespace ZiplineTour.Repository
 
             return dates.ToArray();
         }
-        #endregion
 
-        #endregion
+        #endregion Get Dates
+
+        #endregion Save Schedule Date
 
         #region Save Schedule Time Slots
+
         public async Task<int> SaveScheduleTimeSlot(string times, List<int> DateIds, int EventId, int scheduleId)
         {
             var Times = SplitTimes(times);
@@ -297,7 +295,6 @@ namespace ZiplineTour.Repository
 
             try
             {
-
                 foreach (var dateid in DateIds)
                 {
                     foreach (var time in Times)
@@ -314,25 +311,25 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
-
             }
 
             return timeParam.Get<int>("@returnval");
         }
 
         #region Split Times
+
         public List<string> SplitTimes(string times)
         {
-
             var Times = times.Split(',').ToList();
 
             return Times;
         }
-        #endregion
 
-        #endregion
+        #endregion Split Times
 
-        #endregion
+        #endregion Save Schedule Time Slots
+
+        #endregion Save Event Schedule
 
         public async Task<List<EventSchedule>> GetEventSchedule(int EventId)
         {
@@ -367,13 +364,11 @@ namespace ZiplineTour.Repository
             return schedule;
         }
 
-
         public async Task<string> UploadEventImage(IFormFile ImageFile)
         {
             string ImageName = string.Empty;
             try
             {
-
                 if (ImageFile != null)
                 {
                     ImageName = new String(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
@@ -384,7 +379,6 @@ namespace ZiplineTour.Repository
 
                     using (var fileStream = new FileStream(ImagePath, FileMode.Create))
                     {
-
                         await ImageFile.CopyToAsync(fileStream);
                     }
                 }
@@ -434,4 +428,3 @@ namespace ZiplineTour.Repository
         }
     }
 }
-

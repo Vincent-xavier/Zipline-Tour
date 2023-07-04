@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZiplineTour.Common\ZiplineTour.Common.csproj" />
+    <ProjectReference Include="..\ZiplineTour.Common\ZiplineTour.FrameWork.csproj" />
     <ProjectReference Include="..\ZiplineTour.DBEngine\ZiplineTour.DBEngine.csproj" />
     <ProjectReference Include="..\ZiplineTour.Models\ZiplineTour.Models.csproj" />
   </ItemGroup>

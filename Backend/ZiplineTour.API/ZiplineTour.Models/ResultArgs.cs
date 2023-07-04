@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ZiplineTour.Models
+﻿namespace ZiplineTour.Models
 {
     public class ResultArgs
     {

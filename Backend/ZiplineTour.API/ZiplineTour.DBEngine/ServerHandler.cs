@@ -1,34 +1,36 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
 namespace ZiplineTour.DBEngine
 {
-    public interface IServerHandler
+    public interface ISQLServerHandler
     {
         IDbConnection Connection { get; }
 
-        Task<T> QueryFirstOrDefaultAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null);  // return the Single row Data table values
+        Task<T> QueryFirstOrDefaultAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null);  // return the Single row Data table values
 
-        Task<T> QuerySingleAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null); // return the Data table values
+        Task<T> QuerySingleAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null); // return the Data table values
 
-        Task<T> ExecuteScalarAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null);  // return the object values
+        Task<T> ExecuteScalarAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null);  // return the object values
 
-        Task ExecuteAsync(IDbConnection connection, string sql, CommandType commandType, object parameters = null); // Insert, Update and Delete
+        Task ExecuteAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null); // Insert, Update and Delete
 
-        Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null);   // return the Single data table
+        Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null);   // return the Single data table
 
-        Task<GridReader> QueryMultipleAsync(IDbConnection connection, string sql, CommandType commandType, object parameters = null);  // return the Data Set  values
+        Task<GridReader> QueryMultipleAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null);  // return the Data Set  values
+
+        Task<IDataReader> ExecuteReaderAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null);  // return the Data Set  values
     }
-    public class ServerHandler : IServerHandler
+
+    public class SQLServerHandler : ISQLServerHandler
     {
         private readonly IConfiguration _configuration;
-        public ServerHandler(IConfiguration configuration)
+
+        public SQLServerHandler(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -37,12 +39,12 @@ namespace ZiplineTour.DBEngine
         {
             get
             {
-                var mysqlcon = new MySqlConnection(_configuration.GetConnectionString("ConString"));
-                return mysqlcon;
+                var sqlconnection = new SqlConnection(_configuration.GetConnectionString("ConnString"));
+                return sqlconnection;
             }
         }
 
-        public async Task<T> QueryFirstOrDefaultAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task<T> QueryFirstOrDefaultAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             using (connection)
             {
@@ -50,7 +52,7 @@ namespace ZiplineTour.DBEngine
             }
         }
 
-        public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             using (connection)
             {
@@ -58,7 +60,7 @@ namespace ZiplineTour.DBEngine
             }
         }
 
-        public async Task<T> QuerySingleAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task<T> QuerySingleAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             using (connection)
             {
@@ -66,7 +68,7 @@ namespace ZiplineTour.DBEngine
             }
         }
 
-        public async Task<T> ExecuteScalarAsync<T>(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task<T> ExecuteScalarAsync<T>(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             using (connection)
             {
@@ -74,7 +76,7 @@ namespace ZiplineTour.DBEngine
             }
         }
 
-        public async Task ExecuteAsync(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task ExecuteAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             using (connection)
             {
@@ -82,9 +84,14 @@ namespace ZiplineTour.DBEngine
             }
         }
 
-        public async Task<GridReader> QueryMultipleAsync(IDbConnection connection, string sql, CommandType commandType, object parameters = null)
+        public async Task<GridReader> QueryMultipleAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
         {
             return await connection.QueryMultipleAsync(sql, parameters, commandType: commandType, commandTimeout: 180);
+        }
+
+        public async Task<IDataReader> ExecuteReaderAsync(IDbConnection connection, string sql, CommandType commandType, object? parameters = null)
+        {
+            return await connection.ExecuteReaderAsync(sql, parameters, commandType: commandType, commandTimeout: 180);
         }
     }
 }

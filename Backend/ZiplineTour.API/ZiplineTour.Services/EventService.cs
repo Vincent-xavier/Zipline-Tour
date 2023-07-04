@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Repository;
@@ -13,6 +8,7 @@ namespace ZiplineTour.Services
     public interface IEventService
     {
         Task<ResultArgs> FetchEvents();
+
         Task<ResultArgs> FetchEventsBySlotId(int SlotId);
 
         Task<ResultArgs> EventById(int eventId);
@@ -29,9 +25,11 @@ namespace ZiplineTour.Services
 
         Task<ResultArgs> ScheduleById(int ScheduleId);
     }
+
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
+
         public EventService(IEventRepository eventRepository)
         {
             _eventRepository = eventRepository;
@@ -56,6 +54,7 @@ namespace ZiplineTour.Services
 
             return args;
         }
+
         public async Task<ResultArgs> FetchEventsBySlotId(int SlotId)
         {
             var args = new ResultArgs();
@@ -108,11 +107,12 @@ namespace ZiplineTour.Services
                 args.StatusCode = 200;
                 args.StatusMessage = "success";
                 args.ResultData = events;
-            }else
+            }
+            else
             {
                 args.StatusCode = 404;
                 args.StatusMessage = "error";
-            }    
+            }
 
             return args;
         }
@@ -173,6 +173,7 @@ namespace ZiplineTour.Services
 
             return args;
         }
+
         public async Task<ResultArgs> GetEventSchedule(int EventId)
         {
             var args = new ResultArgs();
@@ -210,7 +211,5 @@ namespace ZiplineTour.Services
 
             return args;
         }
-
-
     }
 }

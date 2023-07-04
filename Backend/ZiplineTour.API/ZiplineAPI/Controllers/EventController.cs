@@ -1,32 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Threading.Tasks;
-using ZiplineTour.DBEngine;
 using ZiplineTour.Models.Input;
-using ZiplineTour.Repository;
 using ZiplineTour.Services;
 
 namespace ZiplineTour.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-    //[Authorize(Roles ="Admin")]
-    //[Authorize(Roles ="User")]
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
         private readonly IServerHandler _serverHandler;
+
         public EventController(IEventService eventService, IServerHandler serverHandler)
         {
             _eventService = eventService;
             _serverHandler = serverHandler;
         }
-
 
         /// <summary>
         /// Fetching Today's Events Details
@@ -47,8 +36,7 @@ namespace ZiplineTour.API.Controllers
                 return BadRequest();
             }
         }
-        
-        
+
         [HttpGet]
         [Route("fetchEvent/{SlotId}")]
         public async Task<IActionResult> FetchEventsBySlotId(int SlotId)
@@ -66,7 +54,7 @@ namespace ZiplineTour.API.Controllers
         }
 
         /// <summary>
-        /// Fetch One Particular Event Full Details 
+        /// Fetch One Particular Event Full Details
         /// </summary>
         /// <param name="eventId">Unique Key</param>
         /// <returns></returns>
@@ -86,7 +74,6 @@ namespace ZiplineTour.API.Controllers
         {
             var events = await _eventService.EventDetails();
 
-
             if (events.StatusCode == 200)
             {
                 return Ok(events);
@@ -98,7 +85,7 @@ namespace ZiplineTour.API.Controllers
         }
 
         /// <summary>
-        /// Get One Particular Event Full Details 
+        /// Get One Particular Event Full Details
         /// To Append Edit Form
         /// </summary>
         /// <param name="eventId"></param>
@@ -152,7 +139,6 @@ namespace ZiplineTour.API.Controllers
                 return Ok(Schedule);
             }
             return BadRequest();
-
         }
 
         [HttpGet("getScheduleById/{ScheduleId}")]
@@ -169,19 +155,17 @@ namespace ZiplineTour.API.Controllers
                 return Ok(Schedule);
             }
             return BadRequest();
-
         }
 
         //#region String Builder
         ///// <summary>
-        ///// Bullk Insert Using String Bulider 
+        ///// Bullk Insert Using String Bulider
         ///// </summary>
         ///// <returns></returns>
         //[HttpPost]
         //[Route("BulkInsert")]
         //public async Task<IActionResult> BulkInsert()
         //{
-
         //    string ConnectionString = "Server=192.168.1.7;Port=3306;Database=zipline;Uid=sjc;Pwd=admin@sjc;";
         //    StringBuilder sCommand = new StringBuilder("INSERT INTO test_usernames (Date,ScheduleId,EventId) VALUES ");
         //    using (MySqlConnection mConnection = new MySqlConnection(ConnectionString))
@@ -210,7 +194,6 @@ namespace ZiplineTour.API.Controllers
         //            var result = myCmd.ExecuteNonQuery();
         //        }
         //    }
-
 
         //    return Ok();
         //}

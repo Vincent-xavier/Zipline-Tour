@@ -1,28 +1,34 @@
-﻿using System;
-using Dapper;
+﻿using Dapper;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ZiplineTour.Common;
-using ZiplineTour.DBEngine;
+using ZiplineTour.Common.Helper;
 using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Models.Output;
-using System.Collections.Generic;
-using ZiplineTour.Common.Helper;
 
 namespace ZiplineTour.Repository
 {
     public interface IBookingRepository
     {
         Task<List<BookingModel>> FetchBooking();
+
         Task<List<Booking>> FetchOrders();
+
         Task<Booking> FetchOrderById(int bookingId);
+
         Task<List<Booking>> BookingListBySlotId(int slotId);
+
         Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
+
         Task<BookingResult> BookingDetailsById(int id);
+
         Task<int> Payment(Payment pay);
     }
+
     public class BookingRepository : IBookingRepository
     {
         private readonly IServerHandler _serverHandler;
@@ -33,6 +39,7 @@ namespace ZiplineTour.Repository
         }
 
         #region Save Event Booking Details
+
         public async Task<BookingResult> SaveEventBooking(BookingModel bookingModel)
         {
             DynamicParameters param = new DynamicParameters();
@@ -60,46 +67,44 @@ namespace ZiplineTour.Repository
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
-
             }
             return result;
         }
-        #endregion
+
+        #endregion Save Event Booking Details
 
         #region Fetching All Booking Details
 
         public async Task<List<BookingModel>> FetchBooking()
         {
             List<BookingModel> bookings = new List<BookingModel>();
-            
+
             try
             {
-                
                 bookings = (await _serverHandler.QueryAsync<BookingModel>(_serverHandler.Connection, StoredProc.Booking.FetchAll, CommandType.StoredProcedure, null)).ToList();
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
+
         public async Task<List<Booking>> FetchOrders()
-            {
+        {
             List<Booking> bookings = new List<Booking>();
-            
+
             try
             {
-                
                 bookings = (await _serverHandler.QueryAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrders, CommandType.StoredProcedure, null)).ToList();
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
+
         public async Task<Booking> FetchOrderById(int bookingId)
         {
             Booking bookings = new Booking();
@@ -111,12 +116,13 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
-        #endregion
+
+        #endregion Fetching All Booking Details
+
         public async Task<int> Payment(Payment pay)
         {
             var param = new DynamicParameters();
@@ -137,7 +143,6 @@ namespace ZiplineTour.Repository
             }
 
             return param.Get<int>("@ReturnVal");
-
         }
 
         public async Task<List<Booking>> BookingListBySlotId(int slotId)
@@ -151,13 +156,13 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return bookings;
         }
 
         #region Fetch One Record By Booking Id
+
         public async Task<BookingResult> BookingDetailsById(int id)
         {
             var booking = new BookingResult();
@@ -175,11 +180,11 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return booking;
         }
-        #endregion
+
+        #endregion Fetch One Record By Booking Id
     }
 }

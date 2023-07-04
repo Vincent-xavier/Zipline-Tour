@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
 using ZiplineTour.Repository;
 
@@ -8,9 +7,12 @@ namespace ZiplineTour.Services
     public interface IUserService
     {
         Task<ResultArgs> Users();
+
         Task<ResultArgs> UserAsync(UserCredentialDTO user);
+
         Task<ResultArgs> Register(UserModel userModel);
     }
+
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
@@ -19,11 +21,11 @@ namespace ZiplineTour.Services
         {
             _userRepository = userRepository;
         }
+
         public async Task<ResultArgs> Users()
         {
             var ResultArgs = new ResultArgs();
             var user = await _userRepository.Users();
-
 
             if (user != null)
             {
@@ -62,7 +64,6 @@ namespace ZiplineTour.Services
         {
             var ResultArgs = new ResultArgs();
             var user = await _userRepository.Register(userModel);
-
 
             if (user != 0)
             {

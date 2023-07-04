@@ -1,12 +1,11 @@
-﻿using ZiplineTour.Common.Helper;
-using Dapper;
+﻿using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ZiplineTour.Common;
-using ZiplineTour.DBEngine;
+using ZiplineTour.Common.Helper;
 using ZiplineTour.Models;
 
 namespace ZiplineTour.Repository
@@ -18,12 +17,14 @@ namespace ZiplineTour.Repository
         Task<UserModel> userAsync(UserCredentialDTO user);
 
         Task<int> Register(UserModel userModel);
+
         Task<List<UserRights>> GetUserRights(int rollbaseId);
     }
 
     public class UserRepository : IUserRepository
     {
         private readonly IServerHandler _serverHandler;
+
         public UserRepository(IServerHandler serverHandler)
         {
             _serverHandler = serverHandler;
@@ -36,11 +37,9 @@ namespace ZiplineTour.Repository
             try
             {
                 listUsers = (await _serverHandler.QueryAsync<UserModel>(_serverHandler.Connection, StoredProc.User.Users, CommandType.StoredProcedure, null)).ToList();
-
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return listUsers;
@@ -58,12 +57,10 @@ namespace ZiplineTour.Repository
             }
             catch (Exception ex)
             {
-
                 new ErrorLog().WriteLog(ex);
             }
             return response;
         }
-
 
         public async Task<int> Register(UserModel userModel)
         {
@@ -90,7 +87,6 @@ namespace ZiplineTour.Repository
             {
                 param.Add("@P_RollId", rollbaseId, DbType.Int16, ParameterDirection.Input);
                 result = (await _serverHandler.QueryAsync<UserRights>(_serverHandler.Connection, StoredProc.User.UserRights, CommandType.StoredProcedure, param)).ToList(); ;
-
             }
             catch (Exception ex)
             {

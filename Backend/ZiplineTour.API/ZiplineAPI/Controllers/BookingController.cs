@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ZiplineTour.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using ZiplineTour.Models.Input;
+using ZiplineTour.Services;
 
 namespace ZiplineTour.API.Controllers
 {
@@ -14,6 +9,7 @@ namespace ZiplineTour.API.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
+
         public BookingController(IBookingService bookingService)
         {
             _bookingService = bookingService;
@@ -82,6 +78,7 @@ namespace ZiplineTour.API.Controllers
                 return BadRequest(result);
             }
         }
+
         [HttpGet]
         [Route("fetchorderById/{bookingId}")]
         public async Task<IActionResult> FetchOrderById(int bookingId)

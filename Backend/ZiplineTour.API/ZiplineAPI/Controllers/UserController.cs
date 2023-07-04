@@ -1,27 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 using ZiplineTour.Services;
 
 namespace ZiplineTour.API.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="User")]
+    [Authorize(Roles = "User")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IConfiguration _configuration; 
-        public UserController(IConfiguration configuration , IUserService userService)
+        private readonly IConfiguration _configuration;
+
+        public UserController(IConfiguration configuration, IUserService userService)
         {
             _userService = userService;
             _configuration = configuration;
         }
 
         #region Sample DPConnect
-        
+
         //[HttpGet]
         //[Route("test")]
         //[ActionName("test")]
@@ -47,16 +45,13 @@ namespace ZiplineTour.API.Controllers
         //    }
 
         //}
-        #endregion
-        
-        
+
+        #endregion Sample DPConnect
+
         [HttpGet]
         public async Task<ActionResult> Users()
         {
             return Ok(await _userService.Users());
         }
-
-       
-
     }
 }
