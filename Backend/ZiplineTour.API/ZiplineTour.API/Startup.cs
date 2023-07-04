@@ -14,6 +14,8 @@ using ZiplineTour.DBEngine;
 using ZiplineTour.Repository;
 using ZiplineTour.Services;
 using static System.Net.WebRequestMethods;
+using ZiplineTour.Models;
+using System.Configuration;
 
 namespace ZiplineTour.API
 {
@@ -32,28 +34,10 @@ namespace ZiplineTour.API
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
 
-            #region Save Jwt Tocken
-            //Inject Jwt
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
-            #endregion
-
             // Access to connect Other software
             services.AddCors(c =>
             c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
             );
-
 
             services.AddTransient<IServerHandler, ServerHandler>();
             services.AddTransient<IUserRepository, UserRepository>();
@@ -64,6 +48,7 @@ namespace ZiplineTour.API
             services.AddTransient<IBookingRepository, BookingRepository>();
 
             #region Swagger UI
+
             //SwaggerUi
             services.AddSwaggerGen();
             services.AddSwaggerGen(c =>
@@ -101,14 +86,13 @@ namespace ZiplineTour.API
                  }
                 });
             });
-            #endregion
 
+            #endregion Swagger UI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             //enable cors
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
@@ -121,7 +105,7 @@ namespace ZiplineTour.API
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot","EventImage")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot", "EventImage")),
                 RequestPath = "/EventImage"
             });
             app.UseRouting();
@@ -135,7 +119,6 @@ namespace ZiplineTour.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Zipline Tour");
-
             });
 
             app.UseEndpoints(endpoints =>

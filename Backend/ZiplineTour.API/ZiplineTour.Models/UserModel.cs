@@ -5,14 +5,12 @@ using System.Text;
 
 namespace ZiplineTour.Models
 {
-
     public class UserCredentialResult
     {
         public UserModel? objUserDetail { get; set; }
         public List<UserRights>? objUserRight { get; set; }
         public int StatusCode { get; set; }
     }
-
 
     public class UserModel
     {
@@ -22,7 +20,7 @@ namespace ZiplineTour.Models
         public string? Token { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; }
         public int RollId { get; set; }
         public string UserRole { get; set; }
     }
@@ -31,8 +29,8 @@ namespace ZiplineTour.Models
     {
         public string UserName { get; set; }
         public string Password { get; set; }
-
     }
+
     public class UserRights
     {
         public int RollId { get; set; }

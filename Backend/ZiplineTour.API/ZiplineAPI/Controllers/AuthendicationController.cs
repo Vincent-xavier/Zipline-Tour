@@ -1,25 +1,22 @@
-﻿using ZiplineTour.Common.Helper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using ZiplineTour.Common;
-using ZiplineTour.DBEngine;
+using ZiplineTour.Common.Helper;
 using ZiplineTour.Models;
 using ZiplineTour.Repository;
 using ZiplineTour.Services;
-using Microsoft.Extensions.Options;
 
 namespace ZiplineTour.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AuthendicationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -35,6 +32,7 @@ namespace ZiplineTour.API.Controllers
             authentication = options.Value;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("UserAsync")]
         public async Task<IActionResult> UserAsync([FromBody] UserCredentialDTO user)
@@ -49,31 +47,31 @@ namespace ZiplineTour.API.Controllers
 
                 var tokenhandler = new JwtSecurityTokenHandler();
                 var tokenkey = Encoding.UTF8.GetBytes(authentication.SecurityKey);
-                byte[] hashBytes;
-                using (var sha256 = SHA256.Create())
-                {
-                    hashBytes = sha256.ComputeHash(tokenkey);
-                }
-                byte[] key128 = new byte[16];
-                Array.Copy(hashBytes, key128, 16);
-                UserCredentialResult objResult = new UserCredentialResult();
-                objResult = (UserCredentialResult)response.ResultData;
+                //byte[] hashBytes;
+                //using (var sha256 = SHA256.Create())
+                //{
+                //    hashBytes = sha256.ComputeHash(tokenkey);
+                //}
+                //byte[] key128 = new byte[16];
+                //Array.Copy(hashBytes, key128, 16);
+                UserModel objResult = new UserModel();
+                objResult = (UserModel)response.ResultData;
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(
                         new Claim[]
                         {
-                                new Claim(ClaimTypes.Name,objResult.objUserDetail.FirstName),
-                                new Claim(ClaimTypes.Role,objResult.objUserDetail.UserRole)
+                                new Claim(ClaimTypes.Name,"test"),
+                                new Claim(ClaimTypes.Role,"testest")
                         }
                  ),
                     Expires = DateTime.Now.AddDays(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key128), SecurityAlgorithms.HmacSha256)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenkey), SecurityAlgorithms.HmacSha256)
                 };
                 var token = tokenhandler.CreateToken(tokenDescriptor);
                 string finaltoken = tokenhandler.WriteToken(token);
-                objResult.objUserDetail.Token = finaltoken;
+                objResult.Token = finaltoken;
                 response.ResultData = objResult;
             }
             catch (Exception ex)
@@ -81,7 +79,7 @@ namespace ZiplineTour.API.Controllers
                 new ErrorLog().WriteLog(ex);
                 return Unauthorized();
             }
-            return Ok(Response);
+            return Ok(response);
         }
 
         //[HttpGet("userRights/{rollbaseId}")]
