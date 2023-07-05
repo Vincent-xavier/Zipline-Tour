@@ -8,16 +8,15 @@ using ZiplineTour.API;
 using ZiplineTour.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add the Dependency Injection
 builder.Services.AddServices(builder.Configuration);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // JWT Authentication
 ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
-                                                            //IWebHostEnvironment environment = builder.Environment;
+                                                            // IWebHostEnvironment environment = builder.Environment;
 
 var appSettingsSection = configuration.GetSection("JWTSetting");
 builder.Services.Configure<JWTSetting>(appSettingsSection);
@@ -28,6 +27,8 @@ var AllowOrgin = appSettings.AllowOrigin;
 
 string[] sAllowOrgin = AllowOrgin.Split(";");
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
 // Register the Swagger generator, defining 1 or more Swagger documents
 builder.Services.AddSwaggerGen(c =>
 {
@@ -102,6 +103,22 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         c.DocExpansion(DocExpansion.None);//This will not expand all the API's.
     });
 }
+
+// Split and add the multiple origins
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins(sAllowOrgin).AllowAnyHeader().AllowAnyMethod();
+                      });
+});
+
+//Enable CORS for the specific port
+app.UseCors("AllowSpecificOrigins");
+
+//Enable to access the Static files
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
