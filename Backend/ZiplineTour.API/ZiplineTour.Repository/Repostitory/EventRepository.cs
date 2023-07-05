@@ -8,34 +8,14 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.DBEngine;
 using ZiplineTour.FrameWork;
+using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models.Input;
+using ZiplineTour.Repository.Interfaces;
 
-namespace ZiplineTour.Repository
+namespace ZiplineTour.Repository.Repostitory
 {
-    public interface IEventRepository
-    {
-        Task<List<Result>> FetchEvents();
-
-        Task<List<Result>> FetchEventsBySlotId(int SlotId);
-
-        Task<TimeModel> EventById(int eventId);
-
-        Task<List<EventModel>> EventDetails();
-
-        Task<EventModel> EventDetailsById(int eventId);
-
-        Task<int> SaveEvent(EventModel eventModel);
-
-        Task<int> SaveEventSchedule(EventSchedule schedule);
-
-        Task<List<EventSchedule>> GetEventSchedule(int EventId);
-
-        Task<EventSchedule> ScheduleById(int ScheduleId);
-    }
-
     public class EventRepository : ControllerBase, IEventRepository
     {
         private readonly ISQLServerHandler _serverHandler;
@@ -55,7 +35,7 @@ namespace ZiplineTour.Repository
             ListDateAndTime list = new ListDateAndTime();
             try
             {
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, System.Data.CommandType.StoredProcedure);
+                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEvents, CommandType.StoredProcedure);
                 if (Events != null)
                 {
                     list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
@@ -105,7 +85,7 @@ namespace ZiplineTour.Repository
             try
             {
                 param.Add("@pSlotId", SlotId, DbType.Int32, ParameterDirection.Input);
-                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEventForRoster, System.Data.CommandType.StoredProcedure, param);
+                var Events = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.Event.FetchEventForRoster, CommandType.StoredProcedure, param);
 
                 list.listDate = (await Events.ReadAsync<DateModel>()).ToList();
                 list.listtime = (await Events.ReadAsync<TimeModel>()).ToList();
@@ -372,7 +352,7 @@ namespace ZiplineTour.Repository
             {
                 if (ImageFile != null)
                 {
-                    ImageName = new String(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+                    ImageName = new string(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
                     ImageName = ImageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(ImageFile.FileName);
                     var ImagePath = Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot", "EventImage", ImageName);
 

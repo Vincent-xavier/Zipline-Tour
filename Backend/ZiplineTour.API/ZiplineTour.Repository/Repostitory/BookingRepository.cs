@@ -4,32 +4,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.DBEngine;
 using ZiplineTour.FrameWork;
+using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
 using ZiplineTour.Models.Output;
+using ZiplineTour.Repository.Interfaces;
 
-namespace ZiplineTour.Repository
+namespace ZiplineTour.Repository.Repostitory
 {
-    public interface IBookingRepository
-    {
-        Task<List<BookingModel>> FetchBooking();
-
-        Task<List<Booking>> FetchOrders();
-
-        Task<Booking> FetchOrderById(int bookingId);
-
-        Task<List<Booking>> BookingListBySlotId(int slotId);
-
-        Task<BookingResult> SaveEventBooking(BookingModel bookingModel);
-
-        Task<BookingResult> BookingDetailsById(int id);
-
-        Task<int> Payment(Payment pay);
-    }
-
     public class BookingRepository : IBookingRepository
     {
         private readonly ISQLServerHandler _serverHandler;
@@ -113,7 +97,7 @@ namespace ZiplineTour.Repository
             try
             {
                 param.Add("@pBookingId", bookingId, DbType.Int32, ParameterDirection.Input);
-                bookings = (await _serverHandler.QueryFirstOrDefaultAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrderById, CommandType.StoredProcedure, param));
+                bookings = await _serverHandler.QueryFirstOrDefaultAsync<Booking>(_serverHandler.Connection, StoredProc.Booking.FetchOrderById, CommandType.StoredProcedure, param);
             }
             catch (Exception ex)
             {

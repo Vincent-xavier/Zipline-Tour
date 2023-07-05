@@ -4,24 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.DBEngine;
 using ZiplineTour.FrameWork;
+using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
+using ZiplineTour.Repository.Interfaces;
 
-namespace ZiplineTour.Repository
+namespace ZiplineTour.Repository.Repostitory
 {
-    public interface IUserRepository
-    {
-        Task<List<UserModel>> Users();
-
-        Task<UserModel> userAsync(UserCredentialDTO user);
-
-        Task<int> Register(UserModel userModel);
-
-        Task<List<UserRights>> GetUserRights(int rollbaseId);
-    }
-
     public class UserRepository : IUserRepository
     {
         private readonly ISQLServerHandler _serverHandler;

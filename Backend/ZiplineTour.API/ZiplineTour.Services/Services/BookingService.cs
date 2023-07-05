@@ -1,27 +1,11 @@
 ﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
-using ZiplineTour.Repository;
+using ZiplineTour.Repository.Interfaces;
+using ZiplineTour.Services.Interface;
 
-namespace ZiplineTour.Services
+namespace ZiplineTour.Services.Services
 {
-    public interface IBookingService
-    {
-        Task<ResultArgs> SaveEventBooking(BookingModel bookingModel);
-
-        Task<ResultArgs> BookingDetailsById(int id);
-
-        Task<ResultArgs> FetchBooking();
-
-        Task<ResultArgs> FetchOrders();
-
-        Task<ResultArgs> FetchOrderById(int bookingId);
-
-        Task<ResultArgs> BookingListBySlotId(int slotId);
-
-        Task<ResultArgs> Payment(Payment pay);
-    }
-
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;

@@ -8,8 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
-using ZiplineTour.Repository;
-using ZiplineTour.Services;
+using ZiplineTour.Services.Interface;
 
 namespace ZiplineTour.API.Controllers
 {
@@ -19,13 +18,11 @@ namespace ZiplineTour.API.Controllers
     public class AuthendicationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly JWTSetting authentication;
 
-        public AuthendicationController(IConfiguration configuration, IUserRepository userRepository, IUserService userService, IOptions<JWTSetting> options)
+        public AuthendicationController(IConfiguration configuration, IUserService userService, IOptions<JWTSetting> options)
         {
-            _userRepository = userRepository;
             _userService = userService;
             _configuration = configuration;
             authentication = options.Value;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZiplineTour.Models.Input;
-using ZiplineTour.Services;
+using ZiplineTour.Services.Interface;
 
 namespace ZiplineTour.API.Controllers
 {

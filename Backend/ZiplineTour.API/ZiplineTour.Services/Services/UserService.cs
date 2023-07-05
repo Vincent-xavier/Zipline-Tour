@@ -1,18 +1,10 @@
 ﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
-using ZiplineTour.Repository;
+using ZiplineTour.Repository.Interfaces;
+using ZiplineTour.Services.Interface;
 
-namespace ZiplineTour.Services
+namespace ZiplineTour.Services.Services
 {
-    public interface IUserService
-    {
-        Task<ResultArgs> Users();
-
-        Task<ResultArgs> UserAsync(UserCredentialDTO user);
-
-        Task<ResultArgs> Register(UserModel userModel);
-    }
-
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;

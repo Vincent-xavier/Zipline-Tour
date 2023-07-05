@@ -1,31 +1,11 @@
 ﻿using System.Threading.Tasks;
 using ZiplineTour.Models;
 using ZiplineTour.Models.Input;
-using ZiplineTour.Repository;
+using ZiplineTour.Repository.Interfaces;
+using ZiplineTour.Services.Interface;
 
-namespace ZiplineTour.Services
+namespace ZiplineTour.Services.Services
 {
-    public interface IEventService
-    {
-        Task<ResultArgs> FetchEvents();
-
-        Task<ResultArgs> FetchEventsBySlotId(int SlotId);
-
-        Task<ResultArgs> EventById(int eventId);
-
-        Task<ResultArgs> EventDetails();
-
-        Task<ResultArgs> EventDetailsById(int eventId);
-
-        Task<ResultArgs> SaveEvent(EventModel eventModel);
-
-        Task<ResultArgs> SaveEventSchedule(EventSchedule schedule);
-
-        Task<ResultArgs> GetEventSchedule(int EventId);
-
-        Task<ResultArgs> ScheduleById(int ScheduleId);
-    }
-
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
