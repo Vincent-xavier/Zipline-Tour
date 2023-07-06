@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using CHMS.Framework;
+using System.Threading.Tasks;
 using ZiplineTour.Models;
 using ZiplineTour.Repository.Interfaces;
 using ZiplineTour.Services.Interface;
@@ -35,18 +36,32 @@ namespace ZiplineTour.Services.Services
 
         public async Task<ResultArgs> UserAsync(UserCredentialDTO user)
         {
+            UserCredentialResult objUserDetail = new UserCredentialResult();
             ResultArgs ResultArgs = new ResultArgs();
-            var userResponse = await _userRepository.userAsync(user);
-            if (userResponse != null)
+            objUserDetail = await _userRepository.userAsync(user);
+            if (objUserDetail.StatusCode == 200 && objUserDetail.objUserDetail != null && !string.IsNullOrEmpty(objUserDetail.objUserDetail.Email))
             {
-                ResultArgs.StatusCode = 200;
-                ResultArgs.StatusMessage = "Login Success";
-                ResultArgs.ResultData = userResponse;
+                ResultArgs.StatusCode = MessageCatalog.ErrorCodes.Success;
+                ResultArgs.StatusMessage = MessageCatalog.ErrorMessages.Success;
+                ResultArgs.ResultData = objUserDetail;
             }
             else
             {
-                ResultArgs.StatusCode = 201;
-                ResultArgs.StatusMessage = "Login Faild";
+                if (objUserDetail.StatusCode == -91)
+                {
+                    ResultArgs.StatusCode = MessageCatalog.ErrorCodes.NoRecordFound;
+                    ResultArgs.StatusMessage = MessageCatalog.ErrorMessages.UserNameNotExists;
+                }
+                else if (objUserDetail.StatusCode == -92)
+                {
+                    ResultArgs.StatusCode = MessageCatalog.ErrorCodes.NoRecordFound;
+                    ResultArgs.StatusMessage = MessageCatalog.ErrorMessages.PasswordIncorrect;
+                }
+                else
+                {
+                    ResultArgs.StatusCode = MessageCatalog.ErrorCodes.NoRecordFound;
+                    ResultArgs.StatusMessage = MessageCatalog.ErrorMessages.UserNameNotExists;
+                }
             }
 
             return ResultArgs;

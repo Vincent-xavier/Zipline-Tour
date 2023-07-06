@@ -8,7 +8,7 @@ namespace ZiplineTour.Repository.Interfaces
     {
         Task<List<UserModel>> Users();
 
-        Task<UserModel> userAsync(UserCredentialDTO user);
+        Task<UserCredentialResult> userAsync(UserCredentialDTO user);
 
         Task<int> Register(UserModel userModel);
 

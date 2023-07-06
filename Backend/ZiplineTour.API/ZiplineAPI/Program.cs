@@ -89,6 +89,16 @@ builder.Services.AddAuthentication(au =>
     };
 });
 
+// Split and add the multiple origins
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins(AllowOrgin).AllowAnyHeader().AllowAnyMethod();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -104,15 +114,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     });
 }
 
-// Split and add the multiple origins
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "AllowSpecificOrigins",
-                      policy =>
-                      {
-                          policy.WithOrigins(sAllowOrgin).AllowAnyHeader().AllowAnyMethod();
-                      });
-});
 
 //Enable CORS for the specific port
 app.UseCors("AllowSpecificOrigins");

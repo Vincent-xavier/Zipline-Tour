@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.DBEngine", "Zip
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZiplineTour.API", "ZiplineAPI\ZiplineTour.API.csproj", "{32A3863A-44EC-4661-84E7-98EF84094C72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ziplinetour.MailService", "Ziplinetour.MailService\Ziplinetour.MailService.csproj", "{FBFC5C39-2DD8-4A90-8AF3-A005529495B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{32A3863A-44EC-4661-84E7-98EF84094C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32A3863A-44EC-4661-84E7-98EF84094C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32A3863A-44EC-4661-84E7-98EF84094C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFC5C39-2DD8-4A90-8AF3-A005529495B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFC5C39-2DD8-4A90-8AF3-A005529495B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFC5C39-2DD8-4A90-8AF3-A005529495B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFC5C39-2DD8-4A90-8AF3-A005529495B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
@@ -43,15 +44,15 @@ namespace ZiplineTour.API.Controllers
 
                 var tokenhandler = new JwtSecurityTokenHandler();
                 var tokenkey = Encoding.UTF8.GetBytes(authentication.SecurityKey);
-                //byte[] hashBytes;
-                //using (var sha256 = SHA256.Create())
-                //{
-                //    hashBytes = sha256.ComputeHash(tokenkey);
-                //}
-                //byte[] key128 = new byte[16];
-                //Array.Copy(hashBytes, key128, 16);
-                UserModel objResult = new UserModel();
-                objResult = (UserModel)response.ResultData;
+                byte[] hashBytes;
+                using (var sha256 = SHA256.Create())
+                {
+                    hashBytes = sha256.ComputeHash(tokenkey);
+                }
+                byte[] key128 = new byte[16];
+                Array.Copy(hashBytes, key128, 16);
+                UserCredentialResult objUserDetail = new UserCredentialResult();
+                objUserDetail = (UserCredentialResult)response.ResultData;
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -67,8 +68,8 @@ namespace ZiplineTour.API.Controllers
                 };
                 var token = tokenhandler.CreateToken(tokenDescriptor);
                 string finaltoken = tokenhandler.WriteToken(token);
-                objResult.Token = finaltoken;
-                response.ResultData = objResult;
+                objUserDetail.objUserDetail.Token = finaltoken;
+                response.ResultData = objUserDetail;
             }
             catch (Exception ex)
             {

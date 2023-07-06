@@ -5,18 +5,7 @@ namespace ZiplineTour.FrameWork.Helper
 {
     public class ConfigSettings
     {
-        public AppSettings AppSettings { get; set; }
         public SMTPMailConfig SMTPMailConfig { get; set; }
-    }
-
-    public class AppSettings
-    {
-        public string? DocBaseURL { get; set; }
-        public string? DiomsBaseURL { get; set; }
-        public string? DioDocBaseURL { get; set; }
-        public string? LogoutURL { get; set; }
-        public string? CHMSBaseURL { get; set; }
-        public string? StaticFilePath { get; set; }
     }
 
     public class SMTPMailConfig

@@ -5,7 +5,6 @@ namespace ZiplineTour.Models
     public class UserCredentialResult
     {
         public UserModel? objUserDetail { get; set; }
-        public List<UserRights>? objUserRight { get; set; }
         public int StatusCode { get; set; }
     }
 

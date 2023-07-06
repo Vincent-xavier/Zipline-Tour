@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ZiplineTour.DBEngine;
+using ZiplineTour.Framework;
 using ZiplineTour.FrameWork;
 using ZiplineTour.FrameWork.Helper;
 using ZiplineTour.Models;
@@ -36,21 +37,29 @@ namespace ZiplineTour.Repository.Repostitory
             return listUsers;
         }
 
-        public async Task<UserModel> userAsync(UserCredentialDTO user)
+        public async Task<UserCredentialResult> userAsync(UserCredentialDTO user)
         {
             var param = new DynamicParameters();
-            var response = new UserModel();
+            UserCredentialResult credentialResult = new UserCredentialResult();
             try
             {
                 param.Add("@P_email", user.UserName, DbType.String, ParameterDirection.Input);
                 param.Add("@P_pass", user.Password, DbType.String, ParameterDirection.Input);
-                response = await _serverHandler.QueryFirstOrDefaultAsync<UserModel>(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
+                var multipleResults = await _serverHandler.QueryMultipleAsync(_serverHandler.Connection, StoredProc.User.UserLogin, CommandType.StoredProcedure, param);
+                if (multipleResults != null)
+                {
+                    credentialResult.StatusCode = await multipleResults.ReadSingleOrDefaultAsync<Int16>();
+                    if (credentialResult.StatusCode == 200)
+                    {
+                        credentialResult.objUserDetail = await multipleResults.ReadSingleOrDefaultAsync<UserModel>();
+                    }
+                }
             }
             catch (Exception ex)
             {
                 new ErrorLog().WriteLog(ex);
             }
-            return response;
+            return credentialResult;
         }
 
         public async Task<int> Register(UserModel userModel)
