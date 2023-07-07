@@ -42,6 +42,7 @@ namespace ZiplineTour.API.Controllers
                 if (response == null || response.StatusCode != 200)
                     return Ok(response);
 
+                //Authentication Key should be 16 character or more than 16 character
                 var tokenhandler = new JwtSecurityTokenHandler();
                 var tokenkey = Encoding.UTF8.GetBytes(authentication.SecurityKey);
                 byte[] hashBytes;
