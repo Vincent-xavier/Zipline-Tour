@@ -60,8 +60,8 @@ namespace ZiplineTour.API.Controllers
                     Subject = new ClaimsIdentity(
                         new Claim[]
                         {
-                                new Claim(ClaimTypes.Name,"test"),
-                                new Claim(ClaimTypes.Role,"testest")
+                                new Claim(ClaimTypes.Name,objUserDetail.objUserDetail.FirstName),
+                                new Claim(ClaimTypes.Role,objUserDetail.objUserDetail.UserRole)
                         }
                  ),
                     Expires = DateTime.Now.AddDays(1),
